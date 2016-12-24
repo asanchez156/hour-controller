@@ -9,27 +9,43 @@
         <% include ../partials/header %>
     </header>
 
+    <% include ../partials/page-header %>
+
     <main>
+        <input type="hidden" id="pageName" value="<%= page %>"/>
         <div class="jumbotron">
-            <h2><%= title %></h2>
-            <table>          
-                <tbody>
-                    <tr>
-                        <td>User</td>
-                        <td><input type="text" id="username" name="username" /></td>
-                    </tr>
-                    <tr>
-                        <td>Password</td>
-                        <td><input type="password" id="password" name="password" /></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row row-centered">
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-centered">
+                        <label for="username">Usuario</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-centered">
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-centered">
+                        <label for="password">Contraseña</label>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6 col-centered">
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <footer>
+    <footer class="section">  
         <% include ../partials/footer %>
-    </footer>
+    </footer>  
+    <!-- Footer Section End -->  
+   
+    </div>
+    <!-- Main contetn End -->
+
+    <% include ../partials/copyright %>
+    <% include ../partials/gotop %>
+    <% include ../partials/scripts %>
     
 </body>
 </html>

@@ -1,1 +1,43 @@
-Error, esta página no existe.
+<!DOCTYPE html>
+<html lang="es">
+<head>
+</head>
+<body class="container">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <h2>Ha ocurrido un error</h2>
+            <h3>Error:</h3>
+            <p><%= error %></p>
+
+            <h3>Message:</h3>
+            <p><%= message %></p>
+
+        </div>
+    </main>
+
+    <footer class="section">  
+        <% include ../partials/footer %>
+    </footer>  
+    <!-- Footer Section End -->  
+   
+    </div>
+    <!-- Main contetn End -->
+
+    <!-- Copytight Start -->
+    <section id="copyright">
+        
+    </section> 
+    <!-- Copytight End -->   
+
+    <!-- Go to Top Link -->
+    <a href="#" class="back-to-top">
+    <i class="icon-arrow-up"></i>
+    </a>
+    
+</body>
+</html>

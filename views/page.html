@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <% include ../partials/head %> 
+  </head>
+  <body>
+
+    <!-- Header Area wrapper Starts -->
+    <header id="header-wrap">
+      <% include ../partials/header %> 
+    </header>
+    <!-- Header Area wrapper End -->
+
+    <% include ../partials/page-header %>   
+    <main>
+        <input type="hidden" id="pageName" value="<%= page %>"/>
+        <div class="jumbotron">
+            Page
+        </div>
+    </main>
+
+    <!-- Footer Section Start -->   
+    <footer class="section">  
+        <% include ../partials/footer %>
+    </footer>  
+    <!-- Footer Section End -->  
+
+    <% include ../partials/copyright %>
+    <% include ../partials/gotop %>
+    <% include ../partials/scripts %>
+
+  </body>
+</html>
