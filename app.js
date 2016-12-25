@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var sql = require('./mysql');
+
 var home = require('./routes/home');
 var about = require('./routes/about');
 var users = require('./routes/users');
@@ -12,6 +14,22 @@ var login = require('./routes/login');
 var page = require('./routes/page');
 
 var app = express();
+
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : sql.connectionData.host,
+  user     : sql.connectionData.user,,
+  password : sql.connectionData.password,
+});
+
+connection.connect();
+
+connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+  console.log('The solution is: ', rows[0].solution);
+});
+
+connection.end();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
