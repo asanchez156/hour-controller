@@ -1,4 +1,4 @@
-export.connectionData = function(){
+exports.connectionData = function(){
 	var mcd = {host     : 'localhost',
 			   user     : 'dbuser',
 			   password : 'password'};
