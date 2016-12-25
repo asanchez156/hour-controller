@@ -5,5 +5,3 @@ exports.connectionData = function(){
 
 	return mcd;
 }
-						  
-
