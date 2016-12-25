@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var sql = require('./mysql');
+var config = require('./config');
 
 var home = require('./routes/home');
 var about = require('./routes/about');
@@ -15,11 +15,15 @@ var page = require('./routes/page');
 
 var app = express();
 
+console.log("host:" + config.mysql.host + 
+            " user: " + config.mysql.user + 
+            " password: " + config.mysql.password);
+
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-  host     : sql.connectionData.host,
-  user     : sql.connectionData.user,,
-  password : sql.connectionData.password,
+  host     : config.mysql.host,
+  user     : config.mysql.user,
+  password : config.mysql.password
 });
 
 connection.connect();
