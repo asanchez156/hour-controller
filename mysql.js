@@ -3,7 +3,7 @@ exports.connectionData = function(){
 			   user     : 'dbuser',
 			   password : 'password'};
 
-	return mcd;
+	return mcd; 
 }
 						  
 
