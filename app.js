@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mysql      = require('mysql');
 
 var config = require('./config');
 
@@ -15,25 +16,26 @@ var page = require('./routes/page');
 
 var app = express();
 
-console.log("host:" + config.mysql.host + 
-            " user: " + config.mysql.user + 
-            " password: " + config.mysql.password);
+//console.log("host: " + config.mysql.host);
+//console.log("user: " + config.mysql.user);
+//console.log("password: " + config.mysql.password);
+//console.log("database: " + config.mysql.database);
 
-var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : config.mysql.host,
   user     : config.mysql.user,
-  password : config.mysql.password
+  password : config.mysql.password,
+  database : config.mysql.database
 });
 
-connection.connect();
-
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-  if (err) throw err;
-  console.log('The solution is: ', rows[0].solution);
+connection.connect(function(err){
+    if(!err) {
+        console.log("Database is connected ... \n\n");  
+    } else {
+        console.log("Error connecting database ... \n\n");  
+        console.log(err);
+    }
 });
-
-connection.end();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
