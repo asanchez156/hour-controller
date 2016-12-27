@@ -39,7 +39,8 @@ connection.connect(function(err){
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.use(favicon());
 app.use(logger('dev'));
@@ -60,9 +61,6 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
-
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
 
 /// error handlers
 
