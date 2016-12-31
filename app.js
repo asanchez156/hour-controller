@@ -81,11 +81,6 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-<<<<<<< HEAD
-=======
-/// error handlers
-
->>>>>>> origin/master
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
