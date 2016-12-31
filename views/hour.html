@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <% include ../partials/head %> 
+  </head>
+  <body>
+
+    <!-- Header Area wrapper Starts -->
+    <header id="header-wrap">
+      <% include ../partials/header %> 
+    </header>
+    <!-- Header Area wrapper End -->
+
+    <% include ../partials/page-header %>   
+    <main>
+        <input type="hidden" id="pageName" value="<%= page %>"/>
+        <div class="pageContent">
+            <div class="searchPanel">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-1 col-sm-6 col-xs-6">
+                            <label for="employee">Nombre empleado</label>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" id="employee" name="employee">
+                        </div>
+                    
+                        <div class="col-md-1 col-sm-6 col-xs-6">
+                            <label for="initialDate">Fecha inicial</label>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" id="initialDate" name="initialDate">
+                        </div>
+                    
+                        <div class="col-md-1 col-sm-6 col-xs-6">
+                            <label for="endDate">Fecha final</label>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" id="endDate" name="endDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                            <button type="text" class="btn btn-primary center-block" onclick="searchWorkingday()">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
+                            <button type="text" class="btn btn-primary center-block" onclick="newWorkingday()">Nuevo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tablePanel">
+                Tabla de horas
+                <table id="hoursTable">
+                </table>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer Section Start -->   
+    <footer class="section">  
+        <% include ../partials/footer %>
+    </footer>  
+    <!-- Footer Section End -->  
+
+    <% include ../partials/copyright %>
+    <% include ../partials/gotop %>
+    <% include ../partials/scripts %>
+
+  </body>
+</html>
