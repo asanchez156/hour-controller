@@ -10,6 +10,12 @@
           <!-- Quick Contacts Starts -->
           <div class="quick-contacts" id="userConnection">
               <!--<span><i class="icon-phone"></i> (00) 123 456 789</span>-->
+              <% if (user){ %>
+              <span><i class="icon-user"></i><a id="usernameBarText" href="#"><%= user.username %></a></span>
+              <span><i class="glyphicon glyphicon-off"></i><a id="logoutBarText" href="/logout">Desconexión</a></span>
+              <% } else {%>
+                  <span><i class="icon-user"></i><a id="usernameBarText" href="/login">Anonimo</a></span>                
+              <% } %>
           </div>
           <!-- Quick Contacts End -->
         </div>
@@ -29,12 +35,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><img src="assets/img/logo1.png" class="logo" alt=""></a>
+          <a class="navbar-brand" href="/"><img src="/assets/img/logo1.png" class="logo" alt=""></a>
         </div>
         
         <div class="collapse navbar-collapse" id="navbar">
           <ul class="nav navbar-nav navbar-right">
             <li id="homePageNav"><a href="/">Pantalla principal</a></li>
+            <% if (user){ %>
+              <li id="hourPageNav"><a href="/hour">Jornadas</a></li>
+            <% } %>
             <li id="aboutPageNav"><a href="/about">Saber más</a></li>
             <!--
             <li><a href="hours.html">Tabla de horas</a></li>
@@ -60,6 +69,9 @@
       <!-- Mobile Menu Start -->
       <ul class="wpb-mobile-menu">
         <li id="homePageNavMobile"><a href="/">Pantalla principal</a></li>
+         <% if (user){ %>
+              <li id="hourPageNav"><a href="/hour">Jornadas</a></li>
+            <% } %>
         <li id="aboutPageNavMobile"><a href="/about">Saber más</a></li>
         <!--
         <li><a href="#">Pages</a>
