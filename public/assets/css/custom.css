@@ -5,3 +5,30 @@
 .top-buffer{
 	 { padding-top: 1em; }
 }
+
+.pageContent{
+	padding-top: 30px;
+	padding-left: 50px;
+	padding-bottom: 30px;
+	padding-right: 50px;
+
+	background-color: #e7e7e7;
+}
+
+.searchPanel{
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	padding-right: 20px;
+
+	background-color: white;
+}
+
+.tablePanel{
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	padding-right: 20px;
+
+	background-color: #faf8ee;
+}
