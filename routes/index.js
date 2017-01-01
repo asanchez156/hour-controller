@@ -17,7 +17,6 @@ var params = function (title, parentPage, page, user, errors) {
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	console.log(req.session.user);
     res.render('home', { title: 'Pantalla principal',
   						page: 'home' ,
   						user: req.session.user });

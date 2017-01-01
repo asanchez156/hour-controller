@@ -40,12 +40,12 @@ function searchWorkingday(){
 	});
 }
 
-function newWorkingdayForm(){
+function newWorkingdayFormSend(){
 
 }
 
 function newWorkingday(){
-	var user = "'"+<%= user.username %>+"'";
+	var user = '<%= user.username %>';
 	var date = $('#date').val();
 	var endDate = $('#endDate').val();
 
@@ -58,9 +58,9 @@ function newWorkingday(){
 	});
 
 
-	workingdayDataList.push(workingdayData)
+	workingdayDataList.push(workingdayData);
 
-	$.post('/hour/create', workingdayData , function(data) {
+	$.post('/hour/create', workingdayDataList , function(data) {
 		
 	})
 	.done(function() {
@@ -76,7 +76,7 @@ function newWorkingday(){
 
 function newPale(){
 	var paleData = {
-		
+
 	}
 
 	$.post('/pale/create', paleData , function(data) {
