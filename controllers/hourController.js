@@ -9,17 +9,6 @@ exports.index = function(req, res, next) {
 			page: 'hour',
   			user: req.session.user
 	    });
-  	/*models.Workingday.findAll().then(function(quizes) {
-  		res.render('hour', {
-	    	title: 'Jornadas',
-			parentPage : 'Pantalla principal',
-			page: 'hour',
-  			user: req.session.user,
-  			workingdays: "data"
-	    });
-  }).catch(function(error) {
-    next(error);
-  });*/
 }
 
 exports.create = function(req, res, next) {
@@ -40,4 +29,8 @@ exports.create = function(req, res, next) {
   }).catch(function(error) {
     next(error);
   });*/
+}
+
+exports.find = function(req, res, next) {
+   console.log("Find workingday");
 }

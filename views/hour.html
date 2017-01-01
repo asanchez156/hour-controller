@@ -48,16 +48,14 @@
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                            <button type="text" class="btn btn-primary center-block" onclick="newWorkingday()">Nuevo</button>
+                            <button type="text" class="btn btn-primary center-block" onclick="newWorkingdayForm()">Nuevo</button>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="tablePanel">
-                Tabla de horas
-                <table id="hoursTable">
-                </table>
+                <table id="hoursTable"></table>
             </div>
             
         </div>
@@ -72,6 +70,8 @@
     <% include ../partials/copyright %>
     <% include ../partials/gotop %>
     <% include ../partials/scripts %>
+    <script type="text/javascript" src="/assets/js/hour-table.js"></script>
+    <% include ../partials/datatables %> 
 
   </body>
 </html>

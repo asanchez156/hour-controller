@@ -50,6 +50,7 @@ router.get('/logout', sessionController.destroy);
 /* Hour */
 
 router.get('/hour', sessionController.loginRequired, hourController.index);
+router.post('/hour', sessionController.loginRequired, hourController.find);
 router.post('/hour/create', sessionController.loginRequired, hourController.create);
 
 router.get('/*', function(req, res) {
