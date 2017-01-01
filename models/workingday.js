@@ -6,7 +6,8 @@ module.exports = function(sequelize, DataTypes) {
     return sequelize.define('jornada', {
         workingdayId:{
             type: DataTypes.INTEGER,
-            field: 'ID_JORNADA'
+            field: 'ID_JORNADA',
+            primaryKey: true
         },
         companyId:{
             type: DataTypes.INTEGER,
@@ -46,6 +47,14 @@ module.exports = function(sequelize, DataTypes) {
                 }
             },
             field: 'FECHA'
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            field: 'CREATE_DATE'
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            field: 'MODIFY_DATE'
         }
     });
 }

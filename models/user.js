@@ -3,10 +3,11 @@
 // Definicion del modelo de User
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('usuario', {
+    return sequelize.define('USUARIO', {
         userId:{
             type: DataTypes.INTEGER,
-            field: 'ID_USUARIO'
+            field: 'ID_USUARIO',
+            primaryKey : true
         },
         username: {
             type: DataTypes.STRING,
@@ -47,6 +48,14 @@ module.exports = function(sequelize, DataTypes) {
         userMode: {
             type: DataTypes.INTEGER,
             field: 'MODO_USUARIO'
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            field: 'CREATE_DATE'
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            field: 'MODIFY_DATE'
         }
     });
 }

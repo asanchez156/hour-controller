@@ -32,8 +32,16 @@ var sequelize = new Sequelize(DB_name, user, pwd, {
 });
 */
 
+//database wide options
+var opts = {
+    define: {
+        //prevent sequelize from pluralizing table names
+        freezeTableName: true
+    }
+}
+
 var sequelize = new Sequelize('mysql://'+config.mysql.user+':'+
-    config.mysql.password+'@'+config.mysql.host+'3306/'+config.mysql.database);
+    config.mysql.password+'@'+config.mysql.host+':3306/'+config.mysql.database, opts);
 
 // Importar la definicion de la tabla User en user.js
 var User = sequelize.import(path.join(__dirname, 'user'));

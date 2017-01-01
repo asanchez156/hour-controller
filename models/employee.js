@@ -6,7 +6,8 @@ module.exports = function(sequelize, DataTypes) {
     return sequelize.define('empleado', {
         employeeId:{
             type: DataTypes.INTEGER,
-            field: 'ID_EMPLEADO'
+            field: 'ID_EMPLEADO',
+            primaryKey: true
         },
         companyId:{
             type: DataTypes.INTEGER,
@@ -37,6 +38,14 @@ module.exports = function(sequelize, DataTypes) {
         isDeleted: {
             type: DataTypes.INTEGER(4),
             field: 'IS_DELETED'
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            field: 'CREATE_DATE'
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            field: 'MODIFY_DATE'
         }
     });
 }
