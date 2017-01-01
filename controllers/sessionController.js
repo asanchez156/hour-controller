@@ -9,17 +9,6 @@ exports.loginRequired = function(req, res, next) {
     }
 };
 
-// GET /login
-exports.new = function(req, res) {
-    var errors = req.session.errors || {};
-    req.session.errors = {};
-    /*
-    res.render('sessions/new', {
-        errors: errors
-    })*/
-    console.log(errors);
-}
-
 // POST /login
 exports.create = function(req, res) {
     var username = req.body.username;
@@ -28,12 +17,10 @@ exports.create = function(req, res) {
     var userController = require('./userController');
     userController.autenticar(username, password, function(error, user) {
         if (error) {
-            console.log("entra en error");
             req.session.errors = [{
-                "message": 'Se ha producido un error: ' + error
+                "message": error.message
             }];
-            console.log(error);
-            res.redirect("/login");
+            res.redirect("/login/error");
         }
         else {
             req.session.user = {
@@ -41,7 +28,6 @@ exports.create = function(req, res) {
                 username: user.username,
                 mode: user.mode
             };
-            console.log("Redirect to page:" + req.session.redir);
             res.redirect("/hour");
         }
     });
