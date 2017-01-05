@@ -98,7 +98,7 @@ function newPale(){
 function loadDates(){
 	$('.datepicker').datepicker({
 	    format: 'dd/mm/yyyy',
-	    defaultDate: 'yesterday',
+	    defaultDate: -1,
 	    laguage: 'es',
     	autoclose: true
 	});
@@ -156,6 +156,11 @@ function addEmployeePanel(){
 	                    </div>`;
 
 	$('#newWorkingDayPanelContent').append(htmlContent);
+	$(`.btn-number[data-field="hours${id}"]`).click(numberSpinner);
+	$(`.input-number[data-field="hours${id}"]`).focusin(numberSpinnerFocusIn);
+	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
+	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
+
 }
 
 function removeEmployeePanel(){
@@ -167,10 +172,7 @@ function removeEmployeePanel(){
 
 }
 
-
-//plugin bootstrap minus and plus
-//http://jsfiddle.net/laelitenetwork/puJ6G/
-$('.btn-number').click(function(e){
+function numberSpinner(e){
     e.preventDefault();
     
     fieldName = $(this).attr('data-field');
@@ -200,12 +202,13 @@ $('.btn-number').click(function(e){
     } else {
         input.val(0);
     }
-});
-$('.input-number').focusin(function(){
+}
+
+function numberSpinnerFocusIn(){
    $(this).data('oldValue', $(this).val());
-});
-$('.input-number').change(function() {
-    
+}
+
+function numberSpinnerChange(e){
     minValue =  parseInt($(this).attr('min'));
     maxValue =  parseInt($(this).attr('max'));
     valueCurrent = parseInt($(this).val());
@@ -223,21 +226,29 @@ $('.input-number').change(function() {
         alert('Sorry, the maximum value was reached');
         $(this).val($(this).data('oldValue'));
     }
+
+}
+
+function numberSpinnerKeydown (e){
+    // Allow: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+         // Allow: Ctrl+A
+        (e.keyCode == 65 && e.ctrlKey === true) || 
+         // Allow: home, end, left, right
+        (e.keyCode >= 35 && e.keyCode <= 39)) {
+             // let it happen, don't do anything
+             return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+    }
     
-    
-});
-$(".input-number").keydown(function (e) {
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-             // Allow: Ctrl+A
-            (e.keyCode == 65 && e.ctrlKey === true) || 
-             // Allow: home, end, left, right
-            (e.keyCode >= 35 && e.keyCode <= 39)) {
-                 // let it happen, don't do anything
-                 return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    });
+}
+
+//plugin bootstrap minus and plus
+//http://jsfiddle.net/laelitenetwork/puJ6G/
+$('.btn-number').click(numberSpinner);
+$('.input-number').focusin(numberSpinnerFocusIn);
+$('.input-number').change(numberSpinnerChange);
+$(".input-number").keydown(numberSpinnerKeydown);
