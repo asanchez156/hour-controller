@@ -8,6 +8,7 @@
     <!-- Header Area wrapper Starts -->
     <header id="header-wrap">
       <% include ../partials/header %> 
+
     </header>
     <!-- Header Area wrapper End -->
 
@@ -18,37 +19,47 @@
             <div class="searchPanel">
                 <div class="row">
                     <div class="form-group">
-                        <div class="col-md-1 col-sm-6 col-xs-6">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <label for="employee">Nombre empleado</label>
                         </div>
-                        <div class="col-md-3 col-sm-6 col-xs-6">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <input type="text" class="form-control" id="employee" name="employee">
                         </div>
                     
-                        <div class="col-md-1 col-sm-6 col-xs-6">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <label for="initialDate">Fecha inicial</label>
                         </div>
-                        <div class="col-md-3 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" id="initialDate" name="initialDate">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" id="initialDate" name="initialDate">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
                         </div>
-                    
-                        <div class="col-md-1 col-sm-6 col-xs-6">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <label for="endDate">Fecha final</label>
                         </div>
-                        <div class="col-md-3 col-sm-6 col-xs-6">
-                            <input type="text" class="form-control" id="endDate" name="endDate">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" id="endDate" name="endDate">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                </br>
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" class="btn btn-primary center-block" onclick="searchWorkingday()">Buscar</button>
+                            <button type="button" class="btn btn-primary" onclick="searchWorkingday()">Buscar</button>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                            <button type="button" class="btn btn-primary center-block" data-toggle="newWorkingDayModal">Nuevo</button>
+                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newWorkingDayModal">Nuevo</button>
                         </div>
                     </div>
                 </div>
@@ -59,29 +70,80 @@
             </div>
         </div>
 
-    <div class="modal fade" id="newWorkingDayModal" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 style="color:red;"><span class="glyphicon glyphicon-lock"></span> Nuevo</h4>
-            </div>
-            <div class="modal-body">
-              <form role="form">
-                <div class="form-group">
-                  <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                  <input type="text" class="form-control" id="usrname" placeholder="Enter email">
+        <div class="modal fade" id="newWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="newWorkingDayModalLbl">Nueva jornada</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="newWorkingDayPanelContent">
+                            <input type="hidden" id="newWorkingDayPanelCounter" value=0/>
+
+                            <div class="panel panel-primary" id="newWorkingDayPanelPale">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Pales</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                                                <label for="datePale">Fecha</label>
+                                            </div>
+                                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                                <div class="input-group date" data-provide="datepicker">
+                                                    <input type="text" class="form-control" id="datePale" name="datePale">
+                                                    <div class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-th"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                                                <label for="pales">Numero de pales</label>
+                                            </div>
+                                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="pales">
+                                                            <span class="glyphicon glyphicon-minus"></span>
+                                                        </button>
+                                                      </span>
+                                                    <input id="pales" name="pales" class="form-control input-number" value="11" min="1" max="20" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="pales">
+                                                            <span class="glyphicon glyphicon-plus"></span>
+                                                        </button>
+                                                     </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <button type="button" class="btn btn-success pull-right" onclick="addEmployeePanel()">
+                                         <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-danger pull-right" onclick="removeEmployeePanel()">
+                                         <span class="glyphicon glyphicon-minus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                  <input type="text" class="form-control" id="psw" placeholder="Enter password">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-off"></span> Guardar</button>
-              </form>
             </div>
-          </div>
-        </div>
-      </div> 
+        </div> 
     </main>
 
     <!-- Footer Section Start -->   

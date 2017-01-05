@@ -85,7 +85,6 @@ ol {
   padding: 10px 0;
 }
 .btn {
-  padding: 10px 40px;
   border-radius: 50px;
   color: #fff;
   font-size: 15px;
@@ -96,6 +95,8 @@ ol {
   -moz-transition: all 0.3s linear;
   -o-transition: all 0.3s linear;
   transition: all 0.3s linear;
+  
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
 }
 .btn:focus {
   color: #fff;
@@ -2281,19 +2282,22 @@ blockquote .quote-text {
   margin-right: 10px;
 }
 .form-control {
-  font-size: 14px;
+  font-size: 12px;
   outline: medium none;
   color: #999;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-  margin: 15px 0;
+  margin: 0;
   padding: 10px 15px;
-  height: 40px;
+  height: 35px;
   border: none;
   border-radius: 0;
   -webkit-transition: all 0.4s ease;
   -moz-transition: all 0.4s ease;
   -ms-transition: all 0.4s ease;
   transition: all 0.4s ease;
+}
+.form-item {
+  margin: 0.5em 0;
 }
 .form-control:focus {
   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.14);
