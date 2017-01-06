@@ -3,11 +3,15 @@
 // Definicion del modelo de Pale
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('pale', {
+    return sequelize.define('PALE', {
         paleId:{
             type: DataTypes.INTEGER,
             field: 'ID_PALE',
             primaryKey: true
+        },
+        userId:{
+            type: DataTypes.INTEGER,
+            field: 'ID_USUARIO'
         },
         companyId:{
             type: DataTypes.INTEGER,
@@ -21,6 +25,15 @@ module.exports = function(sequelize, DataTypes) {
                 }
             },
             field: 'NUM_PALE'
+        },
+        date: {
+            type: DataTypes.DATE,
+            validate: {
+                notEmpty: {
+                    msg: "-> Falta la fecha de la jornada"
+                }
+            },
+            field: 'FECHA'
         },
         description: {
             type: DataTypes.STRING,

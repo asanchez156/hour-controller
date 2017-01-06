@@ -3,7 +3,7 @@
 // Definicion del modelo de Employee
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('empleado', {
+    return sequelize.define('EMPLEADO', {
         employeeId:{
             type: DataTypes.INTEGER,
             field: 'ID_EMPLEADO',

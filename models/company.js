@@ -3,7 +3,7 @@
 // Definicion del modelo de Company
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('empresa', {
+    return sequelize.define('EMPRESA', {
         companyId:{
             type: DataTypes.INTEGER,
             field: 'ID_EMPRESA',

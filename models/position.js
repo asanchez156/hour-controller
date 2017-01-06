@@ -3,7 +3,7 @@
 // Definicion del modelo de Position
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('cargo', {
+    return sequelize.define('CARGO', {
         positionId:{
             type: DataTypes.INTEGER,
             field: 'ID_CARGO',
