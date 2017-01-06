@@ -16,10 +16,10 @@
         <form id="loginForm" action="/login" method="POST">
             <input type="hidden" id="pageName" value="<%= page %>"/>
             <div class="pageContent">
-                <%if (errors) { 
-                    for (var i in errors){ %>
+                <%if (status) { 
+                    for (var i in status.error){ %>
                     <div class="alert alert-danger">
-                        <strong>Error: </strong><%= errors[i].message %>
+                        <strong>Error: </strong><%= status.error[i].message %>
                     </div>
                 <% } } %>
                 <div class="row row-centered">

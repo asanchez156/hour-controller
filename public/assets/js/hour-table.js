@@ -4,6 +4,8 @@ $( document ).ready(function() {
     //Add to Employees by default
     addEmployeePanel();
     addEmployeePanel();
+    $('#employee1').val('Javi');
+    $('#employee2').val('Paco');
 })
 
 
@@ -96,13 +98,16 @@ function newPale(){
 }
 
 function loadDates(){
-	$('.datepicker').datepicker({
-	    format: 'dd/mm/yyyy',
-	    defaultDate: -1,
-	    laguage: 'es',
-    	autoclose: true
-	});
+	$('.date').datepicker(dateInit());
 }
+
+function dateInit (){
+	return {
+	    startView: 'yesterday',
+	    language: 'es',
+    	autoclose: true
+	};
+} 
 
 function addEmployeePanel(){
 	var id = parseInt($('#newWorkingDayPanelCounter').val());
@@ -125,7 +130,7 @@ function addEmployeePanel(){
 	                                        <label for="date${id}">Fecha</label>
 	                                    </div>
 	                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-	                                        <div class="input-group date" data-provide="datepicker">
+	                                        <div class="input-group date" data-provide="datepicker" data-id="datepicker${id}">
 	                                            <input type="text" class="form-control" id="date${id}" name="date${id}">
 	                                            <div class="input-group-addon">
 	                                                <span class="glyphicon glyphicon-th"></span>
@@ -160,6 +165,7 @@ function addEmployeePanel(){
 	$(`.input-number[data-field="hours${id}"]`).focusin(numberSpinnerFocusIn);
 	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
 	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
+	$(`.date[data-id="datepicker${id}"]`).datepicker(dateInit());
 
 }
 
@@ -178,12 +184,12 @@ function numberSpinner(e){
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
     var input = $("input[name='"+fieldName+"']");
-    var currentVal = parseInt(input.val());
+    var currentVal = parseFloat(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
             
             if(currentVal > input.attr('min')) {
-                input.val(currentVal - 1).change();
+                input.val(currentVal - 0.5).change();
             } 
             if(parseInt(input.val()) == input.attr('min')) {
                 $(this).attr('disabled', true);
@@ -192,7 +198,7 @@ function numberSpinner(e){
         } else if(type == 'plus') {
 
             if(currentVal < input.attr('max')) {
-                input.val(currentVal + 1).change();
+                input.val(currentVal + 0.5).change();
             }
             if(parseInt(input.val()) == input.attr('max')) {
                 $(this).attr('disabled', true);
@@ -217,13 +223,13 @@ function numberSpinnerChange(e){
     if(valueCurrent >= minValue) {
         $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
     } else {
-        alert('Sorry, the minimum value was reached');
+        alert('Lo siento, se ha alcanzado el número mínimo');
         $(this).val($(this).data('oldValue'));
     }
     if(valueCurrent <= maxValue) {
         $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
     } else {
-        alert('Sorry, the maximum value was reached');
+        alert('Lo siento, se ha alcanzado el número máximo');
         $(this).val($(this).data('oldValue'));
     }
 

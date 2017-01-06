@@ -16,6 +16,17 @@
     <main>
         <input type="hidden" id="pageName" value="<%= page %>"/>
         <div class="pageContent">
+            <%if (status) { 
+                    for (var i in status.error){ %>
+                    <div class="alert alert-danger">
+                        <strong>Error: </strong><%= status.error[i].message %>
+                    </div>
+                <% } } else if (status.success!=undefinded){ %>
+                    <div class="alert alert-danger">
+                        <strong>Exito: </strong><%= success[i].message %>
+                    </div>
+                <% } %>
+
             <div class="searchPanel">
                 <div class="row">
                     <div class="form-group">
@@ -73,13 +84,13 @@
         <div class="modal fade" id="newWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="newWorkingDayModalLbl">Nueva jornada</h4>
-                    </div>
-                    <form id="" action="/hour/create" method="POST">
+                <form id="" action="/hour/create" method="POST">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="newWorkingDayModalLbl">Nueva jornada</h4>
+                        </div>
                         <div class="modal-body">
                             <div id="newWorkingDayPanelContent">
                                 <input type="hidden" id="newWorkingDayPanelCounter" value=0/>
@@ -92,11 +103,11 @@
                                         <div class="row">
                                             <div class="form-group">
                                                 <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <label for="datePale">Fecha</label>
+                                                    <label for="paleDate">Fecha</label>
                                                 </div>
-                                                <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
                                                     <div class="input-group date" data-provide="datepicker">
-                                                        <input type="text" class="form-control" id="datePale" name="datePale">
+                                                        <input type="text" class="form-control" id="paleDate" name="paleDate">
                                                         <div class="input-group-addon">
                                                             <span class="glyphicon glyphicon-th"></span>
                                                         </div>
@@ -105,7 +116,7 @@
                                                 <div class="form-item col-md-2 col-sm-6 col-xs-6">
                                                     <label for="pales">Numero de pales</label>
                                                 </div>
-                                                <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
                                                     <div class="input-group">
                                                         <span class="input-group-btn">
                                                             <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="pales">
@@ -119,6 +130,12 @@
                                                             </button>
                                                          </span>
                                                     </div>
+                                                </div>
+                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                                                    <label for="paleDescription">Observaciones</label>
+                                                </div>
+                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                                                    <input type="text" class="form-control" id="paleDescription" name="paleDescription">
                                                 </div>
                                             </div>
                                         </div>
@@ -138,11 +155,11 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
                     </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
                 </div>
             </div>
         </div> 

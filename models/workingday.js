@@ -3,25 +3,25 @@
 // Definicion del modelo de Workingday
 
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('jornada', {
+    return sequelize.define('JORNADA', {
         workingdayId:{
             type: DataTypes.INTEGER,
             field: 'ID_JORNADA',
             primaryKey: true
         },
-        companyId:{
+        employeeId:{
             type: DataTypes.INTEGER,
-            field: 'ID_EMPRESA'
+            field: 'ID_EMPLEADO'
         },
         userId:{
             type: DataTypes.INTEGER,
             field: 'ID_USUARIO'
         },
         workingday: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta jornada"
+                    msg: "Falta jornada"
                 }
             },
             field: 'JORNADA'
@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta las horas realizadas"
+                    msg: "Falta las horas realizadas"
                 }
             },
             field: 'HORAS_REALIZADAS'
@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DATE,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta la fecha de la jornada"
+                    msg: "Falta la fecha de la jornada"
                 }
             },
             field: 'FECHA'

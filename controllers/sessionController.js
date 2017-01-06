@@ -17,14 +17,14 @@ exports.create = function(req, res) {
     var userController = require('./userController');
     userController.autenticar(username, password, function(error, user) {
         if (error) {
-            req.session.errors = [{
+            req.session.error = [{
                 "message": error.message
             }];
             res.redirect("/login/error");
         }
         else {
             req.session.user = {
-                id: user.id,
+                id: user.userId,
                 username: user.username,
                 mode: user.mode
             };
