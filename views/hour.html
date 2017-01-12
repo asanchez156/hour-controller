@@ -16,16 +16,9 @@
     <main>
         <input type="hidden" id="pageName" value="<%= page %>"/>
         <div class="pageContent">
-            <%if (status) { 
-                    for (var i in status.error){ %>
-                    <div class="alert alert-danger">
-                        <strong>Error: </strong><%= status.error[i].message %>
-                    </div>
-                <% } } else if (status.success!=undefinded){ %>
-                    <div class="alert alert-danger">
-                        <strong>Exito: </strong><%= success[i].message %>
-                    </div>
-                <% } %>
+            <div id="messages">
+                <% include ../partials/messages %>
+            </div>
 
             <div class="searchPanel">
                 <div class="row">

@@ -12,6 +12,9 @@
     <main>
     <!-- Main Slider Section Start -->
     <input type="hidden" id="pageName" value="<%= page %>"/>
+    <div id="messages">
+        <% include ../partials/messages %>
+    </div>
     <div id="carousel-area">
       <div id="carousel-slider" class="carousel slide" data-ride="carousel">
         
@@ -21,7 +24,7 @@
             <img src="assets/img/slider/bg-1.jpg" alt="">
             <div class="carousel-caption">
               <h2 class="wow fadeInRight" data-wow-delay="300ms"> Control de horas <br> Registra las horas que realizas en tu trabajo</h2>
-              <div class="buttons wow fadeInDown" data-wow-delay="0.2s"><a class="btn btn-lg btn-border" href="/login">Iniciar sessión</a></div>
+              <div class="buttons wow fadeInDown" data-wow-delay="0.2s"><a class="btn btn-lg btn-border" href="#" data-toggle="modal" data-target="#loginModal">Iniciar sessión</a></div>
             </div>
           </div>
           <div class="item">
@@ -78,6 +81,17 @@
     <% include ../partials/copyright %>
     <% include ../partials/gotop %>
     <% include ../partials/scripts %>
+
+    <!-- Login JS -->
+    <script type="text/javascript">
+      
+      $( document ).ready(function() {
+        <% if (login==1) { %>
+           $( "#usernameBarText" ).trigger( "click" );
+        <% } %>
+      });
+
+    </script>
 
 
   </body>
