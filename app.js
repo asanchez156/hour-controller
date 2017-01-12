@@ -18,27 +18,6 @@ var routes = require('./routes/index');
 
 var app = express();
 
-//console.log("host: " + config.mysql.host);
-//console.log("user: " + config.mysql.user);
-//console.log("password: " + config.mysql.password);
-//console.log("database: " + config.mysql.database);
-/*
-var connection = mysql.createConnection({
-  host     : config.mysql.host,
-  user     : config.mysql.user,
-  password : config.mysql.password,
-  database : config.mysql.database
-});
-
-connection.connect(function(err){
-    if(!err) {
-        console.log("Base de datos conectada \n");  
-    } else {
-        console.log("Error al conectar la base de datos ... \n");  
-        console.log(err);
-    }
-});*/
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
@@ -58,8 +37,6 @@ app.use(session());
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-app.use('/', routes);
-
 // Helpers dinamicos:
 app.use(function(req, res, next) {
     // guardar path en session.redir para redirigir tras login
@@ -71,6 +48,8 @@ app.use(function(req, res, next) {
     res.locals.session = req.session;
     next();
 });
+
+app.use('/', routes);
 
 /// error handlers
 
