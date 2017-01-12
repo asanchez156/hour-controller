@@ -8,7 +8,7 @@ exports.index = function(req, res, next) {
 			parentPage : 'Pantalla principal',
 			page: 'hour',
   			user: req.session.user,
-  			status : {error : {}, success:{}}
+  			messages : {error : {}, success:{}}
 	    });
 }
 

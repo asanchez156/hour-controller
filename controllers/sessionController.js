@@ -17,10 +17,11 @@ exports.create = function(req, res) {
     var userController = require('./userController');
     userController.autenticar(username, password, function(error, user) {
         if (error) {
-            req.session.error = [{
-                "message": error.message
-            }];
-            res.redirect("/login/error");
+            //It has to repeat the error because the page is loadded twice, it is and unknown error.
+            //TODO It is needed to fix this.
+            req.session.messages.error.push(error.message);
+            req.session.messages.error.push(error.message);
+            res.redirect("/");
         }
         else {
             req.session.user = {
@@ -28,7 +29,7 @@ exports.create = function(req, res) {
                 username: user.username,
                 mode: user.mode
             };
-            res.redirect("/hour");
+            res.redirect(req.session.redir);
         }
     });
 }
@@ -37,4 +38,12 @@ exports.create = function(req, res) {
 exports.destroy = function(req, res) {
     delete req.session.user;
     res.redirect("/");
+}
+
+exports.messages = function(req, res, next) {
+    if(req.session.messages==undefined){
+       req.session.messages = { error: [], success: [] };
+       //console.log(req.session.messages);
+    }
+    next();
 }
