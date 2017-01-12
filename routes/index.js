@@ -26,11 +26,15 @@ router.get('/', sessionController.messages, function(req, res) {
 
 /* GET Login. */
 router.get('/login', sessionController.messages, function(req, res) {
-    res.render('home', { title: 'Pantalla principal',
-              page: 'home' ,
-              user: req.session.user,
-              messages: req.session.messages,
-              login: 1});
+    if(req.session.user!=undefined){
+        res.redirect("/");
+    }else{
+      res.render('home', { title: 'Pantalla principal',
+                page: 'home' ,
+                user: req.session.user,
+                messages: req.session.messages,
+                login: 1});
+    }
 });
 
 /* Authentication */
