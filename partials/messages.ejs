@@ -1,0 +1,16 @@
+ <%
+ 	if (messages!=undefined) { 
+ 		console.log(messages); 
+ 		console.log('vez');
+ 		if (messages.success!= undefined && messages.success.length>0){ %>
+ 			<div class="alert alert-success">
+	 			<strong>Exito: </strong><%= messages.success.pop() %>
+ 		  	</div>
+ 		<% 	}
+ 		if (messages.error!= undefined && messages.error.length>0){ %>
+ 			<div class="alert alert-danger">
+	 			<strong>Error: </strong><%= messages.error.pop() %>
+ 		  	</div>
+ 	<% 	} 
+  	}
+%> 	
