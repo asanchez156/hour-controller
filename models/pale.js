@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.FLOAT,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta el número de pales"
+                    msg: "Falta el número de pales"
                 }
             },
             field: 'NUM_PALE'
@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DATE,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta la fecha de la jornada"
+                    msg: "Falta la fecha del pale"
                 }
             },
             field: 'FECHA'

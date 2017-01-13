@@ -1,7 +1,11 @@
 // controllers/sessionController.js
 
+
 // MW de autorizacion
 exports.loginRequired = function(req, res, next) {
+    //  ------------ debugueando---------------
+    req.session.user = { id: 1, username: "andoni", mode: 1 };
+    //  ------------ debugueando---------------
     if (req.session.user) {
         next();
     } else {
@@ -29,7 +33,7 @@ exports.create = function(req, res) {
                 username: user.username,
                 mode: user.mode
             };
-            res.redirect(req.session.redir);
+            res.redirect(req.session.redir || "/");
         }
     });
 }

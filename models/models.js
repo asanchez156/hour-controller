@@ -107,3 +107,7 @@ exports.Employee = Employee; // exportar la definicion de la tabla Employee
 //exports.EmpEmpPosition = EmpEmpPosition; // exportar la definicion de la tabla EmpEmpPosition
 exports.WorkingDay = WorkingDay; // exportar la definicion de la tabla WorkingDay
 exports.Pale = Pale; // exportar la definicion de la tabla Pale
+
+exports.transaction = function (tf) { 
+    return sequelize.transaction(tf);
+  }
