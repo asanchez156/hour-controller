@@ -11,17 +11,25 @@ module.exports = function(sequelize, DataTypes) {
         },
         companyId:{
             type: DataTypes.INTEGER,
-            field: 'ID_EMPRESA'
+            field: 'ID_EMPRESA',validate: {
+                notEmpty: {
+                    msg: "Falta la empresa del empleado"
+                }
+            }
         },
         positionId:{
             type: DataTypes.INTEGER,
-            field: 'ID_CARGO'
+            field: 'ID_CARGO',validate: {
+                notEmpty: {
+                    msg: "Falta el cargo del empleado"
+                }
+            }
         },
         name: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta nombre"
+                    msg: "Falta el nombre del empleado"
                 }
             },
             field: 'NOMBRE'
@@ -30,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta apellido"
+                    msg: "Falta el apellido del empleado"
                 }
             },
             field: 'APELLIDO'

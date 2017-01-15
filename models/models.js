@@ -66,37 +66,42 @@ var Pale = sequelize.import(path.join(__dirname, 'pale'));
 
 // Relaciones
 
-Employee.hasMany(Company,{
+Company.hasMany(Employee,{
   foreignKey: {
     name: 'companyId',
     allowNull: false
   }
 });
-Employee.hasMany(Position,{
+Position.hasMany(Employee,{
   foreignKey: {
     name: 'positionId',
     allowNull: false
   }
 });
-WorkingDay.hasMany(User,{
+User.hasMany(WorkingDay,{
   foreignKey: {
     name: 'userId',
     allowNull: false
   }
 });
-WorkingDay.hasMany(Employee,{
+Employee.hasMany(WorkingDay,{
   foreignKey: {
     name: 'employeeId',
     allowNull: false
   }
 });
-Pale.hasMany(Company,{
+Company.hasMany(Pale,{
   foreignKey: {
     name: 'companyId',
     allowNull: false
   }
 });
 
+WorkingDay.belongsTo(User, { foreignKey: 'userId' });
+WorkingDay.belongsTo(Employee, { foreignKey: 'employeeId' });
+Employee.belongsTo(Company, { foreignKey: 'companyId' });
+Employee.belongsTo(Position, { foreignKey: 'positionId' });
+Pale.belongsTo(Company, { foreignKey: 'positionId' });
 //Employee.belongsToMany(EmpEmpPosition, { through: UserProject });
 //Employee.belongsToMany(EmpEmpPosition, { through: UserProject });
 

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta nombre de usuario"
+                    msg: "Falta nombre de usuario del usuario"
                 }
             },
             field: 'NOMBRE_USUARIO'
@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta la contraseña"
+                    msg: "Falta la contraseña del usuario"
                 }
             },
             field: 'PASSWORD'
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta nombre"
+                    msg: "Falta el nombre del usuario"
                 }
             },
             field: 'NOMBRE'
@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta apellido"
+                    msg: "Falta el nombre del usuario"
                 }
             },
             field: 'APELLIDO'

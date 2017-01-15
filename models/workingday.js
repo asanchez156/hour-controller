@@ -11,17 +11,27 @@ module.exports = function(sequelize, DataTypes) {
         },
         employeeId:{
             type: DataTypes.INTEGER,
-            field: 'ID_EMPLEADO'
+            field: 'ID_EMPLEADO',
+            validate: {
+                notEmpty: {
+                    msg: "Falta el empleado de la jornada"
+                }
+            }
         },
         userId:{
             type: DataTypes.INTEGER,
-            field: 'ID_USUARIO'
+            field: 'ID_USUARIO',
+            validate: {
+                notEmpty: {
+                    msg: "Falta el usuario de la jornada"
+                }
+            }
         },
         workingday: {
             type: DataTypes.FLOAT,
             validate: {
                 notEmpty: {
-                    msg: "Falta jornada"
+                    msg: "Falta la jornada"
                 }
             },
             field: 'JORNADA'

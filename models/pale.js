@@ -11,11 +11,21 @@ module.exports = function(sequelize, DataTypes) {
         },
         userId:{
             type: DataTypes.INTEGER,
-            field: 'ID_USUARIO'
+            field: 'ID_USUARIO',
+            validate: {
+                notEmpty: {
+                    msg: "Falta el usuario del pale"
+                }
+            }
         },
         companyId:{
             type: DataTypes.INTEGER,
-            field: 'ID_EMPRESA'
+            field: 'ID_EMPRESA',
+            validate: {
+                notEmpty: {
+                    msg: "Falta la empresa del pale"
+                }
+            }
         },
         paleNum:{
             type: DataTypes.FLOAT,
