@@ -13,101 +13,168 @@ exports.index = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-	console.log("Creating working day");
 	var promises = []
 	var validationErrors = {};
-	console.log(req.body);
-
+	console.log("BODY: ", req.body);
+	var i,j = 1;
 	models.transaction(function (t) {
 	
 	   	promises.push(models.Pale.create({
 					   		companyId : 1,
 					   		userId: req.session.user.id,
 					   		paleNum: req.body.pales,
-					   		date: req.body.paleDate,
+					   		date: req.body.date0,
 					   		description : req.body.paleDescription
 						}, {transaction: t}).then(function (pale) {
 						}));
 
-   		var i = 1;
-	    while (req.body['employee'+i] != undefined){
-	    	promises.push(models.WorkingDay.create({
-				   		employeeId : i, //req.body['employee'+i],
+   		
+   		var eId;
+   		var employees = [];
+   		var employeeId;
+
+	    while (req.body['employee'+j] != undefined){
+	    	employees.push(req.body['employee'+j])
+	    	j++;
+	    }
+
+	    for( var i = 1; i<j; i++){
+	    	employeeId = employees.pop();
+			promises.push(models.Employee.findOne({
+		        where: {
+		            employeeId: parseInt(employeeId || 0)
+		        }
+		    }).then(function(employee) {
+		    		//In this case the employeeId and the iteration are the same
+		            console.log("Employee id: ", employee.employeeId);
+		            if (employee) {
+		            	eId = employee.employeeId;
+		            } else {
+		            	eId = undefined;
+		            }
+		            promises.push(models.WorkingDay.create({
+				   		employeeId : eId || '',
 				   		userId: req.session.user.id,
 				   		workingday: 8,
-				   		hours: req.body['hours'+i],
-				   		description: '', // req.body['description'+i],
-				   		date: req.body['date'+i],
+				   		hours: parseFloat(req.body['hours'+eId]),
+				   		description: '', // req.body['description'+eId],
+				   		date: req.body['date'+eId],
 				    }, {transaction: t}).then(function (workingday) {
-					}));
-		    i++;
+					}));    
+		    }));
 		}
 
 	   	return Promise.all(promises);
 		
 	}).then((results) => {
-		res.redirect("/hour");
+		res.send({
+		   status: 0
+		});
 	}).catch(function (e) {
-		console.log(e);
-		console.log('finished transaction error');
+		res.status(400).send({
+		   message: e.errors[0].message
+		});
 	});
-
-	/*
-   	if (req.body.pales != undefined || req.body.paleDate!=undefined){
-	   	var pale = models.Pale.build({
-	   		companyId : 1,
-	   		userId: req.session.user.id,
-	   		paleNum: req.body.pales,
-	   		date: req.body.paleDate,
-	   		description : req.body.paleDescription
-	    });
-
-	    pale.validate().then(function(err) {
-	        if (err) {
-	        	req.session.error = [{
-	                "message": err.message
-	            }];
-            	res.redirect("/hour/error");
-	        } else {
-	            pale.save().then(function() {
-	                //res.redirect('/hour');
-	            });
-	        }
-	    }).catch(function(error) {
-	        next(error);
-	    }););
-    }*/
-    /*
-    var i = 1;
-    while (req.body['employee'+i] != undefined){
-    	var workingday = models.WorkingDay.build({
-	   		employeeId : i, //req.body['employee'+i],
-	   		userId: req.session.user.id,
-	   		workingday: 8,
-	   		hours: req.body['hours'+i],
-	   		description: '', // req.body['description'+i],
-	   		date: req.body['date'+i],
-	    });
-	    promisesworkingday.validate().then(function(err) {
-	        if (err) {
-		        req.session.error = [{
-	                "message": err.message
-	            }];
-            	res.redirect("/hour/error");
-	        }else {
-	            workingday.save().then(function() {
-	                //res.redirect('/hour');
-	            });
-	        }
-	    }).catch(function(error) {
-	        next(error);
-	    });
-	    i++;
-    }
-    */
-    //res.redirect("/hour");
 }
 
 exports.find = function(req, res, next) {
-   console.log("Find workingday");
+   	var search = {}
+
+   	if (req.body.employeeId){
+   		search.employeeId = parseInt(req.body.employeeId);
+   	}
+   	if (req.body.initialDate && req.body.endDate){
+   		search.date = {
+            	$between: [req.body.initialDate , req.body.endDate]
+            }
+   	}else if (req.body.initialDate){
+   		search.date = {
+            	$between: [req.body.initialDate , today()]
+            }
+   	}else if (req.body.endDate){
+   		search.date = {
+            	$between: ["Fri Jan 1 2010 01:00:00 GMT+0100 (CET)'", req.body.endDate]
+            }
+   	}
+   	models.WorkingDay.findAll({
+        where: search, 
+        include: [models.Employee],
+        order: [['date', 'DESC']],
+    }).then(function(listWorkingday) {
+    	var searchResult = [];
+    		listWorkingday.forEach(function(element, index, array){
+    			searchResult.push({
+    				workingdayId: element.workingdayId,
+    				employeeId: element.employeeId,
+    				employeeName: element.EMPLEADO.name,
+    				date: spanishDate(element.date),
+    				workingday: element.workingday,
+    				hours: element.hours,
+    				description: element.description,
+    				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId},${element.employeeId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button><button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="removeWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
+			});
+    	});
+    	console.log(searchResult);
+    	res.send(JSON.stringify(searchResult));         
+    });
+}
+
+exports.update = function(req, res, next) {
+	console.log("BODY: ", req.body);
+	res.send({
+		   status: 0
+	});
+	/*models.WorkingDay.update({
+				   		employeeId : parseInt(req.body.workingDayId),
+				   		userId: req.session.user.id,
+				   		workingday: 8,
+				   		hours: parseFloat(req.body['hours'+eId]),
+				   		description: '', // req.body['description'+eId],
+				   		date: req.body['date'+eId]
+				    
+	}).then((results) => {
+		res.send({
+		   status: 0
+		});
+	}).catch(function (e) {
+		res.status(400).send({
+		   message: e.errors[0].message
+		});
+	});*/
+}
+
+exports.remove = function(req, res, next) {
+	console.log("BODY: ", req.body);
+}
+
+function today(){
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd='0'+dd
+	} 
+
+	if(mm<10) {
+	    mm='0'+mm
+	} 
+	return yyyy+'-'+mm+'-'+dd;
+}
+
+function spanishDate(date){
+	var today = new Date(date);
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+
+	if(dd<10) {
+	    dd='0'+dd
+	} 
+
+	if(mm<10) {
+	    mm='0'+mm
+	} 
+	return dd+'/'+mm+'/'+yyyy;
 }

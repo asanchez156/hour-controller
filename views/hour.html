@@ -26,7 +26,7 @@
                         <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <label for="employee">Empleado</label>
                         </div>
-                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                        <div class="form-item col-md-2 col-sm-6 col-xs-6" id="employeeSelectDiv0">
                             <input type="text" class="form-control" id="employee" name="employee">
                         </div>
                     
@@ -34,7 +34,7 @@
                             <label for="initialDate">Fecha inicial</label>
                         </div>
                         <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <div class="input-group date" data-provide="datepicker">
+                            <div class="input-group date" data-provide="datepicker" data-id="datepickerInitial">
                                 <input type="text" class="form-control" id="initialDate" name="initialDate">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
@@ -45,7 +45,7 @@
                             <label for="endDate">Fecha final</label>
                         </div>
                         <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <div class="input-group date" data-provide="datepicker">
+                            <div class="input-group date" data-provide="datepicker" data-id="datepickerEnd">
                                 <input type="text" class="form-control" id="endDate" name="endDate">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-th"></span>
@@ -70,14 +70,14 @@
             </div>
             
             <div class="tablePanel">
-                <table id="hoursTable"></table>
+                <table id="hoursTable" class="table table-striped table-bordered" width="100%" cellspacing="0"></table>
             </div>
         </div>
 
         <div class="modal fade" id="newWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                <form id="" action="/hour/create" method="POST">
+                <form id="newWorkingDayForm" action="/hour/create" method="POST">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -85,6 +85,8 @@
                             <h4 class="modal-title" id="newWorkingDayModalLbl">Nueva jornada</h4>
                         </div>
                         <div class="modal-body">
+                            <div id="newWorkingDayErrorsDiv">
+                            </div>
                             <div id="newWorkingDayPanelContent">
                                 <input type="hidden" id="newWorkingDayPanelCounter" value=0/>
 
@@ -99,8 +101,8 @@
                                                     <label for="paleDate">Fecha</label>
                                                 </div>
                                                 <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <div class="input-group date" data-provide="datepicker">
-                                                        <input type="text" class="form-control" id="paleDate" name="paleDate">
+                                                    <div class="input-group date" data-provide="datepicker" data-id="datepicker0">
+                                                        <input type="text" class="form-control" id="date0" name="date0">
                                                         <div class="input-group-addon">
                                                             <span class="glyphicon glyphicon-th"></span>
                                                         </div>
@@ -150,7 +152,31 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button id="saveNewWorkingdayBtn" type="button" class="btn btn-primary" onclick="saveNewWorkingday()">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> <div class="modal fade" id="editWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <form id="workingDayForm" action="/hour/update" method="POST">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="newWorkingDayModalLbl">Editando jornada</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="editWorkingDayErrorsDiv">
+                            </div>
+                            <form id="editWorkingDayForm">
+                                <div id="editWorkingDayPanelContent"/>        
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button id="saveEditWorkingdayBtn" type="button" class="btn btn-primary" >Guardar</button>
                         </div>
                     </form>
                 </div>

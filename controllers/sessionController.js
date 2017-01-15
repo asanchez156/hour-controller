@@ -4,7 +4,7 @@
 // MW de autorizacion
 exports.loginRequired = function(req, res, next) {
     //  ------------ debugueando---------------
-    req.session.user = { id: 1, username: "andoni", mode: 1 };
+    //req.session.user = { id: 1, username: "admin", mode: 1 };
     //  ------------ debugueando---------------
     if (req.session.user) {
         next();

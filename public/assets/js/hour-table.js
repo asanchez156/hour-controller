@@ -1,129 +1,193 @@
 $( document ).ready(function() {
 	$('#newWorkingDayPanelCounter').val(0);
-    loadDates();
+	loadEmployeeSelect(0);
+    loadDate("Initial");
+    loadDate("End");
+    $(`.date[data-id="datepickerInitial"]`).datepicker('update', '');
+    $(`.date[data-id="datepickerEnd"]`).datepicker('update', '');
+    loadDate("0");
     //Add to Employees by default
     addEmployeePanel();
     addEmployeePanel();
-    $('#employee1').val('Javi');
-    $('#employee2').val('Paco');
+    //$('#employee1').val('1');
+    //$('#employee2').val('2');
+    $('.selectpicker').selectpicker('refresh');
+
+    
 })
 
+var hourTable = $('#hoursTable').DataTable( {
+        "scrollY":        "200px",
+        "scrollCollapse": true,
+        columns: [
+            { title : "ID JORNADA", data: "workingdayId", visible: false },
+            { title : "ID EMPLEADO", data: "employeeId", visible: false },
+            { title : "EMPLEADO", data: "employeeName" },
+            { title : "FECHA", data: "date" },
+            { title : "JORNADA", data: "workingday" },
+            { title : "HORAS", data: "hours" },
+            { title : "", data: "functions" }
+        ],
+        "language": {
+            "url": "/assets/locales/dataTables-spanish.json"
+        },
+        select: true,
+        buttons: [
+            { extend: "edit"},
+            { extend: "remove" }
+        ]
+    } );
 
-function populateHourDatatable(data){
-	var table = $('#hoursTable').DataTable({
-        "bAutoWidth" : false,
-        "aaData" : data,
-        "columns" : [ {
-            "data" : "id"
-        }, {
-            "data" : "name"
-        }, {
-            "data" : "lat"
-        }, {
-            "data" : "lon"
-        }]
-    });
+function addError(div,errorText){
+    $(`#${div}`).html(` <div class="alert alert-danger">
+						 					<strong>Error: </strong> ${errorText}
+					 		  			</div>`);
+}
+
+function removeError(div){
+    $(`#${div}`).html('');
+}
+
+function populateHourDatatable(jsonData){
+    hourTable.clear();
+    hourTable.rows.add(JSON.parse(jsonData));
+    hourTable.draw();
 }
 
 function searchWorkingday(){
-	var employee = $('#employee').val();
-	var initialDate = $('#initialDate').val();
-	var endDate = $('#endDate').val();
+	var employeeId = $('#employee0').val();
+	var initialDate = $(`.date[data-id="datepickerInitial"]`).datepicker("getUTCDate");
+	var endDate = $(`.date[data-id="datepickerEnd"]`).datepicker("getUTCDate");
 	
 	var search = {
-		employee : employee,
+		employeeId : employeeId,
 		initialDate : initialDate,
 		endDate : endDate
 	}
+	console.log(search);
+	$.post('/hour/find', search , function(jsonData) {
+		populateHourDatatable(jsonData);
+	});;
+}
 
-	$.post('/hour', search , function(data) {
-		populateHourDatatable(data);
-	})
-	.done(function() {
-	    //alert( "second success" );
-	})
-	.fail(function() {
-	    //alert( "error" );
-	})
-	.always(function() {
-	    //alert( "finished" );
+function editWorkingDay(id,employeeId){
+	$('#editWorkingDayPanelContent').html(getEmployeePanelHtml(id));
+	loadEmployeePanelComponents(id,employeeId);
+	$('#saveEditWorkingdayBtn').on("click", function(){
+		saveEditWorkingday(id);
 	});
+	$('#editWorkingDayModal').modal('show');
 }
 
-function newWorkingdayFormSend(){
-
+function removeWorkingDay(id){
+	$('#removeWorkingDayModal').modal('show');
 }
 
-function newWorkingday(){
-	var user = '<%= user.username %>';
-	var date = $('#date').val();
-	var endDate = $('#endDate').val();
-
-	var workingdayDataList = [];
-	$('#newworkingDayPanel').forEach(function(value, index){
-		var workingdayData = {
-			employee : $('#employee'+index).val(),
-			date : $('#employee'+index).val(),
+function saveNewWorkingday(){
+	$('#saveNewWorkingdayBtn').prop('disabled', true);
+	$('#saveNewWorkingdayBtn').html('<div class="loader"></div>');
+	var inputsData = {};
+	var id = "";
+	$("#newWorkingDayForm :input").each(function(){
+	   if($(this)[0].name!=""){ 
+	   		if($(this).attr("id").includes("date")){
+	   			id = $(this).attr("id").substring(4, 5);
+	   			inputsData[$(this).attr("id")] = $(`.date[data-id="datepicker${id}"]`).datepicker("getUTCDate");
+	   		}else{
+				inputsData[$(this).attr("id")] = $(this).val();
+	   		}
+	   	}
+	});
+	console.log(inputsData);
+	$.post('/hour/create', inputsData , function(data) {
+		console.log(data);
+		if(data.status==0){
+			$('#newWorkingDayModal').modal('hide');
+			removeError("newWorkingDayErrorsDiv");
+		}else if (data.status==5){
+			addError("newWorkingDayErrorsDiv",data.message);
 		}
-	});
-
-
-	workingdayDataList.push(workingdayData);
-
-	$.post('/hour/create', workingdayDataList , function(data) {
-		
 	}).done(function() {
-	    //alert( "second success" );
-	}).fail(function() {
-	    //alert( "error" );
+	}).fail(function(jqXHR) {
+		$('#saveNewWorkingdayBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addError(responseText.message);
 	}).always(function() {
-	    //alert( "finished" );
+		$('#saveNewWorkingdayBtn').removeAttr('disabled');
+		$('#saveNewWorkingdayBtn').html('Guardar');
 	});
 }
 
-function newPale(){
-	var paleData = {
-
-	}
-
-	$.post('/pale/create', paleData , function(data) {
-		
+function saveEditWorkingday(id){
+	$('#editNewWorkingdayBtn').prop('disabled', true);
+	$('#editNewWorkingdayBtn').html('<div class="loader"></div>');
+	var inputsData = [];
+	var id = "";
+	$("#editWorkingDayForm :input").each(function(){
+	   if($(this)[0].name!=""){ 
+	   		if($(this).attr("id").includes("date")){
+	   			id = $(this).attr("id").substring(4, 5);
+	   			inputsData[$(this).attr("id")] = $(`.date[data-id="datepicker${id}"]`).datepicker("getUTCDate");
+	   		}else{
+				inputsData[$(this).attr("id")] = $(this).val();
+	   		}
+	   	}
+	});
+	$.post('/hour/update', inputsData , function(data) {
+		console.log(data);
+		if(data.status==0){
+			$('#editWorkingDayModal').modal('hide');
+			removeError("editWorkingDayErrorsDiv");
+		}else if (data.status==5){
+			addError("editWorkingDayErrorsDiv",data.message);
+		}
 	}).done(function() {
-	    //alert( "second success" );
-	}).fail(function() {
-	    //alert( "error" );
+	}).fail(function(jqXHR) {
+		$('#saveNewWorkingdayBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addError(responseText.message);
 	}).always(function() {
-	    //alert( "finished" );
+		$('#saveNewWorkingdayBtn').removeAttr('disabled');
+		$('#saveNewWorkingdayBtn').html('Guardar');
 	});
 }
 
-function loadDates(){
-	$('.date').datepicker(dateInit());
-}
+function loadDate(id){
+	$(`.date[data-id="datepicker${id}"]`).datepicker(dateInit());
+    $(`.date[data-id="datepicker${id}"]`).datepicker('update', '-1d');
+}	
 
 function dateInit (){
 	return {
-	    startView: 'yesterday',
 	    language: 'es',
     	autoclose: true
 	};
 } 
 
-function addEmployeePanel(){
-	var id = parseInt($('#newWorkingDayPanelCounter').val());
-	id+=1;
-	$('#newWorkingDayPanelCounter').val(id);
-
-	var htmlContent = 	`<div class="panel panel-primary" id="newWorkingDayPanel${id}">
+function loadEmployeeSelect(id){
+	var inputSelectHtml = `	<select class="selectpicker" data-id="employee${id}" id="employee${id}" name="employee${id}">
+							  	<option></option>
+							  	<option value="1">Paco</option>
+							  	<option value="2">Javi</option>
+							  	<option value="3">Pepelu</option>
+							</select>`	;
+	$(`#employeeSelectDiv${id}`).html(inputSelectHtml);
+	$(`.selectpicker[data-id="employee${id}"]`).selectpicker({
+		  style: 'btn-primary',
+		  width: 'fit'
+	});
+}
+function getEmployeePanelHtml(id){
+	return `<div class="panel panel-primary" id="workingDayPanel${id}">
 	                        <div class="panel-heading">
-	                            <h3 class="panel-title" id="employeeTitle">Jornada empleado ${id}</h3></div>
+	                            <h3 class="panel-title" id="employeeTitle">Jornada ${id}</h3></div>
 	                        <div class="panel-body">
 	                            <div class="row">
 	                                <div class="form-group">
 	                                    <div class="col-md-1 col-sm-6 col-xs-6">
-	                                        <label for="employee${id}">Nombre empleado</label>
+	                                        <label for="employee${id}">Empleado</label>
 	                                    </div>
-	                                    <div class="col-md-3 col-sm-6 col-xs-6">
+	                                    <div class="col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
 	                                        <input type="text" class="form-control" id="employee${id}" name="employee${id}">
 	                                    </div>
 	                                    <div class="col-md-1 col-sm-6 col-xs-6">
@@ -159,20 +223,34 @@ function addEmployeePanel(){
 	                            </div>
 	                        </div>
 	                    </div>`;
+}
 
-	$('#newWorkingDayPanelContent').append(htmlContent);
+function loadEmployeePanelComponents(id, employeeId){
 	$(`.btn-number[data-field="hours${id}"]`).click(numberSpinner);
 	$(`.input-number[data-field="hours${id}"]`).focusin(numberSpinnerFocusIn);
 	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
 	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
-	$(`.date[data-id="datepicker${id}"]`).datepicker(dateInit());
+
+	loadDate(id);
+	loadEmployeeSelect(id);
+	$(`.selectpicker[data-id="employee${id}"]`).selectpicker('val', employeeId);
+	$(`.selectpicker[data-id="employee${id}"]`).prop('disabled', true);
+	$(`.selectpicker[data-id="employee${id}"]`).selectpicker('refresh');
+}
+
+function addEmployeePanel(){
+	var id = parseInt($('#newWorkingDayPanelCounter').val());
+	id+=1;
+	$('#newWorkingDayPanelCounter').val(id);
+	$('#newWorkingDayPanelContent').append(getEmployeePanelHtml(id));
+	loadEmployeePanelComponents(id, id);
 
 }
 
 function removeEmployeePanel(){
 	var id = parseInt($('#newWorkingDayPanelCounter').val());
 	if(id > 0){
-		$('#newWorkingDayPanel'+id).remove();
+		$('#workingDayPanel'+id).remove();
 		$('#newWorkingDayPanelCounter').val(id-1);
 	}
 
@@ -251,6 +329,7 @@ function numberSpinnerKeydown (e){
     }
     
 }
+
 
 //plugin bootstrap minus and plus
 //http://jsfiddle.net/laelitenetwork/puJ6G/

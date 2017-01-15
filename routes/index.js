@@ -53,7 +53,9 @@ router.get('/about', sessionController.messages, function(req, res) {
 
 /* Hour */
 router.get('/hour', sessionController.loginRequired, sessionController.messages, hourController.index);
-router.post('/hour', sessionController.loginRequired, sessionController.messages, hourController.find);
+router.post('/hour/find', sessionController.loginRequired, sessionController.messages, hourController.find);
 router.post('/hour/create', sessionController.loginRequired, sessionController.messages, hourController.create);
+router.post('/hour/update', sessionController.loginRequired, sessionController.messages, hourController.update);
+router.post('/hour/remove', sessionController.loginRequired, sessionController.messages, hourController.remove);
 
 module.exports = router;
