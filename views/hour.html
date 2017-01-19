@@ -157,10 +157,11 @@
                     </form>
                 </div>
             </div>
-        </div> <div class="modal fade" id="editWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
+        </div> 
+        <div class="modal fade" id="editWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                <form id="workingDayForm" action="/hour/update" method="POST">
+                <form id="editWorkingDayForm" action="/hour/update" method="POST">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -182,6 +183,31 @@
                 </div>
             </div>
         </div> 
+        <div class="modal fade" id="removeWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="removeWorkingDayModalLlb" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <form id="removeWorkingDayForm" action="/hour/update" method="POST">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="removeWorkingDayModalLbl">Eliminando jornada</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="removeWorkingDayErrorsDiv">
+                            </div>
+                            <form id="removeWorkingDayForm">
+                                <div id="removeWorkingDayPanelContent"/>        
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button id="removeWorkingdayBtn" type="button" class="btn btn-primary" >Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
     </main>
 
     <!-- Footer Section Start -->   
@@ -192,9 +218,7 @@
 
     <% include ../partials/copyright %>
     <% include ../partials/gotop %>
-    <% include ../partials/scripts %>
-    <script type="text/javascript" src="/assets/js/hour-table.js"></script>
-    <% include ../partials/datatables %> 
+    <% include ../partials/scripts %> 
 
   </body>
 </html>

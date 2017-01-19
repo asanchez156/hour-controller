@@ -107,40 +107,46 @@ exports.find = function(req, res, next) {
     				workingdayId: element.workingdayId,
     				employeeId: element.employeeId,
     				employeeName: element.EMPLEADO.name,
-    				date: spanishDate(element.date),
+    				date: element.date,
+    				dateString: spanishDate(element.date),
     				workingday: element.workingday,
     				hours: element.hours,
     				description: element.description,
-    				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId},${element.employeeId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button><button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="removeWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
+    				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="removeWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
 			});
     	});
-    	console.log(searchResult);
+    	//console.log(searchResult);
     	res.send(JSON.stringify(searchResult));         
     });
 }
 
 exports.update = function(req, res, next) {
 	console.log("BODY: ", req.body);
+
+	models.WorkingDay.update({
+		workingdayId : parseInt(req.body.workingdayId)
+	},{
+		where: {
+			employeeId : parseInt(req.body.employeeId),
+			userId: req.session.user.id,
+			workingday: 8,
+			hours: parseFloat(req.body.hours),
+			description: req.body.description,
+			date: req.body.date
+		}
+	}).then(function(workingday) {
+		res.send(JSON.stringify({
+			status: 0,
+			message: "Cambios guardados con exito"
+		}));
+	}).catch(function (e) {
+		console.log(e);
+	});
+
 	res.send({
 		   status: 0
 	});
-	/*models.WorkingDay.update({
-				   		employeeId : parseInt(req.body.workingDayId),
-				   		userId: req.session.user.id,
-				   		workingday: 8,
-				   		hours: parseFloat(req.body['hours'+eId]),
-				   		description: '', // req.body['description'+eId],
-				   		date: req.body['date'+eId]
-				    
-	}).then((results) => {
-		res.send({
-		   status: 0
-		});
-	}).catch(function (e) {
-		res.status(400).send({
-		   message: e.errors[0].message
-		});
-	});*/
+	
 }
 
 exports.remove = function(req, res, next) {

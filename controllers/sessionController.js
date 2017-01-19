@@ -4,7 +4,7 @@
 // MW de autorizacion
 exports.loginRequired = function(req, res, next) {
     //  ------------ debugueando---------------
-    //req.session.user = { id: 1, username: "admin", mode: 1 };
+    req.session.user = { id: 1, username: "admin", mode: 1 };
     //  ------------ debugueando---------------
     if (req.session.user) {
         next();
@@ -18,8 +18,13 @@ exports.create = function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
+    var sha512 = require('js-sha512');
     var userController = require('./userController');
-    userController.autenticar(username, password, function(error, user) {
+
+    var criptoPassword = sha512(password);
+    console.log(criptoPassword);
+
+    userController.autenticar(username, criptoPassword, function(error, user) {
         if (error) {
             //It has to repeat the error because the page is loadded twice, it is and unknown error.
             //TODO It is needed to fix this.
