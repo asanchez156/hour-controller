@@ -12,10 +12,10 @@ exports.index = function(req, res, next) {
 	    });
 }
 
-exports.create = function(req, res, next) {
+exports.createBatch = function(req, res, next) {
 	var promises = []
 	var validationErrors = {};
-	console.log("BODY: ", req.body);
+	console.log("BODY create batch: ", req.body);
 	var i,j = 1;
 	models.transaction(function (t) {
 	
@@ -69,10 +69,10 @@ exports.create = function(req, res, next) {
 		res.send({
 		   status: 0
 		});
-	}).catch(function (e) {
+	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: e.errors[0].message
+		   	message: "Error: " + JSON.stringify(err)
 		});
 	});
 }
@@ -102,17 +102,17 @@ exports.find = function(req, res, next) {
         order: [['date', 'DESC']],
     }).then(function(listWorkingday) {
     	var searchResult = [];
-    		listWorkingday.forEach(function(element, index, array){
-    			searchResult.push({
-    				workingdayId: element.workingdayId,
-    				employeeId: element.employeeId,
-    				employeeName: element.EMPLEADO.name,
-    				date: element.date,
-    				dateString: stringDate(element.date,'es'),
-    				workingday: element.workingday,
-    				hours: element.hours,
-    				description: element.description,
-    				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="removeWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
+		listWorkingday.forEach(function(element, index, array){
+			searchResult.push({
+				workingdayId: element.workingdayId,
+				employeeId: element.employeeId,
+				employeeName: element.EMPLEADO.name,
+				date: element.date,
+				dateString: stringDate(element.date,'es'),
+				workingday: element.workingday,
+				hours: element.hours,
+				description: element.description,
+				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="deleteWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
 			});
     	});
     	//console.log(searchResult);
@@ -120,16 +120,44 @@ exports.find = function(req, res, next) {
     });
 }
 
-exports.update = function(req, res, next) {
-	console.log("BODY data: ", req.body);
+exports.create = function(req, res, next) {
+	console.log("BODY create: ", req.body);
+	models.transaction(function (t) {
+	    return models.WorkingDay.findOne({
+	        where: {
+	            employeeId: parseInt(req.body.employeeId)
+	        }
+	    }).then(function(employee) {
+            return models.WorkingDay.create({
+		   		employeeId : parseInt(employee.employeeId) || '',
+		   		userId: req.session.user.id,
+		   		workingday: 8,
+		   		hours: parseFloat(req.body.hours),
+		   		description: req.body.description,
+		   		date: req.body.date,
+		    }, {transaction: t}).then(function (workingday) {
+			}); 
+	    });
+	}).then((results) => {
+		res.send({
+		   status: 0
+		});
+	}).catch(function (err) {
+		res.status(400).send({
+			status: 1,
+		   	message: "No se ha podido crear la jornada " + JSON.stringify(err)
+		});
+	});
+}
 
+exports.update = function(req, res, next) {
+	console.log("BODY update: ", req.body);
 	models.transaction(function (t) { 
 	  	return models.WorkingDay.findOne({
 	  	 	where: {
 			  	workingdayId : parseInt(req.body.workingdayId)
 		 	}
 	  	}, { transaction: t}).then(function (workingday) {
-	  		//console.log(workingday);
 		    return workingday.updateAttributes({
 		    	userId: req.session.user.id,
 		    	hours: req.body.hours, 
@@ -143,14 +171,32 @@ exports.update = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: e.errors[0].message
+		   	message: "No se ha podido eliminar la jornada " + JSON.stringify(err)
 		});
 	});
 	
 }
 
-exports.remove = function(req, res, next) {
+exports.delete = function(req, res, next) {
 	console.log("BODY: ", req.body);
+	models.transaction(function (t) { 
+	  	return models.WorkingDay.findOne({
+	  	 	where: {
+			  	workingdayId : parseInt(req.body.workingdayId)
+		 	}
+	  	}, { transaction: t}).then(function (workingday) {
+		    return workingday.destroy({}, { transaction: t});
+	  	});
+	}).then(function (success) {
+		res.send({
+		   	status: 0
+		});
+	}).catch(function (err) {
+		res.status(400).send({
+			status: 1,
+		   	message: "No se ha podido eliminar la jornada " + JSON.stringify(err)
+		});
+	});
 }
 
 function stringDate(date,lg){
@@ -176,6 +222,5 @@ function stringDate(date,lg){
 	  		stringDate = yyyy+'/'+mm+'/'+dd;
 	    	break;
 	}
-
 	return stringDate;
 }

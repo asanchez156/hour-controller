@@ -4,6 +4,8 @@ var router = express.Router();
 //var workingDayController = require('../controllers/workingdayController');
 var sessionController = require('../controllers/sessionController');
 var hourController = require('../controllers/hourController');
+var paleController = require('../controllers/paleController');
+var employeeController = require('../controllers/employeeController');
 
 var params = function (title, parentPage, page, user, messages) { 
     return {
@@ -53,9 +55,20 @@ router.get('/about', sessionController.messages, function(req, res) {
 
 /* Hour */
 router.get('/hour', sessionController.loginRequired, sessionController.messages, hourController.index);
-router.post('/hour/find', sessionController.loginRequired, sessionController.messages, hourController.find);
-router.post('/hour/create', sessionController.loginRequired, sessionController.messages, hourController.create);
-router.post('/hour/update', sessionController.loginRequired, sessionController.messages, hourController.update);
-router.post('/hour/remove', sessionController.loginRequired, sessionController.messages, hourController.remove);
+router.post('/hour/find', sessionController.loginRequired, hourController.find);
+router.post('/hour/create', sessionController.loginRequired, hourController.create);
+router.post('/hour/create/batch', sessionController.loginRequired, hourController.createBatch);
+router.post('/hour/update', sessionController.loginRequired, hourController.update);
+router.post('/hour/delete', sessionController.loginRequired,  hourController.delete);
+
+/* Employeee */
+router.get('/employee/find', sessionController.loginRequired, employeeController.find);
+
+/* Pales */
+router.get('/pale', sessionController.loginRequired, sessionController.messages, paleController.index);
+router.post('/pale/create', sessionController.loginRequired, paleController.create);
+router.post('/pale/update', sessionController.loginRequired, paleController.update);
+router.post('/pale/delete', sessionController.loginRequired, paleController.delete);
+//router.post('/pale/find', sessionController.loginRequired, paleController.find);
 
 module.exports = router;
