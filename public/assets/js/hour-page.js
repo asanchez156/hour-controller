@@ -51,7 +51,6 @@ var listEmployee = []
 function setTableRowDataAvailable(){
 	$('#hoursTable tbody').on( 'click', 'button', function () {
 	        workingdayRow = hourTable.row( $(this).parents('tr') ).data();
-	        console.log(workingdayRow);
 			fillEmployeePanelComponents();
 	    } );
 }
@@ -123,7 +122,7 @@ function fillEmployeePanelComponents(){
 function newWorkingDay(){
 	removeMessage("#workingDayMessageDiv");
 	$('#workingDayModalLbl').html("Creando jornada");
-	$('#saveWorkingDayBtn').val("Guardar");
+	$('#saveWorkingDayBtn').html("Guardar");
 	$('#workingDayPanelContent').html(getEmployeePanelHtml(`New`));
 	loadEmployeePanelComponents(`New`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveNewWorkingDay()`);
@@ -133,7 +132,7 @@ function newWorkingDay(){
 function editWorkingDay(id){
 	removeMessage("#workingDayMessageDiv");
 	$('#workingDayModalLbl').html("Editando jornada");
-	$('#saveWorkingDayBtn').val("Guardar");
+	$('#saveWorkingDayBtn').html("Guardar");
 	$('#workingDayPanelContent').html(getEmployeePanelHtml(`Edit${id}`));
 	loadEmployeePanelComponents(`Edit${id}`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveEditWorkingDay(${id})`);
@@ -143,7 +142,7 @@ function editWorkingDay(id){
 function deleteWorkingDay(id){
 	removeMessage("#workingDayMessageDiv");
 	$('#workingDayModalLbl').html("Eliminando jornada");
-	$('#saveWorkingDayBtn').val("Eliminar");
+	$('#saveWorkingDayBtn').html("Eliminar");
 	$('#workingDayPanelContent').html("La jornada va a ser eliminada. ¿Estás seguro?");
 	$('#saveWorkingDayBtn').attr( "onclick",`saveDeleteWorkingDay(${id})`);
 	$('#workingDayModal').modal('show');
@@ -218,8 +217,7 @@ function saveEditWorkingDay(id){
 		hours: $(`#workingDayForm #hoursEdit${id}`).val(),
 		description: ""
 	};
-	
-	//console.log("Update data: ",inputsData);
+
 	$.post('/hour/update', inputsData , function(data) {
 		removeMessage("#workingDayMessageDiv");
 		if(data.status==0){

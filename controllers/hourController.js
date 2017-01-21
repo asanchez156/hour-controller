@@ -128,6 +128,7 @@ exports.create = function(req, res, next) {
 	            employeeId: parseInt(req.body.employeeId)
 	        }
 	    }).then(function(employee) {
+	    	console.log(employee);
             return models.WorkingDay.create({
 		   		employeeId : parseInt(employee.employeeId) || '',
 		   		userId: req.session.user.id,
@@ -135,8 +136,7 @@ exports.create = function(req, res, next) {
 		   		hours: parseFloat(req.body.hours),
 		   		description: req.body.description,
 		   		date: req.body.date,
-		    }, {transaction: t}).then(function (workingday) {
-			}); 
+		    }, {transaction: t});
 	    });
 	}).then((results) => {
 		res.send({
