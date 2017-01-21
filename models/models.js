@@ -116,3 +116,7 @@ exports.Pale = Pale; // exportar la definicion de la tabla Pale
 exports.transaction = function (tf) { 
     return sequelize.transaction(tf);
   }
+
+exports.query = function (query) { 
+    return sequelize.query(query);
+  }

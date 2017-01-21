@@ -20,15 +20,14 @@ exports.create = function(req, res, next) {
 	models.transaction(function (t) {
 	
 	   	promises.push(models.Pale.create({
-					   		companyId : 1,
-					   		userId: req.session.user.id,
-					   		paleNum: req.body.pales,
-					   		date: req.body.date0,
-					   		description : req.body.paleDescription
-						}, {transaction: t}).then(function (pale) {
-						}));
+	   		companyId : 1,
+	   		userId: req.session.user.id,
+	   		paleNum: req.body.pales,
+	   		date: req.body.date0,
+	   		description : req.body.paleDescription
+		}, {transaction: t}).then(function (pale) {
+		}));
 
-   		
    		var eId;
    		var employees = [];
    		var employeeId;
@@ -52,7 +51,7 @@ exports.create = function(req, res, next) {
 		            } else {
 		            	eId = undefined;
 		            }
-		            promises.push(models.WorkingDay.create({
+		            return models.WorkingDay.create({
 				   		employeeId : eId || '',
 				   		userId: req.session.user.id,
 				   		workingday: 8,
@@ -60,7 +59,7 @@ exports.create = function(req, res, next) {
 				   		description: '', // req.body['description'+eId],
 				   		date: req.body['date'+eId],
 				    }, {transaction: t}).then(function (workingday) {
-					}));    
+					}); 
 		    }));
 		}
 
@@ -72,7 +71,8 @@ exports.create = function(req, res, next) {
 		});
 	}).catch(function (e) {
 		res.status(400).send({
-		   message: e.errors[0].message
+			status: 1,
+		   	message: e.errors[0].message
 		});
 	});
 }
@@ -89,7 +89,7 @@ exports.find = function(req, res, next) {
             }
    	}else if (req.body.initialDate){
    		search.date = {
-            	$between: [req.body.initialDate , today()]
+            	$between: [req.body.initialDate , stringDate('','en')]
             }
    	}else if (req.body.endDate){
    		search.date = {
@@ -108,7 +108,7 @@ exports.find = function(req, res, next) {
     				employeeId: element.employeeId,
     				employeeName: element.EMPLEADO.name,
     				date: element.date,
-    				dateString: spanishDate(element.date),
+    				dateString: stringDate(element.date,'es'),
     				workingday: element.workingday,
     				hours: element.hours,
     				description: element.description,
@@ -121,30 +121,30 @@ exports.find = function(req, res, next) {
 }
 
 exports.update = function(req, res, next) {
-	console.log("BODY: ", req.body);
+	console.log("BODY data: ", req.body);
 
-	models.WorkingDay.update({
-		workingdayId : parseInt(req.body.workingdayId)
-	},{
-		where: {
-			employeeId : parseInt(req.body.employeeId),
-			userId: req.session.user.id,
-			workingday: 8,
-			hours: parseFloat(req.body.hours),
-			description: req.body.description,
-			date: req.body.date
-		}
-	}).then(function(workingday) {
-		res.send(JSON.stringify({
-			status: 0,
-			message: "Cambios guardados con exito"
-		}));
-	}).catch(function (e) {
-		console.log(e);
-	});
-
-	res.send({
-		   status: 0
+	models.transaction(function (t) { 
+	  	return models.WorkingDay.findOne({
+	  	 	where: {
+			  	workingdayId : parseInt(req.body.workingdayId)
+		 	}
+	  	}, { transaction: t}).then(function (workingday) {
+	  		//console.log(workingday);
+		    return workingday.updateAttributes({
+		    	userId: req.session.user.id,
+		    	hours: req.body.hours, 
+		    	description: req.body.description
+		    }, { transaction: t});
+	  	});
+	}).then(function (success) {
+		res.send({
+		   	status: 0
+		});
+	}).catch(function (err) {
+		res.status(400).send({
+			status: 1,
+		   	message: e.errors[0].message
+		});
 	});
 	
 }
@@ -153,34 +153,29 @@ exports.remove = function(req, res, next) {
 	console.log("BODY: ", req.body);
 }
 
-function today(){
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-	var yyyy = today.getFullYear();
-
-	if(dd<10) {
-	    dd='0'+dd
-	} 
-
-	if(mm<10) {
-	    mm='0'+mm
-	} 
-	return yyyy+'-'+mm+'-'+dd;
-}
-
-function spanishDate(date){
+function stringDate(date,lg){
 	var today = new Date(date);
 	var dd = today.getDate();
 	var mm = today.getMonth()+1; //January is 0!
 	var yyyy = today.getFullYear();
 
-	if(dd<10) {
-	    dd='0'+dd
-	} 
+	if(dd<10) dd='0'+dd;
 
-	if(mm<10) {
-	    mm='0'+mm
-	} 
-	return dd+'/'+mm+'/'+yyyy;
+	if(mm<10) mm='0'+mm;
+
+	var stringDate = '';
+
+	switch (lg) {
+	  	case 'es':
+	  		stringDate = dd+'/'+mm+'/'+yyyy;
+	    	break;
+	  	case 'en':
+	  		stringDate = yyyy+'/'+mm+'/'+dd;
+	    	break;
+	  	default:
+	  		stringDate = yyyy+'/'+mm+'/'+dd;
+	    	break;
+	}
+
+	return stringDate;
 }

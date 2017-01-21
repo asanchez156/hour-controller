@@ -169,7 +169,7 @@
                             <h4 class="modal-title" id="newWorkingDayModalLbl">Editando jornada</h4>
                         </div>
                         <div class="modal-body">
-                            <div id="editWorkingDayErrorsDiv">
+                            <div id="editWorkingDayMessageDiv">
                             </div>
                             <form id="editWorkingDayForm">
                                 <div id="editWorkingDayPanelContent"/>        
@@ -184,9 +184,9 @@
             </div>
         </div> 
         <div class="modal fade" id="removeWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="removeWorkingDayModalLlb" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal" role="document">
                 <div class="modal-content">
-                <form id="removeWorkingDayForm" action="/hour/update" method="POST">
+                <form id="removeWorkingDayForm" action="/hour/remove" method="POST">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -194,7 +194,7 @@
                             <h4 class="modal-title" id="removeWorkingDayModalLbl">Eliminando jornada</h4>
                         </div>
                         <div class="modal-body">
-                            <div id="removeWorkingDayErrorsDiv">
+                            <div id="removeWorkingDayMessageDiv">
                             </div>
                             <form id="removeWorkingDayForm">
                                 <div id="removeWorkingDayPanelContent"/>        

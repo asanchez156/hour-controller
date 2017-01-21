@@ -9,8 +9,8 @@ $( document ).ready(function() {
     //Add to Employees by default
     addEmployeePanel();
     addEmployeePanel();
-    //$('#employee1').val('1');
-    //$('#employee2').val('2');
+	$(`#newWorkingDayForm .selectpicker[data-id="employee1"]`).selectpicker('val', 1);
+	$(`#newWorkingDayForm .selectpicker[data-id="employee2"]`).selectpicker('val', 2);
     $('.selectpicker').selectpicker('refresh');
 
     setTableRowDataAvailable();
@@ -45,19 +45,28 @@ var row = {}
 function setTableRowDataAvailable(){
 	$('#hoursTable tbody').on( 'click', 'button', function () {
 	        row = hourTable.row( $(this).parents('tr') ).data();
-	        var date = new Date(row.date.substr(0,4),row.date.substr(5,2),row.date.substr(8,2));
-	        $(`#editWorkingDayForm .date[data-id="datepicker${row.workingdayId}"]`).datepicker('update', date);
-
+			fillEmployeePanelComponents();
 	    } );
 }
 
-function addError(div,errorText){
-    $(div).html(` <div class="alert alert-danger">
-						 					<strong>Error: </strong> ${errorText}
-					 		  			</div>`);
+function addMessage(div,type,text){
+	var content = '';
+	switch (type) {
+	  	case 0:
+	  		content = ` <div class="alert alert-info">
+		 					<strong>Info: </strong> ${text}
+	 		  			</div>`;
+	    	break;
+	  	case 1:
+	  		content = ` <div class="alert alert-danger">
+		 					<strong>Error: </strong> ${text}
+	 		  			</div>`;
+	    	break;
+	}
+    $(div).html(content);
 }
 
-function removeError(div){
+function removeMessage(div){
     $(div).html('');
 }
 
@@ -83,19 +92,22 @@ function searchWorkingday(){
 	});;
 }
 
-function fillEmployeePanelComponents(id){
-	$(`.selectpicker[data-id="employee${id}"]`).selectpicker('val', row.employeeId);
-	$(`.selectpicker[data-id="employee${id}"]`).prop('disabled', true);
-	$(`.selectpicker[data-id="employee${id}"]`).selectpicker('refresh');
+function fillEmployeePanelComponents(){
+	$(`#editWorkingDayForm .selectpicker[data-id="employee${row.workingdayId}"]`).selectpicker('val', row.employeeId);
+	$(`#editWorkingDayForm .selectpicker[data-id="employee${row.workingdayId}"]`).prop('disabled', true);
+	$(`#editWorkingDayForm .selectpicker[data-id="employee${row.workingdayId}"]`).selectpicker('refresh');
 
-	//$(`#hours${id}`).val(row.hours);
-	//$(`#description${id}`).val(row.description);
+	var date = new Date(row.date.substr(0,4),parseInt(row.date.substr(5,2))-1,row.date.substr(8,2));
+	$(`#editWorkingDayForm .date[data-id="datepicker${row.workingdayId}"]`).datepicker('update', date);
+	$(`#editWorkingDayForm #date${row.workingdayId}`).prop('disabled', true);
+	$(`#editWorkingDayForm #hours${row.workingdayId}`).val(row.hours);
+
+	//$(`#editWorkingDayForm #description${row.workingdayId}`).val(row.description);
 }
 
 function editWorkingDay(id){
 	$('#editWorkingDayPanelContent').html(getEmployeePanelHtml(id));
 	loadEmployeePanelComponents(id);
-	fillEmployeePanelComponents(id);
 	$('#saveEditWorkingdayBtn').attr( "onclick",`saveEditWorkingday(${id})`);
 	$('#editWorkingDayModal').modal('show');
 }
@@ -105,7 +117,6 @@ function removeWorkingDay(id){
 		saveRemoveWorkingday(id);
 	});
 	loadEmployeePanelComponents(id);
-	fillEmployeePanelComponents(id);
 	$('#removeWorkingDayPanelContent').html("Hola");
 	$('#saveEditWorkingdayBtn').attr( "onclick",`saveRemoveWorkingday(${id})`);
 	$('#removeWorkingDayModal').modal('show');
@@ -127,18 +138,18 @@ function saveNewWorkingday(){
 	});
 	//console.log(inputsData);
 	$.post('/hour/create', inputsData , function(data) {
-		console.log(data);
+		removeMessage("#newWorkingDayMessageDiv");
 		if(data.status==0){
+			searchWorkingday();
 			$('#newWorkingDayModal').modal('hide');
-			removeError("newWorkingDayErrorsDiv");
-		}else if (data.status==5){
-			addError("#newWorkingDayErrorsDiv",data.message);
+		}else if (data.status==1){
+			addMessage("#newWorkingDayMessageDiv", data.status, data.message);
 		}
 	}).done(function() {
 	}).fail(function(jqXHR) {
 		$('#saveNewWorkingdayBtn').prop('enable', true);
 		var responseText =  JSON.parse(jqXHR.responseText);
-		addError("#newWorkingDayErrorsDiv",responseText.message);
+		addMessage("#newWorkingDayMessageDiv",1,responseText.message);
 	}).always(function() {
 		$('#saveNewWorkingdayBtn').removeAttr('disabled');
 		$('#saveNewWorkingdayBtn').html('Guardar');
@@ -157,21 +168,20 @@ function saveEditWorkingday(id){
 		description: ""
 	};
 	
-	console.log("Idata: ",inputsData);
+	//console.log("Update data: ",inputsData);
 	$.post('/hour/update', inputsData , function(data) {
-		console.log(data);
+		removeMessage("#editWorkingDayMessageDiv");
 		if(data.status==0){
 			searchWorkingday();
 			$('#editWorkingDayModal').modal('hide');
-			removeError("#editWorkingDayErrorsDiv");
-		}else if (data.status==5){
-			addError("#editWorkingDayErrorsDiv",data.message);
+		} else if (data.status==1){
+			addMessage("#editWorkingDayMessageDiv", data.status, data.message);
 		}
 	}).done(function() {
 	}).fail(function(jqXHR) {
 		$('#saveNewWorkingdayBtn').prop('enable', true);
 		var responseText =  JSON.parse(jqXHR.responseText);
-		addError(responseText.message);
+		addMessage("#newWorkingDayMessageDiv",1,responseText.message);
 	}).always(function() {
 		$('#saveNewWorkingdayBtn').removeAttr('disabled');
 		$('#saveNewWorkingdayBtn').html('Guardar');
