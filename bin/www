@@ -2,8 +2,22 @@
 var debug = require('debug')('my-application');
 var app = require('../app');
 
-app.set('port', process.env.PORT || 3000);
+var fs = require('fs');
+var https = require('https');
+var http = require('http');
 
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
-});
+var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+var certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+
+//app.set('port', process.env.PORT || 3000);
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(process.env.PORT || 3000);
+httpsServer.listen(process.env.HTTPS_PORT || 3030);
+
+//var server = app.listen(app.get('port'), function() {
+//  debug('Express server listening on port ' + server.address().port);
+//});
