@@ -1,11 +1,16 @@
-var config = require('../config');
+//var config = require('../config');
 
 var path = require('path');
 
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite   DATABASE_URL = sqlite://:@:/
+
+var databaseUrl = process.env.DATABASE_URL;// || config.mysql.databaseUrl;
+console.log('ENV', process.env.DATABASE_URL);
+console.log('config', config.mysql.databaseUrl);
+
 /*
-var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+var url = databaseUrl.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var DB_name = (url[6] || null);
 var user = (url[2] || null);
 var pwd = (url[3] || null);
@@ -19,19 +24,6 @@ var storage = process.env.DATABASE_STORAGE;
 // Cargar Modelo ORM
 var Sequelize = require('sequelize');
 
-
-// Usar BBDD SQLite o Postgres
-/*
-var sequelize = new Sequelize(DB_name, user, pwd, {
-  dialect: protocol,
-  protocol: protocol,
-  port: port,
-  host: host,
-  storage: storage, // solo SQLite (.env)
-  omitNull: true
-});
-*/
-
 //database wide options
 var opts = {
     define: {
@@ -40,8 +32,8 @@ var opts = {
     }
 }
 
-var sequelize = new Sequelize('mysql://'+config.mysql.user+':'+
-    config.mysql.password+'@'+config.mysql.host+':3306/'+config.mysql.database, opts);
+var sequelize = new Sequelize(databaseUrl,opts);
+
 
 // Importar la definicion de la tabla User en user.js
 var User = sequelize.import(path.join(__dirname, 'user'));

@@ -14,8 +14,6 @@ var bodyParser = require('body-parser');
 var config = require('./config');
 var routes = require('./routes/index');
 
-//require('dotenv').load(); // para cargar variables de entorno desde el fichero .env
-
 var app = express();
 
 // view engine setup

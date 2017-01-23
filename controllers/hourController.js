@@ -72,7 +72,7 @@ exports.createBatch = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "Error: " + JSON.stringify(err)
+		   	message: err.errors[0].message
 		});
 	});
 }
@@ -128,9 +128,9 @@ exports.create = function(req, res, next) {
 	            employeeId: parseInt(req.body.employeeId)
 	        }
 	    }).then(function(employee) {
-	    	console.log(employee);
+	    	console.log("Empleado: " + employee);
             return models.WorkingDay.create({
-		   		employeeId : parseInt(employee.employeeId) || '',
+		   		employeeId : employee ? parseInt(employee.employeeId) : '',
 		   		userId: req.session.user.id,
 		   		workingday: 8,
 		   		hours: parseFloat(req.body.hours),
@@ -145,7 +145,7 @@ exports.create = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido crear la jornada " + JSON.stringify(err)
+		   	message: "No se ha podido crear la jornada. " + err.errors[0].message
 		});
 	});
 }
@@ -171,7 +171,7 @@ exports.update = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido eliminar la jornada " + JSON.stringify(err)
+		   	message: "No se ha podido eliminar la jornada. " + err.errors[0].message
 		});
 	});
 	
@@ -194,7 +194,7 @@ exports.delete = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido eliminar la jornada " + JSON.stringify(err)
+		   	message: "No se ha podido eliminar la jornada. " + err.errors[0].message
 		});
 	});
 }

@@ -149,8 +149,8 @@ function deleteWorkingDay(id){
 }
 
 function saveNewWorkingDayBatch(){
-	$('#saveNewWorkingdayBtn').prop('disabled', true);
-	$('#saveNewWorkingdayBtn').html('<div class="loader"></div>');
+	$('#saveNewWorkingDayBtn').prop('disabled', true);
+	$('#saveNewWorkingDayBtn').html('<div class="loader"></div>');
 	var inputsData = {};
 	$("#newWorkingDayForm :input").each(function(){
 	   if($(this)[0].name!=""){ 
@@ -171,18 +171,18 @@ function saveNewWorkingDayBatch(){
 			addMessage("#newWorkingDayMessageDiv", data.status, data.message);
 		}
 	}).fail(function(jqXHR) {
-		$('#saveNewWorkingdayBtn').prop('enable', true);
+		$('#saveNewWorkingDayBtn').prop('enable', true);
 		var responseText =  JSON.parse(jqXHR.responseText);
 		addMessage("#newWorkingDayMessageDiv",1,responseText.message);
 	}).always(function() {
-		$('#saveNewWorkingdayBtn').removeAttr('disabled');
-		$('#saveNewWorkingdayBtn').html('Guardar');
+		$('#saveNewWorkingDayBtn').removeAttr('disabled');
+		$('#saveNewWorkingDayBtn').html('Guardar');
 	});
 }
 
 function saveNewWorkingDay(){
-	$('#saveNewWorkingdayBtn').prop('disabled', true);
-	$('#saveNewWorkingdayBtn').html('<div class="loader"></div>');
+	$('#saveWorkingDayBtn').prop('disabled', true);
+	$('#saveWorkingDayBtn').html('<div class="loader"></div>');
 	var inputsData = {
 		employeeId : $(`#workingDayForm .selectpicker[data-id="employeeNew"]`).selectpicker('val'),
 		date: $(`#workingDayForm .date[data-id="datepickerNew"]`).datepicker("getUTCDate"),
