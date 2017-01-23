@@ -7,7 +7,7 @@ var path = require('path');
 
 var databaseUrl = process.env.DATABASE_URL;// || config.mysql.databaseUrl;
 console.log('ENV', process.env.DATABASE_URL);
-console.log('config', config.mysql.databaseUrl);
+//console.log('config', config.mysql.databaseUrl);
 
 /*
 var url = databaseUrl.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
