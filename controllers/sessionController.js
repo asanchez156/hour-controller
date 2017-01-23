@@ -4,7 +4,9 @@
 // MW de autorizacion
 exports.loginRequired = function(req, res, next) {
     //  ------------ debugueando---------------
-    // req.session.user = { id: 1, username: "admin", mode: 1 };
+    if(process.env.APP_ENV=='development'){
+        req.session.user = { id: 1, username: "admin", mode: 1 };
+    }
     //  ------------ debugueando---------------
     if (req.session.user) {
         next();
