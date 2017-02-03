@@ -6,7 +6,7 @@ exports.find = function(req, res, next) {
         companyId:1
     }
    	models.Employee.findAll({
-        where: where, 
+        where: where,
         order: [['name', 'ASC']],
     }).then(function(listEmployee) {
     	var searchResult = [];
@@ -17,6 +17,6 @@ exports.find = function(req, res, next) {
     		  });
     	});
     	console.log(searchResult);
-    	res.send(JSON.stringify(searchResult));         
+    	res.send(JSON.stringify(searchResult));
     });
 }
