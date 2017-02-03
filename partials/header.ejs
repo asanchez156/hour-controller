@@ -128,14 +128,27 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title" id="newWorkingDayModalLbl">Nueva jornada</h4>
+                    <h4 class="modal-title" id="newWorkingDayModalLbl">
+                      <div class="form-item col-md-3 col-sm-5 col-xs-5">
+                          <label for="paleDate">Nuevo día</label>
+                      </div>
+
+                      <div class="form-item col-md-3 col-sm-5 col-xs-5">
+                          <div class="input-group date" data-provide="datepicker" data-id="datepickerBatch">
+                              <input type="text" class="form-control" id="dateBatch" name="dateBatch">
+                              <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                              </div>
+                          </div>
+                      </div>
+                    </h4>
+
                 </div>
                 <div class="modal-body">
                     <div id="newWorkingDayErrorsDiv">
                     </div>
                     <div id="newWorkingDayPanelContent">
                         <input type="hidden" id="newWorkingDayPanelCounter" value=0/>
-
                         <div class="panel panel-primary" id="newWorkingDayPanelPale">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Pales</h3>
@@ -143,21 +156,11 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="form-group">
-                                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                            <label for="paleDate">Fecha</label>
-                                        </div>
-                                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                            <div class="input-group date" data-provide="datepicker" data-id="datepicker0">
-                                                <input type="text" class="form-control" id="date0" name="date0">
-                                                <div class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-th"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
+
+                                        <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                             <label for="pales">Numero de pales</label>
                                         </div>
-                                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                                        <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="pales">
@@ -172,10 +175,10 @@
                                                  </span>
                                             </div>
                                         </div>
-                                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                            <label for="paleDescription">Observaciones</label>
+                                        <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                            <label for="paleDescription">Nota</label>
                                         </div>
-                                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                                        <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                             <input type="text" class="form-control" id="paleDescription" name="paleDescription">
                                         </div>
                                     </div>

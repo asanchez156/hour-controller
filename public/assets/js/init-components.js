@@ -10,6 +10,8 @@ function dateInit (){
 	};
 }
 
+var listEmployee = []
+
 function loadEmployeeSelect(id){
 	var inputSelectHtml = `	<select class="selectpicker" data-id="employee${id}" id="employee${id}" name="employee${id}">
 							  	<option></option>`;
@@ -31,13 +33,13 @@ function getEmployeePanelHtml(id){
                 <div class="panel-body">
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-1 col-sm-6 col-xs-6">
+                            <div class="col-md-3 col-sm-6 col-xs-6">
                                 <label for="employee${id}">Empleado</label>
                             </div>
                             <div class="col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
                                 <input type="text" class="form-control" id="employee${id}" name="employee${id}">
                             </div>
-                            <div class="col-md-1 col-sm-6 col-xs-6">
+                            <div class="col-md-3 col-sm-6 col-xs-6">
                                 <label for="date${id}">Fecha</label>
                             </div>
                             <div class="form-item col-md-3 col-sm-6 col-xs-6">
@@ -47,6 +49,55 @@ function getEmployeePanelHtml(id){
                                         <span class="glyphicon glyphicon-th"></span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                <label for="description${id}">Nota</label>
+                            </div>
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" id="description${id}" name="description${id}">
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-6">
+                                <label for="hours${id}">Horas</label>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-6">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                       <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="hours${id}">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                      </span>
+                                    <input id="hours${id}" name="hours${id}" class="form-control input-number" value="8" min="1" max="20" type="text">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="hours${id}">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                     </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+}
+
+function getEmployeePanelHtmlBatch(id){
+	return `<div class="panel panel-primary" id="workingDayPanel${id}">
+                <div class="panel-heading">
+                    <h3 class="panel-title" id="employeeTitle">Jornada</h3></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-1 col-sm-6 col-xs-6">
+                                <label for="employee${id}">Empleado</label>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
+                                <input type="text" class="form-control" id="employee${id}" name="employee${id}">
+                            </div>
+                            <div class="form-item col-md-1 col-sm-6 col-xs-6">
+                                <label for="description${id}">Nota</label>
+                            </div>
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" id="description${id}" name="description${id}">
                             </div>
                             <div class="col-md-1 col-sm-6 col-xs-6">
                                 <label for="hours${id}">Horas</label>
@@ -78,26 +129,7 @@ function loadEmployeePanelComponents(id){
 	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
 	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
 
-	loadDate(id);
 	loadEmployeeSelect(id);
-}
-
-function addEmployeePanel(){
-	var id = parseInt($('#newWorkingDayPanelCounter').val());
-	id+=1;
-	$('#newWorkingDayPanelCounter').val(id);
-	$('#newWorkingDayPanelContent').append(getEmployeePanelHtml(id));
-	loadEmployeePanelComponents(id);
-
-}
-
-function removeEmployeePanel(){
-	var id = parseInt($('#newWorkingDayPanelCounter').val());
-	if(id > 0){
-		$('#workingDayPanel'+id).remove();
-		$('#newWorkingDayPanelCounter').val(id-1);
-	}
-
 }
 
 function numberSpinner(e){

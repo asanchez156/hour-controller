@@ -1,6 +1,5 @@
 $( document ).ready(function() {
 	$('#newWorkingDayPanelCounter').val(0);
-
     loadDate("Initial");
     loadDate("End");
     $(`.date[data-id="datepickerInitial"]`).datepicker('update', '');
@@ -9,6 +8,7 @@ $( document ).ready(function() {
 
     setTableRowDataAvailable();
     searchWorkingday();
+
 })
 
 var hourTable = $('#hoursTable').DataTable( {
@@ -35,12 +35,11 @@ var hourTable = $('#hoursTable').DataTable( {
     } );
 
 var workingdayRow = {}
-var listEmployee = []
 
 function setTableRowDataAvailable(){
 	$('#hoursTable tbody').on( 'click', 'button', function () {
 	        workingdayRow = hourTable.row( $(this).parents('tr') ).data();
-			fillEmployeePanelComponents();
+			fillEmployeeEditPanelComponents();
 	    } );
 }
 
@@ -74,7 +73,7 @@ function searchWorkingday(){
 	});;
 }
 
-function fillEmployeePanelComponents(){
+function fillEmployeeEditPanelComponents(){
 	$(`#workingDayForm .selectpicker[data-id="employeeEdit${workingdayRow.workingdayId}"]`).selectpicker('val', workingdayRow.employeeId);
 	$(`#workingDayForm .selectpicker[data-id="employeeEdit${workingdayRow.workingdayId}"]`).prop('disabled', true);
 	$(`#workingDayForm .selectpicker[data-id="employeeEdit${workingdayRow.workingdayId}"]`).selectpicker('refresh');

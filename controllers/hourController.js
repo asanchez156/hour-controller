@@ -18,12 +18,12 @@ exports.createBatch = function(req, res, next) {
 	console.log("BODY create batch: ", req.body);
 	var i,j = 1;
 	models.transaction(function (t) {
-	
+
 	   	promises.push(models.Pale.create({
 	   		companyId : 1,
 	   		userId: req.session.user.id,
 	   		paleNum: req.body.pales,
-	   		date: req.body.date0,
+	   		date: req.body.dateBatch,
 	   		description : req.body.paleDescription
 		}, {transaction: t}).then(function (pale) {
 		}));
@@ -32,8 +32,8 @@ exports.createBatch = function(req, res, next) {
    		var employees = [];
    		var employeeId;
 
-	    while (req.body['employee'+j] != undefined){
-	    	employees.push(req.body['employee'+j])
+	    while (req.body['employeeBatch'+j] != undefined){
+	    	employees.push(req.body['employeeBatch'+j])
 	    	j++;
 	    }
 
@@ -55,16 +55,16 @@ exports.createBatch = function(req, res, next) {
 				   		employeeId : eId || '',
 				   		userId: req.session.user.id,
 				   		workingday: 8,
-				   		hours: parseFloat(req.body['hours'+eId]),
-				   		description: '', // req.body['description'+eId],
-				   		date: req.body['date'+eId],
+				   		hours: parseFloat(req.body['hoursBatch'+eId]),
+				   		description: req.body['descriptionBatch'+eId],
+				   		date: req.body['dateBatch'],
 				    }, {transaction: t}).then(function (workingday) {
-					}); 
+					});
 		    }));
 		}
 
 	   	return Promise.all(promises);
-		
+
 	}).then((results) => {
 		res.send({
 		   status: 0
@@ -97,7 +97,7 @@ exports.find = function(req, res, next) {
             }
    	}
    	models.WorkingDay.findAll({
-        where: search, 
+        where: search,
         include: [models.Employee],
         order: [['date', 'DESC']],
     }).then(function(listWorkingday) {
@@ -116,7 +116,7 @@ exports.find = function(req, res, next) {
 			});
     	});
     	//console.log(searchResult);
-    	res.send(JSON.stringify(searchResult));         
+    	res.send(JSON.stringify(searchResult));
     });
 }
 
@@ -152,7 +152,7 @@ exports.create = function(req, res, next) {
 
 exports.update = function(req, res, next) {
 	console.log("BODY update: ", req.body);
-	models.transaction(function (t) { 
+	models.transaction(function (t) {
 	  	return models.WorkingDay.findOne({
 	  	 	where: {
 			  	workingdayId : parseInt(req.body.workingdayId)
@@ -160,7 +160,7 @@ exports.update = function(req, res, next) {
 	  	}, { transaction: t}).then(function (workingday) {
 		    return workingday.updateAttributes({
 		    	userId: req.session.user.id,
-		    	hours: req.body.hours, 
+		    	hours: req.body.hours,
 		    	description: req.body.description
 		    }, { transaction: t});
 	  	});
@@ -174,12 +174,12 @@ exports.update = function(req, res, next) {
 		   	message: "No se ha podido eliminar la jornada. " + err.errors[0].message
 		});
 	});
-	
+
 }
 
 exports.delete = function(req, res, next) {
 	console.log("BODY: ", req.body);
-	models.transaction(function (t) { 
+	models.transaction(function (t) {
 	  	return models.WorkingDay.findOne({
 	  	 	where: {
 			  	workingdayId : parseInt(req.body.workingdayId)

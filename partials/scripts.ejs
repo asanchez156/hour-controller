@@ -47,6 +47,8 @@
 
     <!-- Pages JS -->
     <script src="/assets/js/main-page.js"></script>
-    <script src="/assets/js/init-components.js"></script>
-    <script src="/assets/js/messages.js"></script>
-    <script src="/assets/js/new-day.js"></script>
+    <% if (user){ %>
+        <script src="/assets/js/init-components.js"></script>
+        <script src="/assets/js/messages.js"></script>
+        <script src="/assets/js/new-day.js"></script>
+    <% } %>
