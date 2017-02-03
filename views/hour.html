@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <% include ../partials/head %> 
+    <% include ../partials/head %>
   </head>
   <body>
 
     <!-- Header Area wrapper Starts -->
     <header id="header-wrap">
-      <% include ../partials/header %> 
+      <% include ../partials/header %>
 
     </header>
     <!-- Header Area wrapper End -->
 
-    <% include ../partials/page-header %>   
+    <% include ../partials/page-header %>
     <main>
         <input type="hidden" id="pageName" value="<%= page %>"/>
         <div class="pageContent">
@@ -29,7 +29,7 @@
                         <div class="form-item col-md-2 col-sm-6 col-xs-6" id="employeeSelectDiv0">
                             <input type="text" class="form-control" id="employee" name="employee">
                         </div>
-                    
+
                         <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <label for="initialDate">Fecha inicial</label>
                         </div>
@@ -63,104 +63,18 @@
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newWorkingDayModal">Nuevo día</button>
-                        </div>
-                        <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
                             <button type="button" class="btn btn-primary pull-right" onclick="newWorkingDay()">Nueva</button>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tablePanel">
                 <table id="hoursTable" class="table table-striped table-bordered" width="100%" cellspacing="0"></table>
             </div>
         </div>
 
-        <div class="modal fade" id="newWorkingDayModal" tabindex="-1" role="dialog" aria-labelledby="newWorkingDayModalLlb" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                <form id="newWorkingDayForm" action="/hour/create" method="POST">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title" id="newWorkingDayModalLbl">Nueva jornada</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="newWorkingDayErrorsDiv">
-                            </div>
-                            <div id="newWorkingDayPanelContent">
-                                <input type="hidden" id="newWorkingDayPanelCounter" value=0/>
-
-                                <div class="panel panel-primary" id="newWorkingDayPanelPale">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">Pales</h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <label for="paleDate">Fecha</label>
-                                                </div>
-                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <div class="input-group date" data-provide="datepicker" data-id="datepicker0">
-                                                        <input type="text" class="form-control" id="date0" name="date0">
-                                                        <div class="input-group-addon">
-                                                            <span class="glyphicon glyphicon-th"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <label for="pales">Numero de pales</label>
-                                                </div>
-                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="pales">
-                                                                <span class="glyphicon glyphicon-minus"></span>
-                                                            </button>
-                                                          </span>
-                                                        <input id="pales" name="pales" class="form-control input-number" value="11" min="1" max="20" type="text">
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="pales">
-                                                                <span class="glyphicon glyphicon-plus"></span>
-                                                            </button>
-                                                         </span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <label for="paleDescription">Observaciones</label>
-                                                </div>
-                                                <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                                                    <input type="text" class="form-control" id="paleDescription" name="paleDescription">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <button type="button" class="btn btn-success pull-right" onclick="addEmployeePanel()">
-                                             <span class="glyphicon glyphicon-plus"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-danger pull-right" onclick="removeEmployeePanel()">
-                                             <span class="glyphicon glyphicon-minus"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button id="saveNewWorkingDayBtn" type="button" class="btn btn-primary" onclick="saveNewWorkingDayBatch()">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> 
+        <!-- Working day modal -->
         <div class="modal fade" id="workingDayModal" tabindex="-1" role="dialog" aria-labelledby="workingDayModalLlb" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -175,7 +89,7 @@
                             <div id="workingDayMessageDiv">
                             </div>
                             <form id="workingDayForm">
-                                <div id="workingDayPanelContent"/>        
+                                <div id="workingDayPanelContent"/>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -186,17 +100,18 @@
                 </div>
             </div>
         </div>
+        <!-- End workin day modal -->
     </main>
 
-    <!-- Footer Section Start -->   
-    <footer class="section">  
+    <!-- Footer Section Start -->
+    <footer class="section">
         <% include ../partials/footer %>
-    </footer>  
-    <!-- Footer Section End -->  
+    </footer>
+    <!-- Footer Section End -->
 
     <% include ../partials/copyright %>
     <% include ../partials/gotop %>
-    <% include ../partials/scripts %> 
+    <% include ../partials/scripts %>
     <script src="/assets/js/hour-page.js"></script>
 
   </body>
