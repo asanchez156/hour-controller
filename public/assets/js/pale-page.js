@@ -7,11 +7,11 @@ $( document ).ready(function() {
     //Add to Employees by default
 
     setTableRowDataAvailable();
-    searchPale();
+    //searchPale();
 
 })
 
-var paleTable = $('#palesTable').DataTable( {
+var paleTable = $('#PaleTable').DataTable( {
         "scrollY":        "200px",
         "scrollCollapse": true,
         columns: [
@@ -36,7 +36,7 @@ var paleTable = $('#palesTable').DataTable( {
 var paleRow = {}
 
 function setTableRowDataAvailable(){
-	$('#palesTable tbody').on( 'click', 'button', function () {
+	$('#PaleTable tbody').on( 'click', 'button', function () {
 	        paleRow = paleTable.row( $(this).parents('tr') ).data();
 			fillPaleEditPanelComponents();
 	    } );
