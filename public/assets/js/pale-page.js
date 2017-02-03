@@ -1,31 +1,26 @@
 $( document ).ready(function() {
-	$('#newWorkingDayPanelCounter').val(0);
-	loadEmployeeSelect(0);
+	$('#newPalePanelCounter').val(0);
     loadDate("Initial");
     loadDate("End");
     $(`.date[data-id="datepickerInitial"]`).datepicker('update', '');
     $(`.date[data-id="datepickerEnd"]`).datepicker('update', '');
-    loadDate("0");
     //Add to Employees by default
-    addEmployeePanel();
-    addEmployeePanel();
-	$(`#newWorkingDayForm .selectpicker[data-id="employee1"]`).selectpicker('val', 1);
-	$(`#newWorkingDayForm .selectpicker[data-id="employee2"]`).selectpicker('val', 2);
-    $('.selectpicker').selectpicker('refresh');
 
     setTableRowDataAvailable();
-    searchWorkingday();
+    searchPale();
+
 })
 
-var paleTable = $('#hoursTable').DataTable( {
+var paleTable = $('#palesTable').DataTable( {
         "scrollY":        "200px",
         "scrollCollapse": true,
         columns: [
+            { title : "ID JORNADA", data: "paleId", visible: false },
             { title : "ID EMPRESA", data: "companyId", visible: false },
-            { title : "ID EMPLEADO", data: "employeeId", visible: false },
+            { title : "EMPRESA", data: "companyName" },
             { title : "FECHA", data: "dateString" },
             { title : "FECHA_DB", data: "date", visible: false  },
-            { title : "PALES", data: "pales" },
+            { title : "PALE", data: "pale" },
             { title : "", data: "functions" }
         ],
         "language": {
@@ -38,357 +33,161 @@ var paleTable = $('#hoursTable').DataTable( {
         ]
     } );
 
-var row = {}
+var paleRow = {}
 
 function setTableRowDataAvailable(){
-	$('#hoursTable tbody').on( 'click', 'button', function () {
-	        row = paleTable.row( $(this).parents('tr') ).data();
-	        console.log(row);
-			fillEmployeePanelComponents();
+	$('#palesTable tbody').on( 'click', 'button', function () {
+	        paleRow = paleTable.row( $(this).parents('tr') ).data();
+			fillPaleEditPanelComponents();
 	    } );
 }
 
-function addMessage(div,type,text){
-	var content = '';
-	switch (type) {
-	  	case 0:
-	  		content = ` <div class="alert alert-info">
-		 					<strong>Info: </strong> ${text}
-	 		  			</div>`;
-	    	break;
-	  	case 1:
-	  		content = ` <div class="alert alert-danger">
-		 					<strong>Error: </strong> ${text}
-	 		  			</div>`;
-	    	break;
-	}
-    $(div).html(content);
+function searchEmployees(callback){
+	$.get("/employee/find", function(data) {
+		listEmployee = JSON.parse(data);
+		callback();
+	}).fail(function(jqXHR) {
+	});
 }
 
-function removeMessage(div){
-    $(div).html('');
+function populatePaleDatatable(jsonData){
+    paleTable.clear();
+    paleTable.rows.add(JSON.parse(jsonData));
+    paleTable.draw();
 }
 
-function populateHourDatatable(jsonData){
-    hourTable.clear();
-    hourTable.rows.add(JSON.parse(jsonData));
-    hourTable.draw();
-}
-
-function searchWorkingday(){
-	var employeeId = $('#employee0').val();
+function searchPale(){
 	var initialDate = $(`.date[data-id="datepickerInitial"]`).datepicker("getUTCDate");
 	var endDate = $(`.date[data-id="datepickerEnd"]`).datepicker("getUTCDate");
-	
+
 	var search = {
-		employeeId : employeeId,
 		initialDate : initialDate,
 		endDate : endDate
 	}
 
-	$.post('/hour/find', search , function(jsonData) {
-		populateHourDatatable(jsonData);
+	$.post('/pale/find', search , function(jsonData) {
+		populatePaleDatatable(jsonData);
 	});;
 }
 
-function fillEmployeePanelComponents(){
-	$(`#editWorkingDayForm .selectpicker[data-id="employeeEdit${row.workingdayId}"]`).selectpicker('val', row.employeeId);
-	$(`#editWorkingDayForm .selectpicker[data-id="employeeEdit${row.workingdayId}"]`).prop('disabled', true);
-	$(`#editWorkingDayForm .selectpicker[data-id="employeeEdit${row.workingdayId}"]`).selectpicker('refresh');
+function fillPaleEditPanelComponents(){
+	$(`#paleForm .selectpicker[data-id="employeeEdit${paleRow.paleId}"]`).selectpicker('val', paleRow.employeeId);
+	$(`#paleForm .selectpicker[data-id="employeeEdit${paleRow.paleId}"]`).prop('disabled', true);
+	$(`#paleForm .selectpicker[data-id="employeeEdit${paleRow.paleId}"]`).selectpicker('refresh');
 
-	var date = new Date(row.date.substr(0,4),parseInt(row.date.substr(5,2))-1,row.date.substr(8,2));
-	$(`#editWorkingDayForm .date[data-id="datepickerEdit${row.workingdayId}"]`).datepicker('update', date);
-	$(`#editWorkingDayForm #dateEdit${row.workingdayId}`).prop('disabled', true);
-	$(`#editWorkingDayForm #hoursEdit${row.workingdayId}`).val(row.hours);
+	var date = new Date(paleRow.date.substr(0,4),parseInt(paleRow.date.substr(5,2))-1,paleRow.date.substr(8,2));
+	$(`#paleForm .date[data-id="datepickerEdit${paleRow.paleId}"]`).datepicker('update', date);
+	$(`#paleForm #dateEdit${paleRow.paleId}`).prop('disabled', true);
 
-	//$(`#editWorkingDayForm #description${row.workingdayId}`).val(row.description);
+	//$(`#editPaleForm #description${paleRow.paleId}`).val(paleRow.description);
 }
 
-function editWorkingDay(id){
-	$('#editWorkingDayPanelContent').html(getEmployeePanelHtml(`Edit${id}`));
-	loadEmployeePanelComponents(`Edit${id}`);
-	$('#saveEditWorkingdayBtn').attr( "onclick",`saveEditWorkingday(${id})`);
-	$('#editWorkingDayModal').modal('show');
+function newPale(){
+	removeMessage("#paleMessageDiv");
+	$('#paleModalLbl').html("Creando jornada");
+	$('#savePaleBtn').html("Guardar");
+	$('#palePanelContent').html(getEmployeePanelHtml(`New`));
+	loadEmployeeSelect(`New`);
+	loadPale(`New`);
+	loadDate(`New`);
+	$('#savePaleBtn').attr( "onclick",`saveNewPale()`);
+	$('#paleModal').modal('show');
 }
 
-function removeWorkingDay(id){
-	$('#removeWorkingdayBtn').click( function(){
-		saveRemoveWorkingday(id);
-	});
-	loadEmployeePanelComponents(id);
-	$('#removeWorkingDayPanelContent').html("Hola");
-	$('#saveEditWorkingdayBtn').attr( "onclick",`saveRemoveWorkingday(${id})`);
-	$('#removeWorkingDayModal').modal('show');
+function editPale(id){
+	removeMessage("#paleMessageDiv");
+	$('#paleModalLbl').html("Editando jornada");
+	$('#savePaleBtn').html("Guardar");
+	$('#palePanelContent').html(getEmployeePanelHtml(`Edit${id}`));
+	loadPale(`Edit${id}`);
+	loadDate(`Edit${id}`);
+	loadEmployeeSelect(`Edit${id}`);
+	$('#savePaleBtn').attr( "onclick",`saveEditPale(${id})`);
+	$('#paleModal').modal('show');
 }
 
-function saveNewWorkingday(){
-	$('#saveNewWorkingdayBtn').prop('disabled', true);
-	$('#saveNewWorkingdayBtn').html('<div class="loader"></div>');
-	var inputsData = {};
-	$("#newWorkingDayForm :input").each(function(){
-	   if($(this)[0].name!=""){ 
-	   		if($(this).attr("id").includes("date")){
-	   			id = $(this).attr("id").substring(4, 5);
-	   			inputsData[$(this).attr("id")] = $(`.date[data-id="datepicker${id}"]`).datepicker("getUTCDate");
-	   		}else{
-				inputsData[$(this).attr("id")] = $(this).val();
-	   		}
-	   	}
-	});
-	//console.log(inputsData);
-	$.post('/hour/create', inputsData , function(data) {
-		removeMessage("#newWorkingDayMessageDiv");
-		if(data.status==0){
-			searchWorkingday();
-			$('#newWorkingDayModal').modal('hide');
-		}else if (data.status==1){
-			addMessage("#newWorkingDayMessageDiv", data.status, data.message);
-		}
-	}).done(function() {
-	}).fail(function(jqXHR) {
-		$('#saveNewWorkingdayBtn').prop('enable', true);
-		var responseText =  JSON.parse(jqXHR.responseText);
-		addMessage("#newWorkingDayMessageDiv",1,responseText.message);
-	}).always(function() {
-		$('#saveNewWorkingdayBtn').removeAttr('disabled');
-		$('#saveNewWorkingdayBtn').html('Guardar');
-	});
+function deletePale(id){
+	removeMessage("#paleMessageDiv");
+	$('#paleModalLbl').html("Eliminando jornada");
+	$('#savePaleBtn').html("Eliminar");
+	$('#palePanelContent').html("La jornada va a ser eliminada. ¿Estás seguro?");
+	$('#savePaleBtn').attr( "onclick",`saveDeletePale(${id})`);
+	$('#paleModal').modal('show');
 }
 
-function saveEditWorkingday(id){
-	$('#editNewWorkingdayBtn').prop('disabled', true);
-	$('#editNewWorkingdayBtn').html('<div class="loader"></div>');
-
+function saveNewPale(){
+	$('#savePaleBtn').prop('disabled', true);
+	$('#savePaleBtn').html('<div class="loader"></div>');
 	var inputsData = {
-		workingdayId: row.workingdayId,
-		//employeeId: row.employeeId,
-		//date: $(`#editWorkingDayForm .date[data-id="datepickerEdit${id}"]`).datepicker("getUTCDate"),
-		hours: $(`#editWorkingDayForm #hoursEdit${id}`).val(),
+		companyId : $(`#paleForm .selectpicker[data-id="employeeNew"]`).selectpicker('val'),
+		date: $(`#paleForm .date[data-id="datepickerNew"]`).datepicker("getUTCDate"),
 		description: ""
 	};
-	
-	//console.log("Update data: ",inputsData);
-	$.post('/hour/update', inputsData , function(data) {
-		removeMessage("#editWorkingDayMessageDiv");
+
+	$.post('/pale/create', inputsData , function(data) {
+		removeMessage("#newPaleMessageDiv");
 		if(data.status==0){
-			searchWorkingday();
-			$('#editWorkingDayModal').modal('hide');
-		} else if (data.status==1){
-			addMessage("#editWorkingDayMessageDiv", data.status, data.message);
+			searchPale();
+			$('#paleModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#paleMessageDiv", data.status, data.message);
 		}
-	}).done(function() {
 	}).fail(function(jqXHR) {
-		$('#saveNewWorkingdayBtn').prop('enable', true);
+		$('#savePaleBtn').prop('enable', true);
 		var responseText =  JSON.parse(jqXHR.responseText);
-		addMessage("#newWorkingDayMessageDiv",1,responseText.message);
+		addMessage("#paleMessageDiv",1,responseText.message);
 	}).always(function() {
-		$('#saveNewWorkingdayBtn').removeAttr('disabled');
-		$('#saveNewWorkingdayBtn').html('Guardar');
+		$('#savePaleBtn').removeAttr('disabled');
+		$('#savePaleBtn').html('Guardar');
 	});
 }
 
-function saveRemoveWorkingday(id){
-	$('#removeWorkingdayBtn').prop('disabled', true);
-	$('#removeWorkingdayBtn').html('<div class="loader"></div>');
+function saveEditPale(id){
+	$('#savePaleBtn').prop('disabled', true);
+	$('#savePaleBtn').html('<div class="loader"></div>');
 
-	$.post('/hour/remove', {workingdayId : id} , function(data) {
-		console.log(data);
-		if(data.status==0){
-			$('#removeWorkingDayModal').modal('hide');
-			removeError("#removeWorkingDayErrorsDiv");
-		}else if (data.status==5){
-			addError("#removeWorkingDayErrorsDiv",data.message);
-		}
-	}).done(function() {
-	}).fail(function(jqXHR) {
-		$('#removeWorkingdayBtn').prop('enable', true);
-		var responseText =  JSON.parse(jqXHR.responseText);
-		addError(responseText.message);
-	}).always(function() {
-		$('#removeWorkingdayBtn').removeAttr('disabled');
-		$('#removeWorkingdayBtn').html('Guardar');
-	});
-}
-
-function loadDate(id){
-	$(`.date[data-id="datepicker${id}"]`).datepicker(dateInit());
-    $(`.date[data-id="datepicker${id}"]`).datepicker('update', '-1d');
-}	
-
-function dateInit (){
-	return {
-	    language: 'es',
-    	autoclose: true
+	var inputsData = {
+		paleId: paleRow.paleId,
+		description: ""
 	};
-} 
 
-function loadEmployeeSelect(id){
-	var inputSelectHtml = `	<select class="selectpicker" data-id="employee${id}" id="employee${id}" name="employee${id}">
-							  	<option></option>
-							  	<option value="1">Paco</option>
-							  	<option value="2">Javi</option>
-							  	<option value="3">Pepelu</option>
-							</select>`	;
-	$(`#employeeSelectDiv${id}`).html(inputSelectHtml);
-	$(`.selectpicker[data-id="employee${id}"]`).selectpicker({
-		  style: 'btn-primary',
-		  width: 'fit'
+	$.post('/pale/update', inputsData , function(data) {
+		removeMessage("#paleMessageDiv");
+		if(data.status==0){
+			searchPale();
+			$('#paleModal').modal('hide');
+		} else if (data.status==1){
+			addMessage("#paleMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#savePaleBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#paleMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#savePaleBtn').removeAttr('disabled');
+		$('#savePaleBtn').html('Guardar');
 	});
 }
-function getEmployeePanelHtml(id){
-	return `<div class="panel panel-primary" id="workingDayPanel${id}">
-	                        <div class="panel-heading">
-	                            <h3 class="panel-title" id="employeeTitle">Jornada ${id}</h3></div>
-	                        <div class="panel-body">
-	                            <div class="row">
-	                                <div class="form-group">
-	                                    <div class="col-md-1 col-sm-6 col-xs-6">
-	                                        <label for="employee${id}">Empleado</label>
-	                                    </div>
-	                                    <div class="col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
-	                                        <input type="text" class="form-control" id="employee${id}" name="employee${id}">
-	                                    </div>
-	                                    <div class="col-md-1 col-sm-6 col-xs-6">
-	                                        <label for="date${id}">Fecha</label>
-	                                    </div>
-	                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-	                                        <div class="input-group date" data-provide="datepicker" data-id="datepicker${id}">
-	                                            <input type="text" class="form-control" id="date${id}" name="date${id}">
-	                                            <div class="input-group-addon">
-	                                                <span class="glyphicon glyphicon-th"></span>
-	                                            </div>
-	                                        </div>
-	                                    </div>
-	                                    <div class="col-md-1 col-sm-6 col-xs-6">
-	                                        <label for="hours${id}">Horas</label>
-	                                    </div>
-	                                    <div class="col-md-3 col-sm-6 col-xs-6">
-	                                        <div class="input-group">
-	                                            <span class="input-group-btn">
-	                                               <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="hours${id}">
-	                                                    <span class="glyphicon glyphicon-minus"></span>
-	                                                </button>
-	                                              </span>
-	                                            <input id="hours${id}" name="hours${id}" class="form-control input-number" value="8" min="1" max="20" type="text">
-	                                            <span class="input-group-btn">
-	                                                <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="hours${id}">
-	                                                    <span class="glyphicon glyphicon-plus"></span>
-	                                                </button>
-	                                             </span>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>`;
+
+function saveDeletePale(id){
+	$('#savePaleBtn').prop('disabled', true);
+	$('#savePaleBtn').html('<div class="loader"></div>');
+
+	$.post('/pale/delete', {paleId : id} , function(data) {
+		removeMessage("#paleErrorsDiv");
+		if(data.status==0){
+			searchPale();
+			$('#paleModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#paleMessageDiv",data.status,responseText.message);
+		}
+	}).done(function() {
+	}).fail(function(jqXHR) {
+		$('#savePaleBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#paleMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#savePaleBtn').removeAttr('disabled');
+		$('#savePaleBtn').html('Eliminar');
+	});
 }
-
-function loadEmployeePanelComponents(id){
-	$(`.btn-number[data-field="hours${id}"]`).click(numberSpinner);
-	$(`.input-number[data-field="hours${id}"]`).focusin(numberSpinnerFocusIn);
-	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
-	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
-
-	loadDate(id);
-	loadEmployeeSelect(id);
-}
-
-function addEmployeePanel(){
-	var id = parseInt($('#newWorkingDayPanelCounter').val());
-	id+=1;
-	$('#newWorkingDayPanelCounter').val(id);
-	$('#newWorkingDayPanelContent').append(getEmployeePanelHtml(id));
-	loadEmployeePanelComponents(id);
-
-}
-
-function removeEmployeePanel(){
-	var id = parseInt($('#newWorkingDayPanelCounter').val());
-	if(id > 0){
-		$('#workingDayPanel'+id).remove();
-		$('#newWorkingDayPanelCounter').val(id-1);
-	}
-
-}
-
-function numberSpinner(e){
-    e.preventDefault();
-    
-    fieldName = $(this).attr('data-field');
-    type      = $(this).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
-    var currentVal = parseFloat(input.val());
-    if (!isNaN(currentVal)) {
-        if(type == 'minus') {
-            
-            if(currentVal > input.attr('min')) {
-                input.val(currentVal - 0.5).change();
-            } 
-            if(parseInt(input.val()) == input.attr('min')) {
-                $(this).attr('disabled', true);
-            }
-
-        } else if(type == 'plus') {
-
-            if(currentVal < input.attr('max')) {
-                input.val(currentVal + 0.5).change();
-            }
-            if(parseInt(input.val()) == input.attr('max')) {
-                $(this).attr('disabled', true);
-            }
-
-        }
-    } else {
-        input.val(0);
-    }
-}
-
-function numberSpinnerFocusIn(){
-   $(this).data('oldValue', $(this).val());
-}
-
-function numberSpinnerChange(e){
-    minValue =  parseInt($(this).attr('min'));
-    maxValue =  parseInt($(this).attr('max'));
-    valueCurrent = parseInt($(this).val());
-    
-    name = $(this).attr('name');
-    if(valueCurrent >= minValue) {
-        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-    } else {
-        alert('Lo siento, se ha alcanzado el número mínimo');
-        $(this).val($(this).data('oldValue'));
-    }
-    if(valueCurrent <= maxValue) {
-        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-    } else {
-        alert('Lo siento, se ha alcanzado el número máximo');
-        $(this).val($(this).data('oldValue'));
-    }
-
-}
-
-function numberSpinnerKeydown (e){
-    // Allow: backspace, delete, tab, escape, enter and .
-    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-         // Allow: Ctrl+A
-        (e.keyCode == 65 && e.ctrlKey === true) || 
-         // Allow: home, end, left, right
-        (e.keyCode >= 35 && e.keyCode <= 39)) {
-             // let it happen, don't do anything
-             return;
-    }
-    // Ensure that it is a number and stop the keypress
-    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-        e.preventDefault();
-    }
-    
-}
-
-
-//plugin bootstrap minus and plus
-//http://jsfiddle.net/laelitenetwork/puJ6G/
-$('.btn-number').click(numberSpinner);
-$('.input-number').focusin(numberSpinnerFocusIn);
-$('.input-number').change(numberSpinnerChange);
-$(".input-number").keydown(numberSpinnerKeydown);
