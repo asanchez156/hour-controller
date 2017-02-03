@@ -26,7 +26,8 @@
   	id+=1;
   	$('#newWorkingDayPanelCounter').val(id);
   	$('#newWorkingDayPanelContent').append(getEmployeePanelHtmlBatch(`Batch${id}`));
-  	loadEmployeePanelComponents(`Batch${id}`);
+  	loadEmployeeSelect(`Batch${id}`);
+  	loadHour(`Batch${id}`);
   	$(`#newWorkingDayForm .selectpicker[data-id="employeeBatch${id}"]`).selectpicker('val', parseInt(id));
     $(`#newWorkingDayForm #dateBatch${id}`).prop('disabled', true);
   }

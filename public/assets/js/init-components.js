@@ -12,6 +12,13 @@ function dateInit (){
 
 var listEmployee = []
 
+function loadHour(id){
+	$(`.btn-number[data-field="hours${id}"]`).click(numberSpinner);
+	$(`.input-number[data-field="hours${id}"]`).focusin(numberSpinnerFocusIn);
+	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
+	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
+}
+
 function loadEmployeeSelect(id){
 	var inputSelectHtml = `	<select class="selectpicker" data-id="employee${id}" id="employee${id}" name="employee${id}">
 							  	<option></option>`;
@@ -33,13 +40,13 @@ function getEmployeePanelHtml(id){
                 <div class="panel-body">
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <label for="employee${id}">Empleado</label>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
                                 <input type="text" class="form-control" id="employee${id}" name="employee${id}">
                             </div>
-                            <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <label for="date${id}">Fecha</label>
                             </div>
                             <div class="form-item col-md-3 col-sm-6 col-xs-6">
@@ -56,10 +63,10 @@ function getEmployeePanelHtml(id){
                             <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <input type="text" class="form-control" id="description${id}" name="description${id}">
                             </div>
-                            <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <label for="hours${id}">Horas</label>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="hours${id}">
@@ -87,10 +94,10 @@ function getEmployeePanelHtmlBatch(id){
                 <div class="panel-body">
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-1 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-1 col-sm-6 col-xs-6">
                                 <label for="employee${id}">Empleado</label>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6" id="employeeSelectDiv${id}">
                                 <input type="text" class="form-control" id="employee${id}" name="employee${id}">
                             </div>
                             <div class="form-item col-md-1 col-sm-6 col-xs-6">
@@ -99,10 +106,10 @@ function getEmployeePanelHtmlBatch(id){
                             <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <input type="text" class="form-control" id="description${id}" name="description${id}">
                             </div>
-                            <div class="col-md-1 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-1 col-sm-6 col-xs-6">
                                 <label for="hours${id}">Horas</label>
                             </div>
-                            <div class="col-md-3 col-sm-6 col-xs-6">
+                            <div class="form-item col-md-3 col-sm-6 col-xs-6">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="hours${id}">
@@ -121,15 +128,6 @@ function getEmployeePanelHtmlBatch(id){
                     </div>
                 </div>
             </div>`;
-}
-
-function loadEmployeePanelComponents(id){
-	$(`.btn-number[data-field="hours${id}"]`).click(numberSpinner);
-	$(`.input-number[data-field="hours${id}"]`).focusin(numberSpinnerFocusIn);
-	$(`.input-number[data-field="hours${id}"]`).change(numberSpinnerChange);
-	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
-
-	loadEmployeeSelect(id);
 }
 
 function numberSpinner(e){

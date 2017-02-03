@@ -91,7 +91,9 @@ function newWorkingDay(){
 	$('#workingDayModalLbl').html("Creando jornada");
 	$('#saveWorkingDayBtn').html("Guardar");
 	$('#workingDayPanelContent').html(getEmployeePanelHtml(`New`));
-	loadEmployeePanelComponents(`New`);
+	loadEmployeeSelect(`New`);
+	loadHour(`New`);
+	loadDate(`New`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveNewWorkingDay()`);
 	$('#workingDayModal').modal('show');
 }
@@ -101,7 +103,9 @@ function editWorkingDay(id){
 	$('#workingDayModalLbl').html("Editando jornada");
 	$('#saveWorkingDayBtn').html("Guardar");
 	$('#workingDayPanelContent').html(getEmployeePanelHtml(`Edit${id}`));
-	loadEmployeePanelComponents(`Edit${id}`);
+	loadHour(`Edit${id}`);
+	loadDate(`Edit${id}`);
+	loadEmployeeSelect(`Edit${id}`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveEditWorkingDay(${id})`);
 	$('#workingDayModal').modal('show');
 }
