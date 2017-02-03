@@ -88,7 +88,7 @@ function newPale(){
 	$('#savePaleBtn').html("Guardar");
 	$('#palePanelContent').html(getEmployeePanelHtml(`New`));
 	loadEmployeeSelect(`New`);
-	loadPale(`New`);
+	loadHour(`New`);
 	loadDate(`New`);
 	$('#savePaleBtn').attr( "onclick",`saveNewPale()`);
 	$('#paleModal').modal('show');
@@ -99,7 +99,7 @@ function editPale(id){
 	$('#paleModalLbl').html("Editando jornada");
 	$('#savePaleBtn').html("Guardar");
 	$('#palePanelContent').html(getEmployeePanelHtml(`Edit${id}`));
-	loadPale(`Edit${id}`);
+	loadHour(`Edit${id}`);
 	loadDate(`Edit${id}`);
 	loadEmployeeSelect(`Edit${id}`);
 	$('#savePaleBtn').attr( "onclick",`saveEditPale(${id})`);
