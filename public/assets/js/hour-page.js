@@ -92,7 +92,6 @@ function editWorkingDay(id){
 	loadHour(`Edit${id}`);
 	loadDate(`Edit${id}`);
 	loadEmployeeSelect(`Edit${id}`);
-	//loadNote(`Edit${id}`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveEditWorkingDay(${id})`);
 	$('#workingDayModal').modal('show');
 }
