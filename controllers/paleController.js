@@ -32,7 +32,7 @@ exports.find = function(req, res, next) {
             }
    	}
    	models.pale.findAll({
-        where: search, 
+        where: search,
         include: [models.company],
         order: [['date', 'DESC']],
     }).then(function(listPale) {
@@ -50,7 +50,7 @@ exports.find = function(req, res, next) {
 			});
     	});
     	console.log(searchResult);
-    	res.send(JSON.stringify(searchResult));         
+    	res.send(JSON.stringify(searchResult));
     });
 }
 
@@ -80,7 +80,7 @@ exports.create = function(req, res, next) {
 exports.update = function(req, res, next) {
 	console.log("BODY data: ", req.body);
 
-	models.transaction(function (t) { 
+	models.transaction(function (t) {
 	  	return models.Pale.findOne({
 	  	 	where: {
 			  	paleId : parseInt(req.body.paleId)
@@ -88,7 +88,7 @@ exports.update = function(req, res, next) {
 	  	}, { transaction: t}).then(function (pale) {
 		    return pale.updateAttributes({
 		    	userId: req.session.user.id,
-		    	hours: req.body.hours, 
+		    	hours: req.body.hours,
 		    	description: req.body.description
 		    }, { transaction: t});
 	  	});
@@ -106,7 +106,7 @@ exports.update = function(req, res, next) {
 
 exports.delete = function(req, res, next) {
 	console.log("BODY: ", req.body);
-	models.transaction(function (t) { 
+	models.transaction(function (t) {
 	  	return models.Pale.findOne({
 	  	 	where: {
 			  	paleId : parseInt(req.body.paleId)

@@ -7,7 +7,7 @@ $( document ).ready(function() {
     //Add to Employees by default
 
     setTableRowDataAvailable();
-    //searchPale();
+    searchPale();
 
 })
 
@@ -15,7 +15,7 @@ var paleTable = $('#PaleTable').DataTable( {
         "scrollY":        "200px",
         "scrollCollapse": true,
         columns: [
-            { title : "ID JORNADA", data: "paleId", visible: false },
+            { title : "ID PALE", data: "paleId", visible: false },
             { title : "ID EMPRESA", data: "companyId", visible: false },
             { title : "EMPRESA", data: "companyName" },
             { title : "FECHA", data: "dateString" },
@@ -71,46 +71,41 @@ function searchPale(){
 }
 
 function fillPaleEditPanelComponents(){
-	$(`#paleForm .selectpicker[data-id="employeeEdit${paleRow.paleId}"]`).selectpicker('val', paleRow.employeeId);
-	$(`#paleForm .selectpicker[data-id="employeeEdit${paleRow.paleId}"]`).prop('disabled', true);
-	$(`#paleForm .selectpicker[data-id="employeeEdit${paleRow.paleId}"]`).selectpicker('refresh');
+	$(`#paleForm .selectpicker[data-id="employee${paleRow.paleId}"]`).selectpicker('val', paleRow.employeeId);
+	$(`#paleForm .selectpicker[data-id="employee${paleRow.paleId}"]`).prop('disabled', true);
+	$(`#paleForm .selectpicker[data-id="employee${paleRow.paleId}"]`).selectpicker('refresh');
 
 	var date = new Date(paleRow.date.substr(0,4),parseInt(paleRow.date.substr(5,2))-1,paleRow.date.substr(8,2));
-	$(`#paleForm .date[data-id="datepickerEdit${paleRow.paleId}"]`).datepicker('update', date);
-	$(`#paleForm #dateEdit${paleRow.paleId}`).prop('disabled', true);
-
-	//$(`#editPaleForm #description${paleRow.paleId}`).val(paleRow.description);
+	$(`#paleForm .date[data-id="datepicker${paleRow.paleId}"]`).datepicker('update', date);
+	$(`#paleForm #date${paleRow.paleId}`).prop('disabled', true);
+	$(`#paleForm #description${paleRow.paleId}`).val(paleRow.description);
 }
 
 function newPale(){
 	removeMessage("#paleMessageDiv");
-	$('#paleModalLbl').html("Creando jornada");
+	$('#paleModalLbl').html("Creando pale");
 	$('#savePaleBtn').html("Guardar");
-	$('#palePanelContent').html(getEmployeePanelHtml(`New`));
-	loadEmployeeSelect(`New`);
-	loadHour(`New`);
-	loadDate(`New`);
+	loadHour("");
+	loadDate("");
 	$('#savePaleBtn').attr( "onclick",`saveNewPale()`);
 	$('#paleModal').modal('show');
 }
 
 function editPale(id){
 	removeMessage("#paleMessageDiv");
-	$('#paleModalLbl').html("Editando jornada");
+	$('#paleModalLbl').html("Editando pale");
 	$('#savePaleBtn').html("Guardar");
-	$('#palePanelContent').html(getEmployeePanelHtml(`Edit${id}`));
-	loadHour(`Edit${id}`);
-	loadDate(`Edit${id}`);
-	loadEmployeeSelect(`Edit${id}`);
+	loadHour("");
+	loadDate("");
 	$('#savePaleBtn').attr( "onclick",`saveEditPale(${id})`);
 	$('#paleModal').modal('show');
 }
 
 function deletePale(id){
 	removeMessage("#paleMessageDiv");
-	$('#paleModalLbl').html("Eliminando jornada");
+	$('#paleModalLbl').html("Eliminando pale");
 	$('#savePaleBtn').html("Eliminar");
-	$('#palePanelContent').html("La jornada va a ser eliminada. ¿Estás seguro?");
+	$('#palePanelContent').html("El pale va a ser eliminado. ¿Estás seguro?");
 	$('#savePaleBtn').attr( "onclick",`saveDeletePale(${id})`);
 	$('#paleModal').modal('show');
 }
@@ -119,11 +114,11 @@ function saveNewPale(){
 	$('#savePaleBtn').prop('disabled', true);
 	$('#savePaleBtn').html('<div class="loader"></div>');
 	var inputsData = {
-		companyId : $(`#paleForm .selectpicker[data-id="employeeNew"]`).selectpicker('val'),
-		date: $(`#paleForm .date[data-id="datepickerNew"]`).datepicker("getUTCDate"),
-		description: ""
+		pales : $(`#paleForm #pales`).val(),
+		date: $(`#paleForm .date[data-id="datepicker"]`).datepicker("getUTCDate"),
+		description: $(`#paleForm #description`).val()
 	};
-
+	console.log(inputsData);
 	$.post('/pale/create', inputsData , function(data) {
 		removeMessage("#newPaleMessageDiv");
 		if(data.status==0){
@@ -147,10 +142,11 @@ function saveEditPale(id){
 	$('#savePaleBtn').html('<div class="loader"></div>');
 
 	var inputsData = {
-		paleId: paleRow.paleId,
-		description: ""
+		paleId: id,
+		pales : $(`#paleForm pales`).val(),
+		description: $(`#paleForm #description`).val()
 	};
-
+	console.log(inputsData);
 	$.post('/pale/update', inputsData , function(data) {
 		removeMessage("#paleMessageDiv");
 		if(data.status==0){

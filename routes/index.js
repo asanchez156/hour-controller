@@ -7,7 +7,7 @@ var hourController = require('../controllers/hourController');
 var paleController = require('../controllers/paleController');
 var employeeController = require('../controllers/employeeController');
 
-var params = function (title, parentPage, page, user, messages) { 
+var params = function (title, parentPage, page, user, messages) {
     return {
               title: title,
               parentPage : parentPage,
@@ -66,6 +66,7 @@ router.get('/employee/find', sessionController.loginRequired, employeeController
 
 /* Pales */
 router.get('/pale', sessionController.loginRequired, sessionController.messages, paleController.index);
+router.post('/pale/find', sessionController.loginRequired, hourController.find);
 router.post('/pale/create', sessionController.loginRequired, paleController.create);
 router.post('/pale/update', sessionController.loginRequired, paleController.update);
 router.post('/pale/delete', sessionController.loginRequired, paleController.delete);
