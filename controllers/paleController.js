@@ -13,6 +13,7 @@ exports.index = function(req, res, next) {
 }
 
 exports.find = function(req, res, next) {
+		console.log("Finding pales");
    	var search = {}
 
    	if (req.body.companyId){
@@ -47,7 +48,7 @@ exports.find = function(req, res, next) {
 				pale: element.pale,
 				description: element.description,
 				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editPale(${element.paleId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="removePale(${element.paleId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
-			});
+				});
     	});
     	console.log(searchResult);
     	res.send(JSON.stringify(searchResult));

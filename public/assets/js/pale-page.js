@@ -26,11 +26,7 @@ var paleTable = $('#PaleTable').DataTable( {
         "language": {
             "url": "/assets/locales/dataTables-spanish.json"
         },
-        select: true,
-        buttons: [
-            { extend: "edit"},
-            { extend: "remove" }
-        ]
+        select: true
     } );
 
 var paleRow = {}
