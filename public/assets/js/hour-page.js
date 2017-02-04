@@ -5,10 +5,8 @@ $( document ).ready(function() {
     $(`.date[data-id="datepickerInitial"]`).datepicker('update', '');
     $(`.date[data-id="datepickerEnd"]`).datepicker('update', '');
     //Add to Employees by default
-
     setTableRowDataAvailable();
     searchWorkingday();
-
 })
 
 var hourTable = $('#hoursTable').DataTable( {
@@ -18,11 +16,12 @@ var hourTable = $('#hoursTable').DataTable( {
             { title : "ID JORNADA", data: "workingdayId", visible: false },
             { title : "ID EMPLEADO", data: "employeeId", visible: false },
             { title : "EMPLEADO", data: "employeeName" },
-            { title : "FECHA", data: "dateString" },
+            { title : "FECHA", data: "dateString"},
             { title : "FECHA_DB", data: "date", visible: false  },
             { title : "JORNADA", data: "workingday" },
             { title : "HORAS", data: "hours" },
-            { title : "", data: "functions" }
+            { title : "NOTAS", data: "description" },
+            { title : "", data: "functions" , width: "60px"}
         ],
         "language": {
             "url": "/assets/locales/dataTables-spanish.json"
@@ -74,8 +73,7 @@ function fillWorkingDayEditPanelComponents(){
 	$(`#workingDayForm .date[data-id="datepickerEdit${workingdayRow.workingdayId}"]`).datepicker('update', date);
 	$(`#workingDayForm #dateEdit${workingdayRow.workingdayId}`).prop('disabled', true);
 	$(`#workingDayForm #hoursEdit${workingdayRow.workingdayId}`).val(workingdayRow.hours);
-
-	//$(`#editWorkingDayForm #description${workingdayRow.workingdayId}`).val(workingdayRow.description);
+	$(`#workingDayForm #descriptionEdit${workingdayRow.workingdayId}`).val(workingdayRow.description);
 }
 
 function newWorkingDay(){
@@ -98,6 +96,7 @@ function editWorkingDay(id){
 	loadHour(`Edit${id}`);
 	loadDate(`Edit${id}`);
 	loadEmployeeSelect(`Edit${id}`);
+	//loadNote(`Edit${id}`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveEditWorkingDay(${id})`);
 	$('#workingDayModal').modal('show');
 }
@@ -118,7 +117,7 @@ function saveNewWorkingDay(){
 		employeeId : $(`#workingDayForm .selectpicker[data-id="employeeNew"]`).selectpicker('val'),
 		date: $(`#workingDayForm .date[data-id="datepickerNew"]`).datepicker("getUTCDate"),
 		hours: $(`#workingDayForm #hoursNew`).val(),
-		description: ""
+		description: $(`#workingDayForm #descriptionNew`).val()
 	};
 
 	$.post('/hour/create', inputsData , function(data) {
@@ -146,7 +145,7 @@ function saveEditWorkingDay(id){
 	var inputsData = {
 		workingdayId: workingdayRow.workingdayId,
 		hours: $(`#workingDayForm #hoursEdit${id}`).val(),
-		description: ""
+		description: $(`#workingDayForm #descriptionEdit${id}`).val()
 	};
 
 	$.post('/hour/update', inputsData , function(data) {
