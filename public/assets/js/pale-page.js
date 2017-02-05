@@ -8,10 +8,9 @@ $( document ).ready(function() {
 
     setTableRowDataAvailable();
     searchPale();
-
 })
 
-var paleTable = $('#PaleTable').DataTable( {
+var paleTable = $('#paleTable').DataTable( {
         "scrollY":        "200px",
         "scrollCollapse": true,
         columns: [
@@ -20,8 +19,9 @@ var paleTable = $('#PaleTable').DataTable( {
             { title : "EMPRESA", data: "companyName" },
             { title : "FECHA", data: "dateString" },
             { title : "FECHA_DB", data: "date", visible: false  },
-            { title : "PALE", data: "pale" },
-            { title : "", data: "functions" }
+            { title : "PALES", data: "pales" },
+            { title : "NOTAS", data: "description" },
+            { title : "FUNCIONES", data: "functions" }
         ],
         "language": {
             "url": "/assets/locales/dataTables-spanish.json"
@@ -32,18 +32,10 @@ var paleTable = $('#PaleTable').DataTable( {
 var paleRow = {}
 
 function setTableRowDataAvailable(){
-	$('#PaleTable tbody').on( 'click', 'button', function () {
+	$('#paleTable tbody').on( 'click', 'button', function () {
 	        paleRow = paleTable.row( $(this).parents('tr') ).data();
 			fillPaleEditPanelComponents();
 	    } );
-}
-
-function searchEmployees(callback){
-	$.get("/employee/find", function(data) {
-		listEmployee = JSON.parse(data);
-		callback();
-	}).fail(function(jqXHR) {
-	});
 }
 
 function populatePaleDatatable(jsonData){
@@ -55,8 +47,10 @@ function populatePaleDatatable(jsonData){
 function searchPale(){
 	var initialDate = $(`.date[data-id="datepickerInitial"]`).datepicker("getUTCDate");
 	var endDate = $(`.date[data-id="datepickerEnd"]`).datepicker("getUTCDate");
+	var companyId = $('#companySearch').val();
 
 	var search = {
+		companyId : companyId,
 		initialDate : initialDate,
 		endDate : endDate
 	}
@@ -67,22 +61,24 @@ function searchPale(){
 }
 
 function fillPaleEditPanelComponents(){
-	$(`#paleForm .selectpicker[data-id="employee${paleRow.paleId}"]`).selectpicker('val', paleRow.employeeId);
-	$(`#paleForm .selectpicker[data-id="employee${paleRow.paleId}"]`).prop('disabled', true);
-	$(`#paleForm .selectpicker[data-id="employee${paleRow.paleId}"]`).selectpicker('refresh');
+	$(`#paleForm .selectpicker[data-id="company"]`).selectpicker('val', paleRow.companyId);
+	$(`#paleForm .selectpicker[data-id="company"]`).prop('disabled', true);
+	$(`#paleForm .selectpicker[data-id="company"]`).selectpicker('refresh');
 
 	var date = new Date(paleRow.date.substr(0,4),parseInt(paleRow.date.substr(5,2))-1,paleRow.date.substr(8,2));
-	$(`#paleForm .date[data-id="datepicker${paleRow.paleId}"]`).datepicker('update', date);
-	$(`#paleForm #date${paleRow.paleId}`).prop('disabled', true);
-	$(`#paleForm #description${paleRow.paleId}`).val(paleRow.description);
+	$(`#paleForm .date[data-id="datepicker"]`).datepicker('update', date);
+	$(`#paleForm #date`).prop('disabled', true);
+	$(`#paleForm #description`).val(paleRow.description);
 }
 
 function newPale(){
 	removeMessage("#paleMessageDiv");
 	$('#paleModalLbl').html("Creando pale");
 	$('#savePaleBtn').html("Guardar");
-	loadHour("");
+	$('#palePanelContent').html(getModalPanelContent());
+	loadPale("");
 	loadDate("");
+	loadCompanySelect("");
 	$('#savePaleBtn').attr( "onclick",`saveNewPale()`);
 	$('#paleModal').modal('show');
 }
@@ -91,8 +87,10 @@ function editPale(id){
 	removeMessage("#paleMessageDiv");
 	$('#paleModalLbl').html("Editando pale");
 	$('#savePaleBtn').html("Guardar");
-	loadHour("");
+	$('#palePanelContent').html(getModalPanelContent());
+	loadPale("");
 	loadDate("");
+	loadCompanySelect("");
 	$('#savePaleBtn').attr( "onclick",`saveEditPale(${id})`);
 	$('#paleModal').modal('show');
 }
@@ -110,6 +108,7 @@ function saveNewPale(){
 	$('#savePaleBtn').prop('disabled', true);
 	$('#savePaleBtn').html('<div class="loader"></div>');
 	var inputsData = {
+		companyId : $(`#paleForm #company`).val(),
 		pales : $(`#paleForm #pales`).val(),
 		date: $(`#paleForm .date[data-id="datepicker"]`).datepicker("getUTCDate"),
 		description: $(`#paleForm #description`).val()
@@ -182,4 +181,52 @@ function saveDeletePale(id){
 		$('#savePaleBtn').removeAttr('disabled');
 		$('#savePaleBtn').html('Eliminar');
 	});
+}
+
+function getModalPanelContent(){
+	return `<div class="row">
+			<div class="form-group">
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<label for="company">Empresa/label>
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6" id="companySelectDiv">
+						<input type="text" class="form-control" id="company" name="company">
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<label for="date">Fecha</label>
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<div class="input-group date" data-provide="datepicker" data-id="datepicker">
+								<input type="text" class="form-control" id="date" name="date">
+								<div class="input-group-addon">
+										<span class="glyphicon glyphicon-th"></span>
+								</div>
+						</div>
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<label for="pales">Numero de pales</label>
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<div class="input-group">
+								<span class="input-group-btn">
+										<button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="pales">
+												<span class="glyphicon glyphicon-minus"></span>
+										</button>
+									</span>
+								<input id="pales" name="pales" class="form-control input-number" value="11" min="1" max="20" type="text">
+								<span class="input-group-btn">
+										<button type="button" class="btn btn-success btn-number" data-type="plus" data-field="pales">
+												<span class="glyphicon glyphicon-plus"></span>
+										</button>
+								 </span>
+						</div>
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<label for="description">Nota</label>
+				</div>
+				<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<input type="text" class="form-control" id="description" name="description">
+				</div>
+			</div>
+	</div>`;
 }
