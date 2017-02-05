@@ -24,12 +24,11 @@
                 <div class="row">
                     <div class="form-group">
                         <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <label for="employee">Empleado</label>
+                            <label for="employeeSearch">Empleado</label>
                         </div>
                         <div class="form-item col-md-2 col-sm-6 col-xs-6" id="employeeSelectDivSearch">
-                            <input type="text" class="form-control" id="employee" name="employee">
+                            <label for="employeeSearch">&nbsp;</label>
                         </div>
-
                         <div class="form-item col-md-2 col-sm-6 col-xs-6">
                             <label for="initialDate">Fecha inicial</label>
                         </div>
@@ -58,12 +57,12 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" class="btn btn-primary" onclick="searchWorkingday()">Buscar</button>
+                            <button type="button" class="btn btn-primary" onclick="searchWorkingday()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                            <button type="button" class="btn btn-primary pull-right" onclick="newWorkingDay()">Nueva</button>
+                            <button type="button" class="btn btn-primary pull-right" onclick="newWorkingDay()"><span class="glyphicon glyphicon-plus"></span> Nueva</button>
                         </div>
                     </div>
                 </div>
@@ -104,9 +103,9 @@
     </main>
 
     <!-- Footer Section Start -->
-    <footer class="section">
+    <!-- <footer class="section">-->
         <% include ../partials/footer %>
-    </footer>
+    <!-- </footer>-->
     <!-- Footer Section End -->
 
     <% include ../partials/copyright %>
