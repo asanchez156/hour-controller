@@ -21,16 +21,12 @@ var hourTable = $('#hoursTable').DataTable( {
             { title : "JORNADA", data: "workingday" },
             { title : "HORAS", data: "hours" },
             { title : "NOTAS", data: "description" },
-            { title : "", data: "functions" , width: "60px"}
+            { title : "FUNCIONES", data: "functions"}
         ],
         "language": {
             "url": "/assets/locales/dataTables-spanish.json"
         },
-        select: true,
-        buttons: [
-            { extend: "edit"},
-            { extend: "remove" }
-        ]
+        select: true
     } );
 
 var workingdayRow = {}
@@ -49,14 +45,14 @@ function populateHourDatatable(jsonData){
 }
 
 function searchWorkingday(){
-	var employeeId = $('#employee0').val();
+	var employeeId = $('#employeeSearch').val();
 	var initialDate = $(`.date[data-id="datepickerInitial"]`).datepicker("getUTCDate");
 	var endDate = $(`.date[data-id="datepickerEnd"]`).datepicker("getUTCDate");
 
 	var search = {
-		employeeId : employeeId,
-		initialDate : initialDate,
-		endDate : endDate
+			employeeId : employeeId,
+			initialDate : initialDate,
+			endDate : endDate
 	}
 
 	$.post('/hour/find', search , function(jsonData) {
@@ -96,7 +92,6 @@ function editWorkingDay(id){
 	loadHour(`Edit${id}`);
 	loadDate(`Edit${id}`);
 	loadEmployeeSelect(`Edit${id}`);
-	//loadNote(`Edit${id}`);
 	$('#saveWorkingDayBtn').attr( "onclick",`saveEditWorkingDay(${id})`);
 	$('#workingDayModal').modal('show');
 }
@@ -114,7 +109,7 @@ function saveNewWorkingDay(){
 	$('#saveWorkingDayBtn').prop('disabled', true);
 	$('#saveWorkingDayBtn').html('<div class="loader"></div>');
 	var inputsData = {
-		employeeId : $(`#workingDayForm .selectpicker[data-id="employeeNew"]`).selectpicker('val'),
+		employeeId : $(`#workingDayForm #employeeNew`).val(),
 		date: $(`#workingDayForm .date[data-id="datepickerNew"]`).datepicker("getUTCDate"),
 		hours: $(`#workingDayForm #hoursNew`).val(),
 		description: $(`#workingDayForm #descriptionNew`).val()

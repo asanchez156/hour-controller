@@ -24,39 +24,45 @@
                 <div class="row">
                     <div class="form-group">
                       <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <label for="initialDate">Fecha inicial</label>
-                        </div>
-                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <div class="input-group date" data-provide="datepicker" data-id="datepickerInitial">
-                                <input type="text" class="form-control" id="initialDate" name="initialDate">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <label for="endDate">Fecha final</label>
-                        </div>
-                        <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                            <div class="input-group date" data-provide="datepicker" data-id="datepickerEnd">
-                                <input type="text" class="form-control" id="endDate" name="endDate">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
-                                </div>
-                            </div>
-                        </div>
+                          <label for="companySearch">Empresa</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6" id="companySelectDivSearch">
+                          <label for="companySearch">&nbsp;</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                          <label for="initialDate">Fecha inicial</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                          <div class="input-group date" data-provide="datepicker" data-id="datepickerInitial">
+                              <input type="text" class="form-control" id="initialDate" name="initialDate">
+                              <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                          <label for="endDate">Fecha final</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                          <div class="input-group date" data-provide="datepicker" data-id="datepickerEnd">
+                              <input type="text" class="form-control" id="endDate" name="endDate">
+                              <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                              </div>
+                          </div>
+                      </div>
                     </div>
                 </div>
                 </br>
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" class="btn btn-primary" onclick="searchPale()">Buscar</button>
+                            <button type="button" class="btn btn-primary" onclick="searchPale()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                            <button type="button" class="btn btn-primary pull-right" onclick="newPale()">Nuevo</button>
+                            <button type="button" class="btn btn-primary pull-right" onclick="newPale()"><span class="glyphicon glyphicon-plus"></span> Nuevo</button>
                         </div>
                     </div>
                 </div>
@@ -82,45 +88,6 @@
                             <div id="paleMessageDiv">
                             </div>
                             <div id="palePanelContent">
-                              <div class="row">
-                                  <div class="form-group">
-                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-                                        <label for="date">Fecha</label>
-                                    </div>
-                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-                                        <div class="input-group date" data-provide="datepicker" data-id="datepicker">
-                                            <input type="text" class="form-control" id="date" name="date">
-                                            <div class="input-group-addon">
-                                                <span class="glyphicon glyphicon-th"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-                                        <label for="pales">Numero de pales</label>
-                                    </div>
-                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-                                        <div class="input-group">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="pales">
-                                                    <span class="glyphicon glyphicon-minus"></span>
-                                                </button>
-                                              </span>
-                                            <input id="pales" name="pales" class="form-control input-number" value="11" min="1" max="20" type="text">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="pales">
-                                                    <span class="glyphicon glyphicon-plus"></span>
-                                                </button>
-                                             </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-                                        <label for="description">Nota</label>
-                                    </div>
-                                    <div class="form-item col-md-3 col-sm-6 col-xs-6">
-                                        <input type="text" class="form-control" id="description" name="description">
-                                    </div>
-                                  </div>
-                              </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -135,9 +102,9 @@
     </main>
 
     <!-- Footer Section Start -->
-    <footer class="section">
+    <!-- <footer class="section">-->
         <% include ../partials/footer %>
-    </footer>
+    <!-- </footer>-->
     <!-- Footer Section End -->
 
     <% include ../partials/copyright %>

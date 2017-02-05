@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_USUARIO',
             validate: {
                 notEmpty: {
-                    msg: "Falta el usuario del pale"
+                    msg: "falta el usuario."
                 }
             }
         },
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_EMPRESA',
             validate: {
                 notEmpty: {
-                    msg: "Falta la empresa del pale"
+                    msg: "falta la empresa."
                 }
             }
         },
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.FLOAT,
             validate: {
                 notEmpty: {
-                    msg: "Falta el número de pales"
+                    msg: "falta el número de pales."
                 }
             },
             field: 'NUM_PALE'
@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.DATE,
             validate: {
                 notEmpty: {
-                    msg: "Falta la fecha del pale"
+                    msg: "falta la fecha."
                 }
             },
             field: 'FECHA'

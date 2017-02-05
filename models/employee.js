@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_EMPRESA',
             validate: {
                 notEmpty: {
-                    msg: "Falta la empresa del empleado"
+                    msg: "falta la empresa"
                 }
             }
         },
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_CARGO',
             validate: {
                 notEmpty: {
-                    msg: "Falta el cargo del empleado"
+                    msg: "falta el cargo"
                 }
             }
         },
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta el nombre del empleado"
+                    msg: "falta el nombre"
                 }
             },
             field: 'NOMBRE'
@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta el apellido del empleado"
+                    msg: "falta el apellido"
                 }
             },
             field: 'APELLIDO'

@@ -2,22 +2,21 @@
   $( document ).ready(function() {
   	$('#newWorkingDayPanelCounter').val(0);
       loadDate("Batch");
+    	loadPale("Batch");
       //Add to Employees by default
-      searchEmployees(init);
+      searchEmployees(initEmployee);
+      searchCompany(initCompany);
   })
 
-  function searchEmployees(callback){
-  	$.get("/employee/find", function(data) {
-  		listEmployee = JSON.parse(data);
-  		callback();
-  	}).fail(function(jqXHR) {
-  	});
-  }
-
-  function init(){
+  function initEmployee(){
     addEmployeePanel();
     addEmployeePanel();
 		loadEmployeeSelect("Search");
+    $('.selectpicker').selectpicker('refresh');
+  }
+
+  function initCompany(){
+    loadCompanySelect("Search");
     $('.selectpicker').selectpicker('refresh');
   }
 

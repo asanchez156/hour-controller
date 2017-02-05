@@ -11,6 +11,7 @@ function dateInit (){
 }
 
 var listEmployee = []
+var listCompany = []
 
 function loadHour(id){
 	$(`.btn-number[data-field="hours${id}"]`).click(numberSpinner);
@@ -19,20 +20,59 @@ function loadHour(id){
 	$(`.input-number[data-field="hours${id}"]`).keydown(numberSpinnerKeydown);
 }
 
-function loadEmployeeSelect(id){
-	var inputSelectHtml = `	<select class="selectpicker" data-id="employee${id}" id="employee${id}" name="employee${id}">
-							  	<option></option>`;
-	listEmployee.forEach(function(element, index, array){
-		inputSelectHtml += `<option value="${element.employeeId}">${element.name}</option>`;
-	});
-	inputSelectHtml += `</select>`;
+function loadPale(id){
+	$(`.btn-number[data-field="pales${id}"]`).click(numberSpinner);
+	$(`.input-number[data-field="pales${id}"]`).focusin(numberSpinnerFocusIn);
+	$(`.input-number[data-field="pales${id}"]`).change(numberSpinnerChange);
+	$(`.input-number[data-field="pales${id}"]`).keydown(numberSpinnerKeydown);
+}
 
-	$(`#employeeSelectDiv${id}`).html(inputSelectHtml);
-	$(`.selectpicker[data-id="employee${id}"]`).selectpicker({
-		  style: 'btn-primary',
-		  width: 'fit'
+function loadEmployeeSelect(id){
+		var inputSelectHtml = `	<select class="selectpicker" data-id="employee${id}" id="employee${id}" name="employee${id}" title="Seleccionar">
+								  	<option></option>`;
+		listEmployee.forEach(function(element, index, array){
+			inputSelectHtml += `<option value="${element.employeeId}">${element.employeeName}</option>`;
+		});
+		inputSelectHtml += `</select>`;
+
+		$(`#employeeSelectDiv${id}`).html(inputSelectHtml);
+		$(`.selectpicker[data-id="employee${id}"]`).selectpicker({
+			  style: 'btn-primary',
+			  width: 'fit'
+		});
+}
+
+function loadCompanySelect(id){
+		var inputSelectHtml = `	<select class="selectpicker" data-id="company${id}" id="company${id}" name="company${id}" title="Seleccionar">
+								  	<option></option>`;
+		listCompany.forEach(function(element, index, array){
+			inputSelectHtml += `<option value="${element.companyId}">${element.companyName}</option>`;
+		});
+		inputSelectHtml += `</select>`;
+
+		$(`#companySelectDiv${id}`).html(inputSelectHtml);
+		$(`.selectpicker[data-id="company${id}"]`).selectpicker({
+			  style: 'btn-primary',
+			  width: 'fit'
+		});
+}
+
+function searchEmployees(callback){
+	$.get("/employee/find", function(data) {
+		listEmployee = JSON.parse(data);
+		callback();
+	}).fail(function(jqXHR) {
 	});
 }
+
+function searchCompany(callback){
+	$.get("/company/find", function(data) {
+		listCompany = JSON.parse(data);
+		callback();
+	}).fail(function(jqXHR) {
+	});
+}
+
 function getEmployeePanelHtml(id){
 	return `<div class="panel panel-primary" id="workingDayPanel${id}">
                 <div class="panel-heading">
