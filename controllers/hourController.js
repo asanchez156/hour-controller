@@ -39,28 +39,15 @@ exports.createBatch = function(req, res, next) {
 
 	    for( var i = 1; i<j; i++){
 	    	employeeId = employees.pop();
-			promises.push(models.Employee.findOne({
-		        where: {
-		            employeeId: parseInt(employeeId || 0)
-		        }
-		    }).then(function(employee) {
-		    		//In this case the employeeId and the iteration are the same
-		            console.log("Employee id: ", employee.employeeId);
-		            if (employee) {
-		            	eId = employee.employeeId;
-		            } else {
-		            	eId = undefined;
-		            }
-		            return models.WorkingDay.create({
-				   		employeeId : eId || '',
+				promises.push(models.WorkingDay.create({
+				   		employeeId : employeeId || '',
 				   		userId: req.session.user.id,
 				   		workingday: 8,
 				   		hours: parseFloat(req.body['hoursBatch'+eId]),
 				   		description: req.body['descriptionBatch'+eId],
 				   		date: req.body['dateBatch'],
-				    }, {transaction: t}).then(function (workingday) {
-					});
-		    }));
+						}, {transaction: t}).then(function (workingday) {
+				}));
 		}
 
 	   	return Promise.all(promises);
@@ -106,7 +93,7 @@ exports.find = function(req, res, next) {
 			searchResult.push({
 				workingdayId: element.workingdayId,
 				employeeId: element.employeeId,
-				employeeName: element.EMPLEADO.name,
+				employeeName: element.EMPLEADO ? element.EMPLEADO.name : "null",
 				date: element.date,
 				dateString: stringDate(element.date,'es'),
 				workingday: element.workingday,
@@ -123,21 +110,14 @@ exports.find = function(req, res, next) {
 exports.create = function(req, res, next) {
 	console.log("BODY create: ", req.body);
 	models.transaction(function (t) {
-	    return models.WorkingDay.findOne({
-	        where: {
-	            employeeId: parseInt(req.body.employeeId)
-	        }
-	    }).then(function(employee) {
-	    	console.log("Empleado: " + employee);
-            return models.WorkingDay.create({
-		   		employeeId : employee ? parseInt(employee.employeeId) : '',
+	    return models.WorkingDay.create({
+		   		employeeId : req.body.employeeId,
 		   		userId: req.session.user.id,
 		   		workingday: 8,
 		   		hours: parseFloat(req.body.hours),
 		   		description: req.body.description,
 		   		date: req.body.date,
 		    }, {transaction: t});
-	    });
 	}).then((results) => {
 		res.send({
 		   status: 0
@@ -145,7 +125,7 @@ exports.create = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido crear la jornada. " + err.errors[0].message
+		   	message: "No se ha podido crear la jornada " + (err.errors[0].message == "JOR_UK must be unique" ? "ya existe." : err.errors[0].message)
 		});
 	});
 }
@@ -171,7 +151,7 @@ exports.update = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido eliminar la jornada. " + err.errors[0].message
+		   	message: "No se ha podido eliminar la jornada " + err.errors[0].message
 		});
 	});
 
@@ -194,7 +174,7 @@ exports.delete = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido eliminar la jornada. " + err.errors[0].message
+		   	message: "No se ha podido eliminar la jornada " + err.errors[0].message
 		});
 	});
 }

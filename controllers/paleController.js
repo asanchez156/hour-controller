@@ -13,9 +13,8 @@ exports.index = function(req, res, next) {
 }
 
 exports.find = function(req, res, next) {
-		console.log("Finding pales");
    	var search = {}
-
+		console.log(req.body);
    	if (req.body.companyId){
    		search.companyId = parseInt(req.body.companyId);
    	}
@@ -32,22 +31,22 @@ exports.find = function(req, res, next) {
             	$between: ["Fri Jan 1 2010 01:00:00 GMT+0100 (CET)'", req.body.endDate]
             }
    	}
-   	models.pale.findAll({
+   	models.Pale.findAll({
         where: search,
-        include: [models.company],
+        include: [models.Company],
         order: [['date', 'DESC']],
     }).then(function(listPale) {
-    	var searchResult = [];
+    var searchResult = [];
 		listPale.forEach(function(element, index, array){
 			searchResult.push({
 				paleId: element.paleId,
 				companyId: element.companyId,
-				companyName: element.EMPRESA.name,
+				companyName: element.EMPRESA.companyName,
 				date: element.date,
 				dateString: stringDate(element.date,'es'),
-				pale: element.pale,
+				pales: element.paleNum,
 				description: element.description,
-				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editPale(${element.paleId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="removePale(${element.paleId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
+				functions: `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editPale(${element.paleId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="deletePale(${element.paleId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
 				});
     	});
     	console.log(searchResult);
@@ -58,8 +57,8 @@ exports.find = function(req, res, next) {
 exports.create = function(req, res, next) {
 	console.log("BODY pale: ", req.body);
 	models.transaction(function (t) {
-	   	models.Pale.create({
-	   		companyId : 1,
+	   	return models.Pale.create({
+	   		companyId : req.body.companyId,
 	   		userId: req.session.user.id,
 	   		paleNum: req.body.pales,
 	   		date: req.body.date,
@@ -71,9 +70,10 @@ exports.create = function(req, res, next) {
 		   status: 0
 		});
 	}).catch(function (err) {
+		console.log(err);
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido crear el pale " + JSON.stringify(err)
+		   	message: "No se ha podido crear el pale " + (err.errors[0].message == "PAL_UK must be unique" ? "ya existe." : err.errors[0].message)
 		});
 	});
 }
@@ -100,7 +100,7 @@ exports.update = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido actualizar el pale " + JSON.stringify(err)
+		   	message: "No se ha podido actualizar el pale " + err.errors[0].message
 		});
 	});
 }
@@ -122,7 +122,7 @@ exports.delete = function(req, res, next) {
 	}).catch(function (err) {
 		res.status(400).send({
 			status: 1,
-		   	message: "No se ha podido eliminar el pale " + JSON.stringify(err)
+		   	message: "No se ha podido eliminar el pale " + err.errors[0].message
 		});
 	});
 }
