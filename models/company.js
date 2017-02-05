@@ -9,14 +9,14 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_EMPRESA',
             primaryKey: true
         },
-        company: {
+        companyName: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta el nombre de empresa"
+                    msg: "falta el nombre."
                 }
             },
-            field: 'EMPRESA'
+            field: 'NOMBRE_EMPRESA'
         },
         createdAt: {
             type: DataTypes.DATE,

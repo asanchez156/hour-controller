@@ -89,11 +89,11 @@ Company.hasMany(Pale,{
   }
 });
 
-WorkingDay.belongsTo(User, { foreignKey: 'userId' });
-WorkingDay.belongsTo(Employee, { foreignKey: 'employeeId' });
+WorkingDay.belongsTo(User, { foreignKey: 'userId'});
+WorkingDay.belongsTo(Employee, { foreignKey: 'employeeId'});
 Employee.belongsTo(Company, { foreignKey: 'companyId' });
 Employee.belongsTo(Position, { foreignKey: 'positionId' });
-Pale.belongsTo(Company, { foreignKey: 'positionId' });
+Pale.belongsTo(Company, { foreignKey: 'companyId' });
 //Employee.belongsToMany(EmpEmpPosition, { through: UserProject });
 //Employee.belongsToMany(EmpEmpPosition, { through: UserProject });
 
@@ -105,10 +105,10 @@ exports.Employee = Employee; // exportar la definicion de la tabla Employee
 exports.WorkingDay = WorkingDay; // exportar la definicion de la tabla WorkingDay
 exports.Pale = Pale; // exportar la definicion de la tabla Pale
 
-exports.transaction = function (tf) { 
+exports.transaction = function (tf) {
     return sequelize.transaction(tf);
   }
 
-exports.query = function (query) { 
+exports.query = function (query) {
     return sequelize.query(query);
   }

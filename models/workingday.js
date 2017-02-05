@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_EMPLEADO',
             validate: {
                 notEmpty: {
-                    msg: "Falta el empleado de la jornada"
+                    msg: "falta el empleado."
                 }
             }
         },
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_USUARIO',
             validate: {
                 notEmpty: {
-                    msg: "Falta el usuario de la jornada"
+                    msg: "falta el usuario."
                 }
             }
         },
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.FLOAT,
             validate: {
                 notEmpty: {
-                    msg: "Falta la jornada"
+                    msg: "falta la jornada."
                 }
             },
             field: 'JORNADA'
@@ -40,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta las horas realizadas"
+                    msg: "faltan las horas realizadas."
                 }
             },
             field: 'HORAS_REALIZADAS'

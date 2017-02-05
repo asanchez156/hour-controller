@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta el cargo"
+                    msg: "falta el cargo."
                 }
             },
             field: 'CARGO'
