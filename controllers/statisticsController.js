@@ -60,9 +60,10 @@ exports.findWorkingday = function(req, res, next) {
               while (i<searchResult.length && searchResult[i].employeeId!=element.employeeId){
                   i++;
               }
-              i=0;
               console.log("BUCLE",i);
               if(searchResult[i].employeeId==element.employeeId){
+                  console.log("result",i);
+                  console.log(searchResult);
                   searchResult[i].result[yyyy-startYear].month[mm][0] += element.workingday;
                   searchResult[i].result[yyyy-startYear].month[mm][1] += element.hours;
                   searchResult[i].result[yyyy-startYear].total[0] += element.workingday;
