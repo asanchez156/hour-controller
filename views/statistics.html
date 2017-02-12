@@ -23,22 +23,46 @@
             <div class="searchPanel">
                 <div class="row">
                     <div class="form-group">
-                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                          <label for="companySearch">Empresa</label>
+                      <div id="selectSearchMode">
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <label for="searchMode">Buscar</label>
+                          </div>
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <select class="selectpicker" data-id="searchMode" id="searchMode" name="searchMode" title="Seleccionar">
+                                <option></option>
+                                <option value=1>Jornadas</option>
+                                <option value=2>Pales</option>
+                              </select>
+                          </div>
                       </div>
-                      <div class="form-item col-md-2 col-sm-6 col-xs-6" id="companySelectDivSearch">
-                          <label for="companySearch">&nbsp;</label>
+                      <div id="companySearchDiv" style="display:none;">
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <label for="companySearch">Empresa</label>
+                          </div>
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6" id="companySelectDivSearch">
+                              <label for="companySearch">&nbsp;</label>
+                          </div>
                       </div>
-                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
-                          <label for="employeeSearch">Empleado</label>
-                      </div>
-                      <div class="form-item col-md-2 col-sm-6 col-xs-6" id="employeeSelectDivSearch">
-                          <label for="employeeSearch">&nbsp;</label>
+                      <div id="employeeSearchDiv" style="display:none;">
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <label for="employeeSearch">Empleado</label>
+                          </div>
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6" id="employeeSelectDivSearch">
+                              <label for="employeeSearch">&nbsp;</label>
+                          </div>
                       </div>
                     </div>
                 </div>
-                </br>
-
+              <div id="searchButtonDiv" style="display:none;">
+                  </br>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-6">
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                              <button id="statisticsSearchButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
             </div>
 
             <div class="panel-group">

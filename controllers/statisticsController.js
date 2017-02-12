@@ -13,14 +13,10 @@ exports.index = function(req, res, next) {
 }
 
 exports.findPale = function(req, res, next) {
-
-    //Devolver un Json con el nombre de la empresa el resumen del mes X por cada año X
-    // y el total de cada año x.
-
     var search = {}
     var startYear = 2017;
-    var currentYear = new Date().getFullYear()+1;
-    console.log("Body findPale", req.body);
+    var currentYear = new Date().getFullYear();
+
     if (req.body.companyId){
         search.companyId = parseInt(req.body.companyId);
     }
@@ -40,7 +36,6 @@ exports.findPale = function(req, res, next) {
       })
     });
     var date,mm,yyyy;
-
     var sumMonth, sumYear = 0;
 
     models.Pale.findAll({
@@ -52,8 +47,6 @@ exports.findPale = function(req, res, next) {
             date = new Date(element.date);
             mm = date.getMonth();
             yyyy = date.getFullYear();
-            //if(req.body.month==(mm+1)){}
-            //if(req.body.year==(yyyy)){}
             if(yyyy<=currentYear){
                 searchResult.find(function(company){
                   company.result[yyyy-startYear].month[mm] += element.paleNum;
@@ -66,6 +59,21 @@ exports.findPale = function(req, res, next) {
 }
 exports.findWorkingday = function(req, res, next) {
   console.log("findWorkingday");
+
+  var search = {}
+  var startYear = 2017;
+  var currentYear = new Date().getFullYear();
+
+  if (req.body.companyId){
+      search.companyId = parseInt(req.body.companyId);
+  }
+  if (req.body.employeeId){
+      search.employeeId = parseInt(req.body.employeeId);
+  }
+
+  //initializing variables
+  var searchResult = [];
+  res.send(JSON.stringify(searchResult));
 }
 
 function stringDate(date,lg){
