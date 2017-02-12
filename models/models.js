@@ -76,6 +76,12 @@ User.hasMany(WorkingDay,{
     allowNull: false
   }
 });
+User.hasOne(Employee,{
+  foreignKey: {
+    name: 'employeeId',
+    allowNull: false
+  }
+});
 Employee.hasMany(WorkingDay,{
   foreignKey: {
     name: 'employeeId',
@@ -91,6 +97,7 @@ Company.hasMany(Pale,{
 
 WorkingDay.belongsTo(User, { foreignKey: 'userId'});
 WorkingDay.belongsTo(Employee, { foreignKey: 'employeeId'});
+Employee.belongsTo(User, { foreignKey: 'employeeId' });
 Employee.belongsTo(Company, { foreignKey: 'companyId' });
 Employee.belongsTo(Position, { foreignKey: 'positionId' });
 Pale.belongsTo(Company, { foreignKey: 'companyId' });
