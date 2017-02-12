@@ -8,6 +8,7 @@ var paleController = require('../controllers/paleController');
 var employeeController = require('../controllers/employeeController');
 var companyController = require('../controllers/companyController');
 var statisticsController = require('../controllers/statisticsController');
+var importExportController = require('../controllers/importExportController');
 
 var params = function (title, parentPage, page, user, messages) {
     return {
@@ -80,5 +81,11 @@ router.post('/pale/delete', sessionController.loginRequired, paleController.dele
 router.get('/statistics', sessionController.loginRequired, sessionController.messages, statisticsController.index);
 router.post('/statistics/find/pale', sessionController.loginRequired, statisticsController.findPale);
 router.post('/statistics/find/workingday', sessionController.loginRequired, statisticsController.findWorkingday);
+
+
+/* Excel import export */
+router.post('/excel/import', sessionController.loginRequired, importExportController.import);
+router.post('/excel/export', sessionController.loginRequired, importExportController.export);
+
 
 module.exports = router;
