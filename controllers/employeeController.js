@@ -21,8 +21,10 @@ exports.find = function(req, res, next) {
     });
 }
 
-exports.findEmployees = function(callback) {
+exports.findEmployees = function(search, callback) {
    	models.Employee.findAll({
+        where: search,
+        include: [models.Company],
         order: [['name', 'ASC']],
     }).then(function(listEmployee) {
     	var searchResult = [];
@@ -30,7 +32,8 @@ exports.findEmployees = function(callback) {
       		searchResult.push({
       				employeeId: element.employeeId,
               companyId: element.companyId,
-      				employeeName: element.name
+      				employeeName: element.name,
+      				companyName: element.EMPRESA.companyName
     		  });
     	});
     	callback(searchResult);

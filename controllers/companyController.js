@@ -21,8 +21,9 @@ exports.find = function(req, res, next) {
     });
 }
 
-exports.findCompanys = function(callback) {
+exports.findCompanys = function(search, callback) {
    	models.Company.findAll({
+        where: search,
         order: [['companyName', 'ASC']],
     }).then(function(listCompany) {
     	var searchResult = [];
