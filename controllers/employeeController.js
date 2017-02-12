@@ -20,3 +20,19 @@ exports.find = function(req, res, next) {
     	res.send(JSON.stringify(searchResult));
     });
 }
+
+exports.findEmployees = function(callback) {
+   	models.Employee.findAll({
+        order: [['name', 'ASC']],
+    }).then(function(listEmployee) {
+    	var searchResult = [];
+    	listEmployee.forEach(function(element, index, array){
+      		searchResult.push({
+      				employeeId: element.employeeId,
+              companyId: element.companyId,
+      				employeeName: element.name
+    		  });
+    	});
+    	callback(searchResult);
+    });
+}
