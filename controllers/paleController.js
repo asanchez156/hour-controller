@@ -88,8 +88,7 @@ exports.update = function(req, res, next) {
 		 	}
 	  	}, { transaction: t}).then(function (pale) {
 		    return pale.updateAttributes({
-		    	userId: req.session.user.id,
-		    	hours: req.body.hours,
+		    	paleNum: req.body.pales,
 		    	description: req.body.description
 		    }, { transaction: t});
 	  	});

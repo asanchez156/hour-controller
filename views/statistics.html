@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+
+    <!-- Header Area wrapper Starts -->
+    <header id="header-wrap">
+      <% include ../partials/header %>
+
+    </header>
+    <!-- Header Area wrapper End -->
+
+    <% include ../partials/page-header %>
+    <main>
+        <input type="hidden" id="pageName" value="<%= page %>"/>
+        <div class="pageContent">
+            <div id="messages">
+                <% include ../partials/messages %>
+            </div>
+
+            <div class="searchPanel">
+                <div class="row">
+                    <div class="form-group">
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                          <label for="companySearch">Empresa</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6" id="companySelectDivSearch">
+                          <label for="companySearch">&nbsp;</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6">
+                          <label for="employeeSearch">Empleado</label>
+                      </div>
+                      <div class="form-item col-md-2 col-sm-6 col-xs-6" id="employeeSelectDivSearch">
+                          <label for="employeeSearch">&nbsp;</label>
+                      </div>
+                    </div>
+                </div>
+                </br>
+
+            </div>
+
+            <div class="panel-group">
+                  <div id="paleTablePanel"/>
+                  <div id="workingdayTablePanel"/>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section Start -->
+    <!-- <footer class="section">-->
+        <% include ../partials/footer %>
+    <!-- </footer>-->
+    <!-- Footer Section End -->
+
+    <% include ../partials/copyright %>
+    <% include ../partials/gotop %>
+    <% include ../partials/scripts %>
+    <script src="/assets/js/statistics-page.js"></script>
+
+  </body>
+</html>

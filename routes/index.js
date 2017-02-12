@@ -7,6 +7,7 @@ var hourController = require('../controllers/hourController');
 var paleController = require('../controllers/paleController');
 var employeeController = require('../controllers/employeeController');
 var companyController = require('../controllers/companyController');
+var statisticsController = require('../controllers/statisticsController');
 
 var params = function (title, parentPage, page, user, messages) {
     return {
@@ -74,6 +75,10 @@ router.post('/pale/find', sessionController.loginRequired, paleController.find);
 router.post('/pale/create', sessionController.loginRequired, paleController.create);
 router.post('/pale/update', sessionController.loginRequired, paleController.update);
 router.post('/pale/delete', sessionController.loginRequired, paleController.delete);
-//router.post('/pale/find', sessionController.loginRequired, paleController.find);
+
+/* Statistics */
+router.get('/statistics', sessionController.loginRequired, sessionController.messages, statisticsController.index);
+router.post('/statistics/find/pale', sessionController.loginRequired, statisticsController.findPale);
+router.post('/statistics/find/workingday', sessionController.loginRequired, statisticsController.findWorkingday);
 
 module.exports = router;
