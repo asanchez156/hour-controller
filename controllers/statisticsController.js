@@ -28,17 +28,18 @@ exports.findWorkingday = function(req, res, next) {
   }
 
   //initializing variables
-  var searchResult = [];
+  var searchResult = {};
   var year = [];
 
-  for (var j = startYear; j<=currentYear; j++){
-      year.push({year:j, total:[0,0] , month:[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]})
-  }
   employeeController.findEmployees(search,function(employees){
     employees.forEach(function(employee, index, array){
       if (!req.body.employeeId || (req.body.employeeId ? req.body.employeeId==employee.employeeId : false)){
-        employee.result = year;
-        searchResult['e'+employee.employeeId] = employee;
+        employee.result = [];
+        for (var j = startYear; j<=currentYear; j++){
+            employee.result.push({year:j, total:[0,0] , month:[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]})
+        }
+      //  employee.result = year.slice();
+        searchResult[employee.employeeId] = employee;
       }
     })
   });
@@ -53,53 +54,30 @@ exports.findWorkingday = function(req, res, next) {
       order: [[{ raw: 'date DESC' }]]//[['date', 'DESC']]
   }).then(function(listWorkingDay) {
       listWorkingDay.forEach(function(element, index){
-          console.log("index", index);
           date = new Date(element.date);
           mm = date.getMonth();
           yyyy = date.getFullYear();
-          console.log(searchResult);
           if(yyyy<=currentYear){
-              searchResult = updateArraySearchResult(searchResult, 'e'+element.employeeId , yyyy-startYear, mm,
-                  element.workingday, element.hours);
-          }
-              /*
-              console.log("BUCLE",i);
-              searchResult[i].result[yyyy-startYear].month[mm][0] += element.workingday;
-              console.log(searchResult[0].result[yyyy-startYear].month[mm][0]);
-              console.log(searchResult[1].result[yyyy-startYear].month[mm][0]);
-              searchResult[i].result[yyyy-startYear].month[mm][1] += element.hours;
-              console.log(searchResult[0].result[yyyy-startYear].month[mm][1]);
-              console.log(searchResult[1].result[yyyy-startYear].month[mm][1]);
-              searchResult[i].result[yyyy-startYear].total[0] += element.workingday;
-              console.log(searchResult[0].result[yyyy-startYear].total[0]);
-              console.log(searchResult[1].result[yyyy-startYear].total[0]);
-              searchResult[i].result[yyyy-startYear].total[1] += element.hours;
-              console.log(searchResult[0].result[yyyy-startYear].total[1]);
-              console.log(searchResult[1].result[yyyy-startYear].total[1]);*/
+              var workingday = element.workingday;
+              var hours = element.hours;
+              var employeeId = element.employeeId;
+              var posResult = yyyy-startYear;
+              var result = searchResult[employeeId].result[posResult];
+
+              console.log("BUCLE",employeeId);
+
+              result.month[mm][0] += workingday;
+              result.month[mm][1] += hours;
+              result.total[0] += workingday;
+              result.total[1] += hours;
+
+              console.log(JSON.stringify(searchResult));
+            }
       });
       res.send(JSON.stringify(searchResult));
    });
 }
 
-function updateArraySearchResult(searchResult, employeeId , posResult, mm, workingday, hours){
-    console.log("BUCLE",employeeId);
-    console.log("searchResult",searchResult[employeeId]);
-    console.log("result", searchResult[employeeId].result[posResult]);
-    searchResult[employeeId].result[posResult].month[mm][0] += workingday;
-    console.log(searchResult[employeeId].result[posResult].month[mm][0]);
-    console.log(searchResult[employeeId].result[posResult].month[mm][0]);
-    searchResult[employeeId].result[posResult].month[mm][1] += hours;
-    console.log(searchResult[employeeId].result[posResult].month[mm][1]);
-    console.log(searchResult[employeeId].result[posResult].month[mm][1]);
-    searchResult[employeeId].result[posResult].total[0] += workingday;
-    console.log(searchResult[employeeId].result[posResult].total[0]);
-    console.log(searchResult[employeeId].result[posResult].total[0]);
-    searchResult[employeeId].result[posResult].total[1] += hours;
-    console.log(searchResult[employeeId].result[posResult].total[1]);
-    console.log(searchResult[employeeId].result[posResult].total[1]);
-
-    return searchResult;
-}
 
 exports.findPale = function(req, res, next) {
     var search = {}
