@@ -81,36 +81,38 @@ function searchWorkingDayStatistics(){
 
 function fillWorkingDayStatistics(data){
 	$("#workingDayTablePanel").html("");
-	data.forEach(function(company, index, array){
-			$(`#workingDayTablePanel`).append(`<div id="workingDayTablePanelGroup${company.companyId}" class="panel-group"/>`);
-			$(`#workingDayTablePanelGroup${company.companyId}`).append(`<div class="panel-heading"><h2>${company.companyName}</h2></div>`);
-			$(`#workingDayTablePanelGroup${company.companyId}`).append(`<div id="workingDayTablePanelCompany${company.companyId}" class="panel panel-default"/>`);
-			$(`#workingDayTablePanelCompany${company.companyId}`).append(`<div id="workingDayTablePanelCompany${company.companyId}Years" class="row"></div>`);
-			company.result.forEach(function(yyyy, index, array){
-					$(`#workingDayTablePanelCompany${company.companyId}Years`).append(`<div class="col-md-4 col-sm-6 col-xs-12">
-							<div id="panelWorkingDayBodyCompany${company.companyId}Year${yyyy.year}" class="panel-body"/></div>`);
+	data.forEach(function(employee, index, array){
+			$(`#workingDayTablePanel`).append(`<div id="workingDayTablePanelGroup${employee.employeeId}" class="panel-group"/>`);
+			$(`#workingDayTablePanelGroup${employee.employeeId}`).append(`<div class="panel-heading"><h2>${employee.employeeName} - ${employee.companyName}</h2></div>`);
+			$(`#workingDayTablePanelGroup${employee.employeeId}`).append(`<div id="workingDayTablePanelCompany${employee.employeeId}" class="panel panel-default"/>`);
+			$(`#workingDayTablePanelCompany${employee.employeeId}`).append(`<div id="workingDayTablePanelCompany${employee.employeeId}Years" class="row"></div>`);
+			employee.result.forEach(function(yyyy, index, array){
+					$(`#workingDayTablePanelCompany${employee.employeeId}Years`).append(`<div class="col-md-4 col-sm-6 col-xs-12">
+							<div id="panelWorkingDayBodyCompany${employee.employeeId}Year${yyyy.year}" class="panel-body"/></div>`);
 
-					$(`#panelWorkingDayBodyCompany${company.companyId}Year${yyyy.year}`).append(`<div class="panel-heading"><h3>Año ${yyyy.year}</h3></div>`);
-					$(`#panelWorkingDayBodyCompany${company.companyId}Year${yyyy.year}`).append($(`<div class="panel-body">`)
+					$(`#panelWorkingDayBodyCompany${employee.employeeId}Year${yyyy.year}`).append(`<div class="panel-heading"><h3>Año ${yyyy.year}</h3></div>`);
+					$(`#panelWorkingDayBodyCompany${employee.employeeId}Year${yyyy.year}`).append($(`<div class="panel-body">`)
                 .append($(`<div class="table-responsive">`)
-                .append($(`<table class="table" id="workingDayTableCompany${company.companyId}Year${yyyy.year}"/>`))));
-					$(`#workingDayTableCompany${company.companyId}Year${yyyy.year}`).append($('<thead>')
+                .append($(`<table class="table" id="workingDayTableCompany${employee.employeeId}Year${yyyy.year}"/>`))));
+					$(`#workingDayTableCompany${employee.employeeId}Year${yyyy.year}`).append($('<thead>')
               .append($('<tr>')
 							.append($('<th>').append('Mes'))
-              .append($('<th>').append('Total'))))
+              .append($('<th>').append('Total jornada'))
+              .append($('<th>').append('Total horas'))))
               .append($('<tbody>')
 					);
 					yyyy.month.forEach(function(mm, index, array){
-						$(`#workingDayTableCompany${company.companyId}Year${yyyy.year}`).find('tbody')
+						$(`#workingDayTableCompany${employee.employeeId}Year${yyyy.year}`).find('tbody')
 						    .append($('<tr>')
 						        .append($('<td>').append(monthString(index)))
-										.append($('<td>').append(mm))
-						    );
+										.append($('<td>').append(mm)[0])
+										.append($('<td>').append(mm)[1]));
 					});
-					$(`#workingDayTableCompany${company.companyId}Year${yyyy.year}`).find('tbody')
+					$(`#workingDayTableCompany${employee.employeeId}Year${yyyy.year}`).find('tbody')
 							.append($('<tr>')
 									.append($('<td>').append("<b>Total</b>"))
-									.append($('<td>').append(`<b>${yyyy.total}</b>`))
+									.append($('<td>').append(`<b>${yyyy.total[0]}</b>`))
+                  .append($('<td>').append(`<b>${yyyy.total[1]}</b>`))
 					);
 			});
 	});
