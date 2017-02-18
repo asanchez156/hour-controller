@@ -83,9 +83,17 @@ router.post('/statistics/find/pale', sessionController.loginRequired, statistics
 router.post('/statistics/find/workingday', sessionController.loginRequired, statisticsController.findWorkingday);
 
 
-/* Excel import export */
-router.post('/excel/import', sessionController.loginRequired, importExportController.import);
-router.post('/excel/export', sessionController.loginRequired, importExportController.export);
+/* Excel import export Working Day */
+router.post('/excel/import/workingday', sessionController.loginRequired, importExportController.importWorkingDay);
+router.get('/excel/import/workingday', sessionController.loginRequired, importExportController.importWorkingDay);
+router.post('/excel/export/workingday', sessionController.loginRequired, importExportController.exportWorkingDay);
+router.get('/excel/export/workingday', sessionController.loginRequired, importExportController.exportWorkingDay);
+
+/* Excel import export Pale */
+router.post('/excel/import/pale', sessionController.loginRequired, importExportController.importPale);
+router.get('/excel/import/pale', sessionController.loginRequired, importExportController.importPale);
+router.post('/excel/export/pale', sessionController.loginRequired, importExportController.exportPale);
+router.get('/excel/export/pale', sessionController.loginRequired, importExportController.importPale);
 
 
 module.exports = router;
