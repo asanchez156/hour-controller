@@ -55,15 +55,15 @@
                 </div>
                 </br>
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                        <div class="col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" class="btn btn-primary" onclick="searchWorkingday()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
-                        </div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        <button type="button" class="btn btn-primary" onclick="searchWorkingday()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6">
-                        <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
-                            <button type="button" class="btn btn-primary pull-right" onclick="newWorkingDay()"><span class="glyphicon glyphicon-plus"></span> Nueva</button>
-                        </div>
+                    <div class="col-md-8 col-sm-8 col-xs-8 pull-right">
+                        <button type="button" class="btn btn-primary pull-right" onclick="newWorkingDay()"><span class="glyphicon glyphicon-plus"></span> Nueva</button>
+                        <span class="pull-right">&nbsp;</span>
+                        <button type="button" class="btn btn-primary pull-right" onclick="importWorkingDay()"><span class="glyphicon glyphicon-import"></span> Importar</button>
+                        <span class="pull-right">&nbsp;</span>
+                        <button type="button" class="btn btn-primary pull-right" onclick="exportWorkingDay()"><span class="glyphicon glyphicon-export"></span> Exportar</button>
                     </div>
                 </div>
             </div>
@@ -87,15 +87,40 @@
                         <div class="modal-body">
                             <div id="workingDayMessageDiv">
                             </div>
-                            <form id="workingDayForm">
-                                <div id="workingDayPanelContent"/>
-                            </form>
+                            <div id="workingDayPanelContent">
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             <button id="saveWorkingDayBtn" type="button" class="btn btn-primary" >Guardar</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <!-- End workin day modal -->
+
+        <!-- Excel modal -->
+        <div class="modal fade" id="excelModal" tabindex="-1" role="dialog" aria-labelledby="excelModalLlb" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="excelModalLbl">Import/Export</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="excelMessageDiv">
+                        </div>
+                        <form id="excelForm">
+                            <div id="excelPanelContent"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button id="excelImportExportBtn" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
                 </div>
             </div>
         </div>

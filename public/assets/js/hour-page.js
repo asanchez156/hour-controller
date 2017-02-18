@@ -183,3 +183,59 @@ function saveDeleteWorkingDay(id){
 		$('#saveWorkingDayBtn').html('Eliminar');
 	});
 }
+
+function importWorkingDay(){
+		removeMessage("#excelMessageDiv");
+		$('#excelModalLbl').html("Importando jornadas");
+		$('#excelPanelContent').html("Escoge el fichero a importar");
+		$('#excelImportExportBtn').html("Importar");
+		$('#excelImportExportBtn').attr( "onclick",`excelImportWorkingDay()`);
+		$('#excelModal').modal('show');
+}
+
+function excelImportWorkingDay(){
+	var inputsData = {};
+	$.post('/excel/import/workingday', inputsData , function(data) {
+		removeMessage("#excelMessageDiv");
+		if(data.status==0){
+			$('#excelModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#excelMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#excelImportExportBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#excelMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#excelImportExportBtn').removeAttr('disabled');
+		$('#excelImportExportBtn').html('Importar');
+	});
+}
+
+function exportWorkingDay(){
+		removeMessage("#excelMessageDiv");
+		$('#excelModalLbl').html("Exportando jornadas");
+		$('#excelPanelContent').html("Vas a exportar todas las jornadas");
+		$('#excelImportExportBtn').html("Exportar");
+		$('#excelImportExportBtn').attr( "onclick",`excelExportWorkingDay()`);
+		$('#excelModal').modal('show');
+}
+
+function excelExportWorkingDay(){
+	var inputsData = {};
+	$.post('/excel/export/workingday', inputsData , function(data) {
+		removeMessage("#excelMessageDiv");
+		if(data.status==0){
+			$('#excelModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#excelMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#excelImportExcportBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#excelMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#excelImportExportBtn').removeAttr('disabled');
+		$('#excelImportExportBtn').html('Exportar');
+	});
+}
