@@ -1,0 +1,3 @@
+export APP_ENV=development
+export DATABASE_URL=mysql://sql8159610:t4f7v9t51G@sql8.freesqldatabase.com:3306/sql8159610
+node bin/www
