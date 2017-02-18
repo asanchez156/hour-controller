@@ -138,7 +138,7 @@ function saveEditPale(id){
 
 	var inputsData = {
 		paleId: id,
-		pales : $(`#paleForm pales`).val(),
+		pales : $(`#paleForm #pales`).val(),
 		description: $(`#paleForm #description`).val()
 	};
 	console.log(inputsData);
@@ -187,7 +187,7 @@ function getModalPanelContent(){
 	return `<div class="row">
 			<div class="form-group">
 				<div class="form-item col-md-3 col-sm-6 col-xs-6">
-						<label for="company">Empresa/label>
+						<label for="company">Empresa</label>
 				</div>
 				<div class="form-item col-md-3 col-sm-6 col-xs-6" id="companySelectDiv">
 						<input type="text" class="form-control" id="company" name="company">

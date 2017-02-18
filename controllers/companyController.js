@@ -20,3 +20,19 @@ exports.find = function(req, res, next) {
     	res.send(JSON.stringify(searchResult));
     });
 }
+
+exports.findCompanys = function(search, callback) {
+   	models.Company.findAll({
+        where: search,
+        order: [['companyName', 'ASC']],
+    }).then(function(listCompany) {
+    	var searchResult = [];
+    	listCompany.forEach(function(element, index, array){
+      		searchResult.push({
+      				companyId: element.companyId,
+      				companyName: element.companyName
+    		  });
+    	});
+    	callback(searchResult);
+    });
+}

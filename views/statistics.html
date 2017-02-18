@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <% include ../partials/head %>
+  </head>
+  <body>
+
+    <!-- Header Area wrapper Starts -->
+    <header id="header-wrap">
+      <% include ../partials/header %>
+
+    </header>
+    <!-- Header Area wrapper End -->
+
+    <% include ../partials/page-header %>
+    <main>
+        <input type="hidden" id="pageName" value="<%= page %>"/>
+        <div class="pageContent">
+            <div id="messages">
+                <% include ../partials/messages %>
+            </div>
+
+            <div class="searchPanel">
+                <div class="row">
+                    <div class="form-group">
+                      <div id="selectSearchMode">
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <label for="searchMode">Buscar</label>
+                          </div>
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <select class="selectpicker" data-id="searchMode" id="searchMode" name="searchMode" title="Seleccionar">
+                                <option></option>
+                                <option value=1>Jornadas</option>
+                                <option value=2>Pales</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div id="companySearchDiv" style="display:none;">
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <label for="companySearch">Empresa</label>
+                          </div>
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6" id="companySelectDivSearch">
+                              <label for="companySearch">&nbsp;</label>
+                          </div>
+                      </div>
+                      <div id="employeeSearchDiv" style="display:none;">
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6">
+                              <label for="employeeSearch">Empleado</label>
+                          </div>
+                          <div class="form-item col-md-2 col-sm-3 col-xs-6" id="employeeSelectDivSearch">
+                              <label for="employeeSearch">&nbsp;</label>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+              <div id="searchButtonDiv" style="display:none;">
+                  </br>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-6">
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                              <button id="statisticsSearchButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="panel-group">
+                  <div id="paleTablePanel"></div>
+                  <div id="workingDayTablePanel"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section Start -->
+    <!-- <footer class="section">-->
+        <% include ../partials/footer %>
+    <!-- </footer>-->
+    <!-- Footer Section End -->
+
+    <% include ../partials/copyright %>
+    <% include ../partials/gotop %>
+    <% include ../partials/scripts %>
+    <script src="/assets/js/statistics-page.js"></script>
+
+  </body>
+</html>

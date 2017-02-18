@@ -9,11 +9,20 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_USUARIO',
             primaryKey : true
         },
+        employeeId:{
+            type: DataTypes.INTEGER,
+            field: 'ID_EMPLEADO',
+            validate: {
+                notEmpty: {
+                    msg: "falta el usuario."
+                }
+            }
+        },
         username: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta nombre de usuario del usuario"
+                    msg: "falta nombre de usuario del usuario."
                 }
             },
             field: 'NOMBRE_USUARIO'
@@ -22,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta la contraseña del usuario"
+                    msg: "falta la contraseña del usuario."
                 }
             },
             field: 'PASSWORD'
@@ -31,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta el nombre del usuario"
+                    msg: "falta el nombre del usuario."
                 }
             },
             field: 'NOMBRE'
@@ -40,7 +49,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "Falta el nombre del usuario"
+                    msg: "falta el nombre del usuario"
                 }
             },
             field: 'APELLIDO'
