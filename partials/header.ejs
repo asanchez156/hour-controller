@@ -11,7 +11,7 @@
           <div class="quick-contacts" id="userConnection">
               <!--<span><i class="icon-phone"></i> (00) 123 456 789</span>-->
               <% if (user){ %>
-                  <% if (user.mode<2){ %>
+                  <% if (parseInt(user.mode)<2){ %>
                     <span><i class="glyphicon glyphicon-plus"></i><a href="#" onclick="workingdayModal()">Nuevo día</a></span>
                   <% } %>
                   <span><i class="icon-user"></i><a id="usernameBarText" href="#"><%= user.username %></a></span>
@@ -42,7 +42,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li id="homePageNav"><a href="/">Pantalla principal</a></li>
             <% if (user){ %>
-              <% if (user.mode<2){ %>
+              <% if (parseInt(user.mode)<2){ %>
               <li id="hourPageNav"><a href="/hour">Jornadas</a></li>
               <li id="palePageNav"><a href="/pale">Pales</a></li>
               <% } %>
@@ -57,7 +57,7 @@
       <ul class="wpb-mobile-menu">
         <li id="homePageNavMobile"><a href="/">Pantalla principal</a></li>
          <% if (user){ %>
-           <% if (user.mode<2){ %>
+           <% if (parseInt(user.mode)<2){ %>
               <li id="hourPageNavMobile"><a href="/hour">Jornadas</a></li>
               <li id="palePageNavMobile"><a href="/pale">Pales</a></li>
             <% } %>

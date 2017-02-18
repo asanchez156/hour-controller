@@ -10,7 +10,6 @@ function initSearchModeDiv(){
   $('.selectpicker[data-id="searchMode"]').on('change', function(){
     clearStatisticsPanels();
     var selected = $(this).find("option:selected").val();
-    console.log(selected);
     switch (selected) {
       case '1':
           showEmployeeSearchDiv();
