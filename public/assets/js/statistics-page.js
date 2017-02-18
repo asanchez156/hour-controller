@@ -81,41 +81,83 @@ function searchWorkingDayStatistics(){
 
 function fillWorkingDayStatistics(data){
 	$("#workingDayTablePanel").html("");
-	data.forEach(function(employee, index, array){
+  for (var employeeId in data) {
+    var employee = data[employeeId];
+    var employeeTotalHours = [];
 			$(`#workingDayTablePanel`).append(`<div id="workingDayTablePanelGroup${employee.employeeId}" class="panel-group"/>`);
 			$(`#workingDayTablePanelGroup${employee.employeeId}`).append(`<div class="panel-heading"><h2>${employee.employeeName} - ${employee.companyName}</h2></div>`);
-			$(`#workingDayTablePanelGroup${employee.employeeId}`).append(`<div id="workingDayTablePanelCompany${employee.employeeId}" class="panel panel-default"/>`);
-			$(`#workingDayTablePanelCompany${employee.employeeId}`).append(`<div id="workingDayTablePanelCompany${employee.employeeId}Years" class="row"></div>`);
+			$(`#workingDayTablePanelGroup${employee.employeeId}`).append(`<div id="workingDayTablePanelEmployee${employee.employeeId}" class="panel panel-default"/>`);
+			$(`#workingDayTablePanelEmployee${employee.employeeId}`).append(`<div id="workingDayTablePanelEmployee${employee.employeeId}Years" class="row"></div>`);
 			employee.result.forEach(function(yyyy, index, array){
-					$(`#workingDayTablePanelCompany${employee.employeeId}Years`).append(`<div class="col-md-4 col-sm-6 col-xs-12">
-							<div id="panelWorkingDayBodyCompany${employee.employeeId}Year${yyyy.year}" class="panel-body"/></div>`);
+					$(`#workingDayTablePanelEmployee${employee.employeeId}Years`).append(`<div class="col-md-4 col-sm-6 col-xs-12">
+							<div id="panelWorkingDayBodyEmployee${employee.employeeId}Year${yyyy.year}" class="panel-body"/></div>`);
 
-					$(`#panelWorkingDayBodyCompany${employee.employeeId}Year${yyyy.year}`).append(`<div class="panel-heading"><h3>Año ${yyyy.year}</h3></div>`);
-					$(`#panelWorkingDayBodyCompany${employee.employeeId}Year${yyyy.year}`).append($(`<div class="panel-body">`)
+					$(`#panelWorkingDayBodyEmployee${employee.employeeId}Year${yyyy.year}`).append(`<div class="panel-heading"><h3>Año ${yyyy.year}</h3></div>`);
+					$(`#panelWorkingDayBodyEmployee${employee.employeeId}Year${yyyy.year}`).append($(`<div class="panel-body">`)
                 .append($(`<div class="table-responsive">`)
-                .append($(`<table class="table" id="workingDayTableCompany${employee.employeeId}Year${yyyy.year}"/>`))));
-					$(`#workingDayTableCompany${employee.employeeId}Year${yyyy.year}`).append($('<thead>')
+                .append($(`<table class="table" id="workingDayTableEmployee${employee.employeeId}Year${yyyy.year}"/>`))));
+					$(`#workingDayTableEmployee${employee.employeeId}Year${yyyy.year}`).append($('<thead>')
               .append($('<tr>')
 							.append($('<th>').append('Mes'))
               .append($('<th>').append('Total jornada'))
-              .append($('<th>').append('Total horas'))))
+              .append($('<th>').append('Total horas'))
+              .append($('<th>').append('Diferencia'))))
               .append($('<tbody>')
 					);
+          employeeTotalHours.push({year:yyyy.year, totalWorkingday:yyyy.total[0] , totalHours:yyyy.total[1] , totalDifference:yyyy.total[2] });
+
 					yyyy.month.forEach(function(mm, index, array){
-						$(`#workingDayTableCompany${employee.employeeId}Year${yyyy.year}`).find('tbody')
+						$(`#workingDayTableEmployee${employee.employeeId}Year${yyyy.year}`).find('tbody')
 						    .append($('<tr>')
 						        .append($('<td>').append(monthString(index)))
-										.append($('<td>').append(mm)[0])
-										.append($('<td>').append(mm)[1]));
-					});
-					$(`#workingDayTableCompany${employee.employeeId}Year${yyyy.year}`).find('tbody')
+										.append($('<td>').append(mm[0]))
+										.append($('<td>').append(mm[1]))
+										.append($('<td>').append(mm[2])));
+  					});
+					$(`#workingDayTableEmployee${employee.employeeId}Year${yyyy.year}`).find('tbody')
 							.append($('<tr>')
 									.append($('<td>').append("<b>Total</b>"))
 									.append($('<td>').append(`<b>${yyyy.total[0]}</b>`))
                   .append($('<td>').append(`<b>${yyyy.total[1]}</b>`))
-					);
-			});
-	});
+                  .append($('<td>').append(`<b>${yyyy.total[2]}</b>`))
+          );
+      });
+
+      //Years summary
+      $(`#workingDayTablePanelEmployee${employee.employeeId}Years`).append(`<div class="col-md-4 col-sm-6 col-xs-12">
+          <div id="panelWorkingDayBodyEmployee${employee.employeeId}AllYears" class="panel-body"/></div>`);
+      $(`#panelWorkingDayBodyEmployee${employee.employeeId}AllYears`).append(`<div class="panel-heading">
+          <h3>Total ${employee.employeeName}</h3></div>`);
+      $(`#panelWorkingDayBodyEmployee${employee.employeeId}AllYears`).append($(`<div class="panel-body">`)
+            .append($(`<div class="table-responsive">`)
+            .append($(`<table class="table" id="workingDayTableEmployee${employee.employeeId}AllYears"/>`))));
+      $(`#workingDayTableEmployee${employee.employeeId}AllYears`).append($('<thead>')
+          .append($('<tr>')
+          .append($('<th>').append('Año'))
+          .append($('<th>').append('Total jornada'))
+          .append($('<th>').append('Total horas'))
+          .append($('<th>').append('Diferencia'))))
+          .append($('<tbody>')
+      );
+      var total = {totalWorkingday:0, totalHours:0, totalDifference:0}
+      employeeTotalHours.forEach(function(year, index, array){
+          $(`#workingDayTableEmployee${employee.employeeId}AllYears`).find('tbody')
+              .append($('<tr>')
+                  .append($('<td>').append(year.year))
+                  .append($('<td>').append(year.totalWorkingday))
+                  .append($('<td>').append(year.totalHours))
+                  .append($('<td>').append(year.totalDifference)));
+          total.totalWorkingday +=year.totalWorkingday;
+          total.totalHours +=year.totalHours;
+          total.totalDifference +=year.totalDifference;
+      });
+      $(`#workingDayTableEmployee${employee.employeeId}AllYears`).find('tbody')
+          .append($('<tr>')
+              .append($('<td>').append('<b>TOTAL</b>'))
+              .append($('<td>').append(`<b>${total.totalWorkingday}</b>`))
+              .append($('<td>').append(`<b>${total.totalHours}</b>`))
+              .append($('<td>').append(`<b>${total.totalDifference}</b>`)));
+	}
 }
 
 function searchPaleStatistics(){
@@ -133,7 +175,9 @@ function searchPaleStatistics(){
 
 function fillPaleStatistics(data){
 	$("#paleTablePanel").html("");
-	data.forEach(function(company, index, array){
+  for (var companyId in data) {
+      var company = data[companyId];
+      var companyTotalPales = [];
 			$(`#paleTablePanel`).append(`<div id="paleTablePanelGroup${company.companyId}" class="panel-group"/>`);
 			$(`#paleTablePanelGroup${company.companyId}`).append(`<div class="panel-heading"><h2>${company.companyName}</h2></div>`);
 			$(`#paleTablePanelGroup${company.companyId}`).append(`<div id="paleTablePanelCompany${company.companyId}" class="panel panel-default"/>`);
@@ -152,6 +196,9 @@ function fillPaleStatistics(data){
               .append($('<th>').append('Total'))))
               .append($('<tbody>')
 					);
+
+          companyTotalPales.push({year:yyyy.year, totalPales:yyyy.total});
+
 					yyyy.month.forEach(function(mm, index, array){
 						$(`#paleTableCompany${company.companyId}Year${yyyy.year}`).find('tbody')
 						    .append($('<tr>')
@@ -165,7 +212,34 @@ function fillPaleStatistics(data){
 									.append($('<td>').append(`<b>${yyyy.total}</b>`))
 					);
 			});
-	});
+
+      //Years summary
+      $(`#paleTablePanelCompany${company.companyId}Years`).append(`<div class="col-md-4 col-sm-6 col-xs-12">
+          <div id="panelPaleBodyCompany${company.companyId}AllYears" class="panel-body"/></div>`);
+      $(`#panelPaleBodyCompany${company.companyId}AllYears`).append(`<div class="panel-heading">
+          <h3>Total ${company.companyName}</h3></div>`);
+      $(`#panelPaleBodyCompany${company.companyId}AllYears`).append($(`<div class="panel-body">`)
+            .append($(`<div class="table-responsive">`)
+            .append($(`<table class="table" id="paleTableCompany${company.companyId}AllYears"/>`))));
+      $(`#paleTableCompany${company.companyId}AllYears`).append($('<thead>')
+          .append($('<tr>')
+          .append($('<th>').append('Año'))
+          .append($('<th>').append('Total pales'))))
+          .append($('<tbody>')
+      );
+      var sumAllPales = 0;
+      companyTotalPales.forEach(function(year, index, array){
+          $(`#paleTableCompany${company.companyId}AllYears`).find('tbody')
+              .append($('<tr>')
+                  .append($('<td>').append(year.year))
+                  .append($('<td>').append(year.totalPales)));
+          sumAllPales +=year.totalPales;
+      });
+      $(`#paleTableCompany${company.companyId}AllYears`).find('tbody')
+          .append($('<tr>')
+              .append($('<td>').append('<b>TOTAL</b>'))
+              .append($('<td>').append(`<b>${sumAllPales}</b>`)));
+	}
 }
 
 
