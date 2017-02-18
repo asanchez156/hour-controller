@@ -38,7 +38,7 @@ exports.create = function(req, res) {
             req.session.user = {
                 id: user.userId,
                 username: user.username,
-                mode: user.mode
+                mode: user.userMode
             };
             res.redirect(req.session.redir || "/");
         }
