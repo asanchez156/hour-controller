@@ -44,6 +44,12 @@ function populatePaleDatatable(jsonData){
     paleTable.draw();
 }
 
+function searchAllPale(){
+	$.post('/pale/find', {} , function(jsonData) {
+		populatePaleDatatable(jsonData);
+	});;
+}
+
 function searchPale(){
 	var initialDate = $(`.date[data-id="datepickerInitial"]`).datepicker("getUTCDate");
 	var endDate = $(`.date[data-id="datepickerEnd"]`).datepicker("getUTCDate");
@@ -117,7 +123,7 @@ function saveNewPale(){
 	$.post('/pale/create', inputsData , function(data) {
 		removeMessage("#newPaleMessageDiv");
 		if(data.status==0){
-			searchPale();
+			searchAllPale();
 			$('#paleModal').modal('hide');
 		}else if (data.status==1){
 			addMessage("#paleMessageDiv", data.status, data.message);
@@ -145,7 +151,7 @@ function saveEditPale(id){
 	$.post('/pale/update', inputsData , function(data) {
 		removeMessage("#paleMessageDiv");
 		if(data.status==0){
-			searchPale();
+			searchAllPale();
 			$('#paleModal').modal('hide');
 		} else if (data.status==1){
 			addMessage("#paleMessageDiv", data.status, data.message);
@@ -167,7 +173,7 @@ function saveDeletePale(id){
 	$.post('/pale/delete', {paleId : id} , function(data) {
 		removeMessage("#paleErrorsDiv");
 		if(data.status==0){
-			searchPale();
+			searchAllPale();
 			$('#paleModal').modal('hide');
 		}else if (data.status==1){
 			addMessage("#paleMessageDiv",data.status,responseText.message);
@@ -229,4 +235,65 @@ function getModalPanelContent(){
 				</div>
 			</div>
 	</div>`;
+}
+
+function importPale(){
+		removeMessage("#excelMessageDiv");
+		$('#excelModalLbl').html("Importando pales");
+		$('#excelPanelContent').html("Escoge el fichero a importar");
+		$('#excelImportExportBtn').html("Importar");
+		$('#excelImportExportBtn').attr( "onclick",`excelImportPale()`);
+		$('#excelModal').modal('show');
+}
+
+function excelImportPale(){
+	$('#excelImportExportBtn').prop('disabled', true);
+	$('#excelImportExportBtn').html('<div class="loader"></div>');
+	var inputsData = {};
+	$.post('/excel/import/pale', inputsData , function(data) {
+		removeMessage("#excelMessageDiv");
+		if(data.status==0){
+			searchAllPale();
+			$('#excelModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#excelMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#excelImportExportBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#excelMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#excelImportExportBtn').removeAttr('disabled');
+		$('#excelImportExportBtn').html('Importar');
+	});
+}
+
+function exportPale(){
+		removeMessage("#excelMessageDiv");
+		$('#excelModalLbl').html("Exportando pales");
+		$('#excelPanelContent').html("Vas a exportar todos las pales");
+		$('#excelImportExportBtn').html("Exportar");
+		$('#excelImportExportBtn').attr( "onclick",`excelExportPale()`);
+		$('#excelModal').modal('show');
+}
+
+function excelExportPale(){
+	$('#excelImportExportBtn').prop('disabled', true);
+	$('#excelImportExportBtn').html('<div class="loader"></div>');
+	var inputsData = {};
+	$.post('/excel/export/pale', inputsData , function(data) {
+		removeMessage("#excelMessageDiv");
+		if(data.status==0){
+			$('#excelModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#excelMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#excelImportExcportBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#excelMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#excelImportExportBtn').removeAttr('disabled');
+		$('#excelImportExportBtn').html('Exportar');
+	});
 }

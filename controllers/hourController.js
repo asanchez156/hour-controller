@@ -15,7 +15,7 @@ exports.index = function(req, res, next) {
 exports.createBatch = function(req, res, next) {
 	var promises = []
 	var validationErrors = {};
-	console.log("BODY create batch: ", req.body);
+	if (process.env.APP_ENV=='development') console.log("Create day batch body: ", JSON.stringify(req.body));
 	var i,j = 1;
 	models.transaction(function (t) {
 
@@ -57,6 +57,7 @@ exports.createBatch = function(req, res, next) {
 		   status: 0
 		});
 	}).catch(function (err) {
+		if (process.env.APP_ENV=='development') console.log("Create day batch error:", JSON.stringify(err));
 		res.status(400).send({
 			status: 1,
 		   	message: err.errors[0].message
@@ -89,26 +90,26 @@ exports.find = function(req, res, next) {
         order: [['date', 'DESC']],
     }).then(function(listWorkingday) {
     	var searchResult = [];
-		listWorkingday.forEach(function(element, index, array){
-			searchResult.push({
-				workingdayId: element.workingdayId,
-				employeeId: element.employeeId,
-				employeeName: element.EMPLEADO ? element.EMPLEADO.name : "null",
-				date: element.date,
-				dateString: stringDate(element.date,'es'),
-				workingday: element.workingday,
-				hours: element.hours,
-				description: element.description,
-				functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="deleteWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
-			});
-    	});
-    	//console.log(searchResult);
+			listWorkingday.forEach(function(element, index, array){
+					searchResult.push({
+							workingdayId: element.workingdayId,
+							employeeId: element.employeeId,
+							employeeName: element.EMPLEADO ? element.EMPLEADO.name : "null",
+							date: element.date,
+							dateString: stringDate(element.date,'es'),
+							workingday: element.workingday,
+							hours: element.hours,
+							description: element.description,
+							functions:  `<button type="button" class="btn btn-primary" aria-label="Editar" onclick="editWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>&nbsp;<button type="button" class="btn btn-primary" aria-label="Eliminar" onclick="deleteWorkingDay(${element.workingdayId})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>`
+					});
+	    });
+    	if (process.env.APP_ENV=='development') console.log("Search Workingdays", JSON.stringify(searchResult));
     	res.send(JSON.stringify(searchResult));
-    });
+  });
 }
 
 exports.create = function(req, res, next) {
-	console.log("BODY create: ", req.body);
+	if (process.env.APP_ENV=='development') console.log("Create WorkingDay body: ", JSON.stringify(req.body));
 	models.transaction(function (t) {
 	    return models.WorkingDay.create({
 		   		employeeId : req.body.employeeId,
@@ -123,6 +124,7 @@ exports.create = function(req, res, next) {
 		   status: 0
 		});
 	}).catch(function (err) {
+		if (process.env.APP_ENV=='development') console.log("Create WorkingDay error: ", JSON.stringify(err));
 		res.status(400).send({
 			status: 1,
 		   	message: "No se ha podido crear la jornada " + (err.errors[0].message == "JOR_UK must be unique" ? "ya existe." : err.errors[0].message)
@@ -131,7 +133,7 @@ exports.create = function(req, res, next) {
 }
 
 exports.update = function(req, res, next) {
-	console.log("BODY update: ", req.body);
+	if (process.env.APP_ENV=='development') console.log("Update WorkingDay body: ", JSON.stringify(req.body));
 	models.transaction(function (t) {
 	  	return models.WorkingDay.findOne({
 	  	 	where: {
@@ -149,6 +151,7 @@ exports.update = function(req, res, next) {
 		   	status: 0
 		});
 	}).catch(function (err) {
+		if (process.env.APP_ENV=='development') console.log("Update WorkingDay error: ", JSON.stringify(err));
 		res.status(400).send({
 			status: 1,
 		   	message: "No se ha podido eliminar la jornada " + err.errors[0].message
@@ -158,7 +161,7 @@ exports.update = function(req, res, next) {
 }
 
 exports.delete = function(req, res, next) {
-	console.log("BODY: ", req.body);
+	if (process.env.APP_ENV=='development') console.log("Delete WorkingDay body: ", JSON.stringify(req.body));
 	models.transaction(function (t) {
 	  	return models.WorkingDay.findOne({
 	  	 	where: {
@@ -172,6 +175,7 @@ exports.delete = function(req, res, next) {
 		   	status: 0
 		});
 	}).catch(function (err) {
+		if (process.env.APP_ENV=='development') console.log("Delete WorkingDay error: ", JSON.stringify(err));
 		res.status(400).send({
 			status: 1,
 		   	message: "No se ha podido eliminar la jornada " + err.errors[0].message

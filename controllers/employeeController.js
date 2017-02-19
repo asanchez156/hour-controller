@@ -16,7 +16,7 @@ exports.find = function(req, res, next) {
       				employeeName: element.name,
     		  });
     	});
-    	console.log(searchResult);
+    		if (process.env.APP_ENV=='development') console.log("Search Employees", JSON.stringify(searchResult));
     	res.send(JSON.stringify(searchResult));
     });
 }

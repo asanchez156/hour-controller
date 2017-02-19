@@ -44,6 +44,12 @@ function populateHourDatatable(jsonData){
     hourTable.draw();
 }
 
+function searchAllWorkingday(){
+	$.post('/hour/find', {} , function(jsonData) {
+			populateHourDatatable(jsonData);
+	});
+}
+
 function searchWorkingday(){
 	var employeeId = $('#employeeSearch').val();
 	var initialDate = $(`.date[data-id="datepickerInitial"]`).datepicker("getUTCDate");
@@ -118,7 +124,7 @@ function saveNewWorkingDay(){
 	$.post('/hour/create', inputsData , function(data) {
 		removeMessage("#newWorkingDayMessageDiv");
 		if(data.status==0){
-			searchWorkingday();
+			searchAllWorkingday();
 			$('#workingDayModal').modal('hide');
 		}else if (data.status==1){
 			addMessage("#workingDayMessageDiv", data.status, data.message);
@@ -146,7 +152,7 @@ function saveEditWorkingDay(id){
 	$.post('/hour/update', inputsData , function(data) {
 		removeMessage("#workingDayMessageDiv");
 		if(data.status==0){
-			searchWorkingday();
+			searchAllWorkingday();
 			$('#workingDayModal').modal('hide');
 		} else if (data.status==1){
 			addMessage("#workingDayMessageDiv", data.status, data.message);
@@ -168,7 +174,7 @@ function saveDeleteWorkingDay(id){
 	$.post('/hour/delete', {workingdayId : id} , function(data) {
 		removeMessage("#workingDayErrorsDiv");
 		if(data.status==0){
-			searchWorkingday();
+			searchAllWorkingday();
 			$('#workingDayModal').modal('hide');
 		}else if (data.status==1){
 			addMessage("#workingDayMessageDiv",data.status,responseText.message);
@@ -181,5 +187,66 @@ function saveDeleteWorkingDay(id){
 	}).always(function() {
 		$('#saveWorkingDayBtn').removeAttr('disabled');
 		$('#saveWorkingDayBtn').html('Eliminar');
+	});
+}
+
+function importWorkingDay(){
+		removeMessage("#excelMessageDiv");
+		$('#excelModalLbl').html("Importando jornadas");
+		$('#excelPanelContent').html("Escoge el fichero a importar");
+		$('#excelImportExportBtn').html("Importar");
+		$('#excelImportExportBtn').attr( "onclick",`excelImportWorkingDay()`);
+		$('#excelModal').modal('show');
+}
+
+function excelImportWorkingDay(){
+	$('#excelImportExportBtn').prop('disabled', true);
+	$('#excelImportExportBtn').html('<div class="loader"></div>');
+	var inputsData = {};
+	$.post('/excel/import/workingday', inputsData , function(data) {
+		removeMessage("#excelMessageDiv");
+		if(data.status==0){
+			searchAllWorkingday();
+			$('#excelModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#excelMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#excelImportExportBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#excelMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#excelImportExportBtn').removeAttr('disabled');
+		$('#excelImportExportBtn').html('Importar');
+	});
+}
+
+function exportWorkingDay(){
+		removeMessage("#excelMessageDiv");
+		$('#excelModalLbl').html("Exportando jornadas");
+		$('#excelPanelContent').html("Vas a exportar todas las jornadas");
+		$('#excelImportExportBtn').html("Exportar");
+		$('#excelImportExportBtn').attr( "onclick",`excelExportWorkingDay()`);
+		$('#excelModal').modal('show');
+}
+
+function excelExportWorkingDay(){
+	$('#excelImportExportBtn').prop('disabled', true);
+	$('#excelImportExportBtn').html('<div class="loader"></div>');
+	var inputsData = {};
+	$.post('/excel/export/workingday', inputsData , function(data) {
+		removeMessage("#excelMessageDiv");
+		if(data.status==0){
+			$('#excelModal').modal('hide');
+		}else if (data.status==1){
+			addMessage("#excelMessageDiv", data.status, data.message);
+		}
+	}).fail(function(jqXHR) {
+		$('#excelImportExcportBtn').prop('enable', true);
+		var responseText =  JSON.parse(jqXHR.responseText);
+		addMessage("#excelMessageDiv",1,responseText.message);
+	}).always(function() {
+		$('#excelImportExportBtn').removeAttr('disabled');
+		$('#excelImportExportBtn').html('Exportar');
 	});
 }
