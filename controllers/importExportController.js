@@ -16,6 +16,10 @@ var Workingday = function (employeeName, date, workingday, hours, description){
 }
 
 exports.importWorkingDay = function(req, res, next) {
+
+    //upload excel file
+
+    
     var myExcel = XLSX.readFile(__dirname + '/../public/assets/excel/example.xlsx'); // parses a file
     //var obj = xlsx.parse(fs.readFileSync(__dirname + '/myFile.xlsx')); // parses a buffer
     var hoja1 = myExcel.Sheets[myExcel.SheetNames[0]];
@@ -104,6 +108,10 @@ var Pale = function (companyName, date, paleNum, description){
 }
 
 exports.importPale = function(req, res, next) {
+
+  //upload excel file
+
+
   var myExcel = XLSX.readFile(__dirname + '/../public/assets/excel/examplePale.xlsx'); // parses a file
   //var obj = xlsx.parse(fs.readFileSync(__dirname + '/myFile.xlsx')); // parses a buffer
   var hoja1 = myExcel.Sheets[myExcel.SheetNames[0]];

@@ -240,7 +240,17 @@ function getModalPanelContent(){
 function importPale(){
 		removeMessage("#excelMessageDiv");
 		$('#excelModalLbl').html("Importando pales");
-		$('#excelPanelContent').html("Escoge el fichero a importar");
+		$('#excelPanelContent').html(`
+			<div class="row">
+				<div class="form-group">
+					<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<label for="excelFile">Fichero a importar</label>
+					</div>
+					<div class="form-item col-md-6 col-sm-6 col-xs-6">
+							<input class="button" type="file" id="excelFile" name="excelFile"/>
+					</div>
+				</div>
+			</div>`);
 		$('#excelImportExportBtn').html("Importar");
 		$('#excelImportExportBtn').attr( "onclick",`excelImportPale()`);
 		$('#excelModal').modal('show');
@@ -249,7 +259,11 @@ function importPale(){
 function excelImportPale(){
 	$('#excelImportExportBtn').prop('disabled', true);
 	$('#excelImportExportBtn').html('<div class="loader"></div>');
-	var inputsData = {};
+	var excelFile = $('#excelFile');
+	var inputsData = {
+		excelFile: new FormData(excelFile)
+	};
+
 	$.post('/excel/import/pale', inputsData , function(data) {
 		removeMessage("#excelMessageDiv");
 		if(data.status==0){
