@@ -62,8 +62,10 @@
                         <button type="button" class="btn btn-primary pull-right" onclick="newWorkingDay()"><span class="glyphicon glyphicon-plus"></span> Nueva</button>
                         <span class="pull-right">&nbsp;</span>
                         <button type="button" class="btn btn-primary pull-right" onclick="importWorkingDay()"><span class="glyphicon glyphicon-import"></span> Importar</button>
-                        <span class="pull-right">&nbsp;</span>
-                        <button type="button" class="btn btn-primary pull-right" onclick="exportWorkingDay()"><span class="glyphicon glyphicon-export"></span> Exportar</button>
+                        <% if (process.env.APP_ENV=='development') { %>
+                          <span class="pull-right">&nbsp;</span>
+                          <button type="button" class="btn btn-primary pull-right" onclick="exportWorkingDay()"><span class="glyphicon glyphicon-export"></span> Exportar</button>
+                       <% } %>
                     </div>
                 </div>
             </div>

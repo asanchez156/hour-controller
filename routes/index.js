@@ -93,7 +93,7 @@ router.get('/excel/export/workingday', sessionController.loginRequired, importEx
 router.post('/excel/import/pale', sessionController.loginRequired, importExportController.importPale);
 router.get('/excel/import/pale', sessionController.loginRequired, importExportController.importPale);
 router.post('/excel/export/pale', sessionController.loginRequired, importExportController.exportPale);
-router.get('/excel/export/pale', sessionController.loginRequired, importExportController.importPale);
+router.get('/excel/export/pale', sessionController.loginRequired, importExportController.exportPale);
 
 
 module.exports = router;
