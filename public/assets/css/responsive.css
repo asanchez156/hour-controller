@@ -242,12 +242,13 @@
     text-align: center;
   }
   /* All pages */
+  /*
   .page-header {
     min-height: 180px;
   }
   .page-header .page-title {
     font-size: 30px;
-  }
+  }*/
   #about .service-block .descr h4 {
     font-size: ;
   }
