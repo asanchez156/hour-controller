@@ -60,9 +60,9 @@
                     </div>
                     <div class="col-md-8 col-sm-8 col-xs-8 pull-right">
                         <button type="button" class="btn btn-primary pull-right" onclick="newPale()"><span class="glyphicon glyphicon-plus"></span> Nuevo</button>
+                        <% if (process.env.APP_ENV=='development') { %>
                         <span class="pull-right">&nbsp;</span>
                         <button type="button" class="btn btn-primary pull-right" onclick="importPale()"><span class="glyphicon glyphicon-import"></span> Importar</button>
-                        <% if (process.env.APP_ENV=='development') { %>
                           <span class="pull-right">&nbsp;</span>
                           <button type="button" class="btn btn-primary pull-right" onclick="exportPale()"><span class="glyphicon glyphicon-export"></span> Exportar</button>
                         <% } %>
