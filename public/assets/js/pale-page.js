@@ -73,6 +73,8 @@ function fillPaleEditPanelComponents(){
 
 	var date = new Date(paleRow.date.substr(0,4),parseInt(paleRow.date.substr(5,2))-1,paleRow.date.substr(8,2));
 	$(`#paleForm .date[data-id="datepicker"]`).datepicker('update', date);
+
+	$(`#paleForm #pales`).val(paleRow.pales);
 	$(`#paleForm #date`).prop('disabled', true);
 	$(`#paleForm #description`).val(paleRow.description);
 }
@@ -313,7 +315,7 @@ function fixdata(data) {
 }
 
 function downloadPaleExcelExample(){
-	location.href = 'assets/excel/examplePale.xlsx'; 
+	location.href = 'assets/excel/examplePale.xlsx';
 }
 
 // EXPORTAR EXCEL
