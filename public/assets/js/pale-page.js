@@ -313,7 +313,7 @@ function fixdata(data) {
 }
 
 function downloadPaleExcelExample(){
-	location.href = 'assets/excel/examplePale.xlsx';
+	location.href = 'assets/excel/examplePale.xlsx'; 
 }
 
 // EXPORTAR EXCEL
