@@ -84,7 +84,7 @@ exports.importWorkingDay = function(req, res, next) {
                 }
           	});
         } else{
-            res.status(400).send({status:1, message: `Fichero mal construido, ten ecuenta que el contenido ha de ir en la primera página.`});
+            res.status(400).send({status:1, message: `Fichero mal construido, ten en cuenta que el contenido ha de ir en la primera página.`});
         }
       } else {
          res.status(400).send({status:1, message: `No existe el fichero o es incorrecto`});
@@ -174,7 +174,7 @@ exports.importPale = function(req, res, next) {
             }
         });
     } else{
-        res.status(400).send({status:1, message: `Fichero mal construido, ten ecuenta que el contenido ha de ir en la primera página.`});
+        res.status(400).send({status:1, message: `Fichero mal construido, ten en cuenta que el contenido ha de ir en la primera página.`});
     }
   } else {
       res.status(400).send({status:1, message: `No existe el fichero o es incorrecto`});
