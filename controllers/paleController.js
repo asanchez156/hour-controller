@@ -20,15 +20,15 @@ exports.find = function(req, res, next) {
    	}
    	if (req.body.initialDate && req.body.endDate){
    		search.date = {
-            	$between: [req.body.initialDate , req.body.endDate]
+            	$between: [stringDate(req.body.initialDate) , stringDate(req.body.endDate)]
             }
    	}else if (req.body.initialDate){
    		search.date = {
-            	$between: [req.body.initialDate , stringDate('','en')]
+            	$between: [stringDate(req.body.initialDate) , stringDate(new Date())]
             }
    	}else if (req.body.endDate){
    		search.date = {
-            	$between: ["Fri Jan 1 2010 01:00:00 GMT+0100 (CET)'", req.body.endDate]
+            	$between: [stringDate('Fri Jan 1 2010 01:00:00 GMT+0100 (CET)'), stringDate(req.body.endDate)]
             }
    	}
    	models.Pale.findAll({
