@@ -120,6 +120,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="downloadWorkingDayExcelExample()">Descargar ejemplo</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button id="excelImportExportBtn" type="button" class="btn btn-primary">Guardar</button>
                     </div>
@@ -139,6 +140,7 @@
     <% include ../partials/gotop %>
     <% include ../partials/scripts %>
     <script src="/assets/js/hour-page.js"></script>
+    <script src="/assets/js/xlsx-dist/xlsx.core.min.js"></script>
 
   </body>
 </html>
