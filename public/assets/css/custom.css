@@ -7,19 +7,19 @@
 }
 
 .pageContent{
-	padding-top: 5%;
-	padding-left: 2.5%;
-	padding-bottom: 5%;
-	padding-right: 2.5%;
+	padding-top: 1.5em;
+	padding-left: 1.5em;
+	padding-bottom: 1.5em;
+	padding-right: 1.5em;
 
 	background-color: #e7e7e7;
 }
 
 .searchPanel{
-	padding-top: 2.5%;
-	padding-left: 2.5%;
-	padding-bottom: 2.5%;
-	padding-right: 2.5%;
+	padding-top: 1.5em;
+	padding-left: 1.5em;
+	padding-bottom: 1.5em;
+	padding-right: 1.5em;
 
 	background-color: white;
 }

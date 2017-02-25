@@ -190,36 +190,87 @@ function saveDeleteWorkingDay(id){
 	});
 }
 
+// IMPORTAR EXCEL
+
 function importWorkingDay(){
 		removeMessage("#excelMessageDiv");
 		$('#excelModalLbl').html("Importando jornadas");
-		$('#excelPanelContent').html("Escoge el fichero a importar");
+		$('#excelPanelContent').html(`
+			<div class="row">
+				<div class="form-group">
+					<div class="form-item col-md-3 col-sm-6 col-xs-6">
+						<label for="excelFile">Fichero a importar</label>
+					</div>
+					<div class="form-item col-md-6 col-sm-6 col-xs-6">
+							<input class="button" type="file" id="excelFile" name="excelFile"/>
+					</div>
+				</div>
+			</div>`);
 		$('#excelImportExportBtn').html("Importar");
 		$('#excelImportExportBtn').attr( "onclick",`excelImportWorkingDay()`);
 		$('#excelModal').modal('show');
+
+		var xlsFile = document.getElementById('excelFile');
+		if(xlsFile.addEventListener) xlsFile.addEventListener('change', handleFile, false);
 }
 
 function excelImportWorkingDay(){
-	$('#excelImportExportBtn').prop('disabled', true);
-	$('#excelImportExportBtn').html('<div class="loader"></div>');
-	var inputsData = {};
-	$.post('/excel/import/workingday', inputsData , function(data) {
-		removeMessage("#excelMessageDiv");
-		if(data.status==0){
-			searchAllWorkingday();
-			$('#excelModal').modal('hide');
-		}else if (data.status==1){
-			addMessage("#excelMessageDiv", data.status, data.message);
-		}
-	}).fail(function(jqXHR) {
-		$('#excelImportExportBtn').prop('enable', true);
-		var responseText =  JSON.parse(jqXHR.responseText);
-		addMessage("#excelMessageDiv",1,responseText.message);
-	}).always(function() {
-		$('#excelImportExportBtn').removeAttr('disabled');
-		$('#excelImportExportBtn').html('Importar');
-	});
+		$('#excelImportExportBtn').prop('disabled', true);
+		$('#excelImportExportBtn').html('<div class="loader"></div>');
+
+		$.post('/excel/import/workingday', {"excelFile" : excelFile} , function(data) {
+			removeMessage("#excelMessageDiv");
+			if(data.status==0){
+				searchAllWorkingday();
+				$('#excelModal').modal('hide');
+			}else if (data.status==1){
+				addMessage("#excelMessageDiv", data.status, data.message);
+			}
+		}).fail(function(jqXHR) {
+			$('#excelImportExportBtn').prop('enable', true);
+			var responseText =  JSON.parse(jqXHR.responseText);
+			addMessage("#excelMessageDiv",1,responseText.message);
+		}).always(function() {
+			$('#excelImportExportBtn').removeAttr('disabled');
+			$('#excelImportExportBtn').html('Importar');
+		});
+
 }
+
+function downloadWorkingDayExcelExample(){
+	location.href = 'assets/excel/exampleWorkingday.xlsx';
+}
+
+var excelFile = {};
+function handleFile(e) {
+	var files = e.target.files;
+	var f = files[0];
+	{
+			var reader = new FileReader();
+			reader.onload = function(e) {
+					var data = e.target.result;
+			    var arr = fixdata(data);
+					try{
+			    	excelFile = XLSX.read(btoa(arr), {type: 'base64'});
+						removeMessage("#excelMessageDiv");
+					} catch (e){
+						document.getElementById("excelFile").value = '';
+						excelFile = {}
+						addMessage("#excelMessageDiv", 1, "El fichero seleccionado no es un fichero excel.");
+					}
+			};
+			reader.readAsArrayBuffer(f);
+	}
+}
+
+function fixdata(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(l*w)));
+	return o;
+}
+
+// EXPORTAR EXCEL
 
 function exportWorkingDay(){
 		removeMessage("#excelMessageDiv");
