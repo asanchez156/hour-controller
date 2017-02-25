@@ -5,7 +5,14 @@
 exports.loginRequired = function(req, res, next) {
     //  ------------ debugueando---------------
     if(process.env.APP_ENV=='development'){
-        req.session.user = { id: 1, username: "admin", mode: 1 };
+        req.session.user = {
+          id: 1,
+          username: "admin",
+          mode: 1,
+          employeeId: 0,
+          employeeName: "admin",
+          companyId: 0,
+          companyName: "amdin"};
     }
     //  ------------ debugueando---------------
     if (req.session.user) {
@@ -24,22 +31,27 @@ exports.create = function(req, res) {
     var userController = require('./userController');
 
     var criptoPassword = sha512(password);
-    console.log(criptoPassword);
+    //console.log(criptoPassword);
 
-    userController.autenticar(username, criptoPassword, function(error, user) {
+    userController.autenticar(username, criptoPassword, function(error, user, employeeName, employeeSurname, companyId, companyName) {
         if (error) {
             //It has to repeat the error because the page is loadded twice, it is and unknown error.
             //TODO It is needed to fix this.
             req.session.messages.error.push(error.message);
             req.session.messages.error.push(error.message);
             res.redirect("/");
-        }
-        else {
+        } else {
             req.session.user = {
                 id: user.userId,
                 username: user.username,
+                employeeId: user.employeeId,
+                employeeName: employeeName,
+                employeeSurname: employeeSurname,
+                companyId: companyId,
+                companyName: companyName,
                 mode: user.userMode
             };
+            console.log(req.session.user);
             res.redirect(req.session.redir || "/");
         }
     });
