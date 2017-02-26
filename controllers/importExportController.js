@@ -152,9 +152,6 @@ exports.importPale = function(req, res, next) {
             var errorPaleDate = err.errors[0].value.substr(err.errors[0].value.indexOf('-')+1);
             var errorPaleCompanyId = err.errors[0].value.substr(0,err.errors[0].value.indexOf('-'))|'';
 
-            console.log(errorPaleDate);
-            console.log(errorPaleCompanyId);
-
             if (errorPaleCompanyId!=''){
                 models.Company.findOne({
                     where: {
@@ -182,6 +179,36 @@ exports.importPale = function(req, res, next) {
 }
 
 exports.exportPale = function(req, res, next) {
+    console.log("Export Workbook");
+    var workbook = XLSX.readFile(__dirname + '/../public/assets/excel/pales.xlsx');
+    //console.log("Workbook", JSON.stringify(workbook));
+    var hoja1 = workbook.Sheets[workbook.SheetNames[0]];
+    var ref = hoja1['!ref'];
+
+    if (ref && ref.includes('A1:D')){
+        var start = ['A',1];
+        var end = ['D', parseInt(ref.substr(ref.indexOf('D')+1)) ]
+        console.log("hoja1", JSON.stringify(hoja1));
+
+        /*
+        var paleList=[];
+        for (var i = 2; i < 3; i++){
+          "A2":{"t":"s","v":"Netto Mendibil","r":"<t>Netto Mendibil</t>","h":"Netto Mendibil","w":"Netto Mendibil"},"B2":{"t":"n","v":"42736","w":"1/1/17"},"C2":{"t":"n","v":"8","w":"8"},"A3":{"t":"s","v":"Netto Mendibil","r":"<t>Netto Mendibil</t>","h":"Netto Mendibil","w":"Netto Mendibil"}
+            hoja1[`A${i}`]={ t : "s",
+                             v : "Netto Mendibil",
+                             h : "Netto Mendibil",
+                             w : "Netto Mendibil",
+                            }
+            hoja1[`A${i}`].v;
+            hoja1[`B${i}`].w;
+            hoja1[`C${i}`].v;
+            hoja1[`D${i}`].v;
+
+        }*/
+    }
+
+    //var xlsx = XLSX.writeFile(workbook, 'pales.xlsx');
+    if (process.env.APP_ENV=='development') console.log("Import pale excel", JSON.stringify(xlsx));
     res.send('');
 }
 
