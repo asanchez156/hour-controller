@@ -1,5 +1,5 @@
  <%
- 	if (messages!=undefined) { 
+ 	if (messages!=undefined) {
  		if (messages.success!= undefined && messages.success.length>0){ %>
  			<div class="alert alert-success">
 	 			<strong>Exito: </strong><%= messages.success.pop() %>
@@ -9,6 +9,6 @@
  			<div class="alert alert-danger">
 	 			<strong>Error: </strong><%= messages.error.pop() %>
  		  	</div>
- 	<% 	} 
+ 	<% 	}
   	}
-%> 	
+%>

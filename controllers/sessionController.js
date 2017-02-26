@@ -31,7 +31,6 @@ exports.create = function(req, res) {
     var userController = require('./userController');
 
     var criptoPassword = sha512(password);
-    //console.log(criptoPassword);
 
     userController.autenticar(username, criptoPassword, function(error, user, employeeName, employeeSurname, companyId, companyName) {
         if (error) {
@@ -51,7 +50,7 @@ exports.create = function(req, res) {
                 companyName: companyName,
                 mode: user.userMode
             };
-            console.log(req.session.user);
+            if (process.env.APP_ENV=='development') console.log("Search Employees", JSON.stringify(req.session.user));
             res.redirect(req.session.redir || "/");
         }
     });
