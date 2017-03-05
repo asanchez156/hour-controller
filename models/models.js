@@ -100,7 +100,8 @@ Company.hasMany(Pale,{
 
 WorkingDay.belongsTo(User, { foreignKey: 'userId'});
 WorkingDay.belongsTo(Employee, { foreignKey: 'employeeId'});
-Employee.belongsTo(User, { foreignKey: 'employeeId' }); // ESTA COGIENDO MAL EL EMPLEADO
+Employee.belongsTo(User, { foreignKey: 'employeeId' });
+// ESTA COGIENDO MAL EL EMPLEADO 
 //Employee.belongsTo(Company, { foreignKey: 'companyId' });
 Employee.belongsToMany(Company, { through: EmployeeCompany, foreignKey: 'employeeId' });
 Company.belongsToMany(Employee, { through: EmployeeCompany, foreignKey: 'companyId' });
