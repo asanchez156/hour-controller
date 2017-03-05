@@ -56,14 +56,17 @@ var WorkingDay = sequelize.import(path.join(__dirname, 'workingday'));
 // Importar la definicion de la tabla Pale en pale.js
 var Pale = sequelize.import(path.join(__dirname, 'pale'));
 
+// Importar la definicion de la tabla EmployeeCompany en employeeCompany.js
+var EmployeeCompany = sequelize.import(path.join(__dirname, 'employeeCompany'));
+
 // Relaciones
 
-Company.hasMany(Employee,{
+/*Company.hasMany(Employee,{
   foreignKey: {
     name: 'companyId',
     allowNull: false
   }
-});
+});*/
 Position.hasMany(Employee,{
   foreignKey: {
     name: 'positionId',
@@ -97,12 +100,14 @@ Company.hasMany(Pale,{
 
 WorkingDay.belongsTo(User, { foreignKey: 'userId'});
 WorkingDay.belongsTo(Employee, { foreignKey: 'employeeId'});
-Employee.belongsTo(User, { foreignKey: 'employeeId' });
-Employee.belongsTo(Company, { foreignKey: 'companyId' });
+Employee.belongsTo(User, { foreignKey: 'employeeId' }); // ESTA COGIENDO MAL EL EMPLEADO
+//Employee.belongsTo(Company, { foreignKey: 'companyId' });
+Employee.belongsToMany(Company, { through: EmployeeCompany, foreignKey: 'employeeId' });
+Company.belongsToMany(Employee, { through: EmployeeCompany, foreignKey: 'companyId' });
 Employee.belongsTo(Position, { foreignKey: 'positionId' });
 Pale.belongsTo(Company, { foreignKey: 'companyId' });
-//Employee.belongsToMany(EmpEmpPosition, { through: UserProject });
-//Employee.belongsToMany(EmpEmpPosition, { through: UserProject });
+//Employee.belongsToMany(Employee,  { through: UserProject });
+//Employee.belongsToMany(Employee, { through: UserProject });
 
 exports.User = User; // exportar la definicion de la tabla User
 exports.Position = Position; // exportar la definicion de la tabla Position
@@ -111,6 +116,7 @@ exports.Employee = Employee; // exportar la definicion de la tabla Employee
 //exports.EmpEmpPosition = EmpEmpPosition; // exportar la definicion de la tabla EmpEmpPosition
 exports.WorkingDay = WorkingDay; // exportar la definicion de la tabla WorkingDay
 exports.Pale = Pale; // exportar la definicion de la tabla Pale
+exports.EmployeeCompany = EmployeeCompany;
 
 exports.transaction = function (tf) {
     return sequelize.transaction(tf);

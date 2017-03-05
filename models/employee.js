@@ -9,15 +9,6 @@ module.exports = function(sequelize, DataTypes) {
             field: 'ID_EMPLEADO',
             primaryKey: true
         },
-        companyId:{
-            type: DataTypes.INTEGER,
-            field: 'ID_EMPRESA',
-            validate: {
-                notEmpty: {
-                    msg: "falta la empresa"
-                }
-            }
-        },
         positionId:{
             type: DataTypes.INTEGER,
             field: 'ID_CARGO',
