@@ -32,7 +32,7 @@ exports.create = function(req, res) {
 
     var criptoPassword = sha512(password);
 
-    userController.autenticar(username, criptoPassword, function(error, user, employeeName, employeeSurname, companyId, companyName) {
+    userController.autenticar(username, criptoPassword, function(error, user) {
         if (error) {
             //It has to repeat the error because the page is loadded twice, it is and unknown error.
             //TODO It is needed to fix this.
@@ -44,13 +44,11 @@ exports.create = function(req, res) {
                 id: user.userId,
                 username: user.username,
                 employeeId: user.employeeId,
-                employeeName: employeeName,
-                employeeSurname: employeeSurname,
-                companyId: companyId,
-                companyName: companyName,
+                //employeeName: user.EMPLEADO.name,
+                //employeeSurname: user.EMPLEADO.surname,
                 mode: user.userMode
             };
-            if (process.env.APP_ENV=='development') console.log("Search Employees", JSON.stringify(req.session.user));
+            if (process.env.APP_ENV=='development') console.log("Session user: ", JSON.stringify(req.session.user));
             res.redirect(req.session.redir || "/");
         }
     });

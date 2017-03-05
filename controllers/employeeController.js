@@ -3,7 +3,7 @@ var models = require("../models/models.js")
 
 exports.find = function(req, res, next) {
    	var where = {
-        companyId:1
+        //companyId:1
     }
    	models.Employee.findAll({
         where: where,
@@ -22,6 +22,7 @@ exports.find = function(req, res, next) {
 }
 
 exports.findEmployees = function(search, callback) {
+    console.log("search: ", search);
    	models.Employee.findAll({
         where: search,
         include: [models.Company],
@@ -31,7 +32,7 @@ exports.findEmployees = function(search, callback) {
     	listEmployee.forEach(function(element, index, array){
       		searchResult.push({
       				employeeId: element.employeeId,
-              companyId: element.companyId,
+              companyId: element.EMPRESA.companyId,
       				employeeName: element.name,
       				companyName: element.EMPRESA.companyName
     		  });

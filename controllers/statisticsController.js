@@ -85,7 +85,7 @@ exports.findPale = function(req, res, next) {
         if (!req.body.companyId || (req.body.companyId ? req.body.companyId==company.companyId : false)){
           company.result = [];
           for (var j = startYear; j<=currentYear; j++){
-              company.result.push({year:j, total:0 , month:[0,0,0,0,0,0,0,0,0,0]})
+              company.result.push({year:j, total:0 , month:[0,0,0,0,0,0,0,0,0,0,0,0]})
           }
           searchResult[company.companyId] = company;
         }

@@ -6,28 +6,13 @@ exports.autenticar = function(username, password, callback) {
     models.User.findOne({
         where: {
             username: username
-        }
-    }).then(function(user) {
-      // get employee and company
-      models.Employee.findOne({
-        where: {
-            employeeId : user ? user.employeeId : null 
         },
-        include : [models.Company]
-      }).then(function(employee) {
-        var employeeName = null ;
-        var employeeSurname = null ;
-        var companyId = null ;
-        var companyName = null ;
-        if(employee){
-          employeeName = employee.name;
-          employeeSurname = employee.surname;
-          companyId = employee.companyId;
-          companyName = employee.EMPRESA.companyName;
-        }
+        include : [models.Employee]
+    }).then(function(user) {
         if (user) {
+          if (process.env.APP_ENV=='development') console.log("User: ", JSON.stringify(user));
             if (password === user.password) {
-                callback(null, user, employeeName, employeeSurname, companyId, companyName);
+                callback(null, user);
             }
             else {
                 callback(new Error('Password erroneo'));
@@ -36,5 +21,4 @@ exports.autenticar = function(username, password, callback) {
             callback(new Error('Usuario incorrecto'));
         }
       });
-    });
-};
+    };
