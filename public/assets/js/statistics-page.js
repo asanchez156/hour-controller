@@ -244,6 +244,6 @@ function fillPaleStatistics(data){
 
 function monthString(mm){
 	var month = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-			"Julio", "Agosto", "Septiembre", "Octubre", "Nobiembre", "Diciembre"];
+			"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 	return month[mm];
 }
