@@ -80,7 +80,7 @@ exports.findPale = function(req, res, next) {
     }
     //initializing variables
     var searchResult = {};
-    companyController.findCompanys(search, function(companys){
+    companyController.findCompanys(req, search, function(companys){
       companys.forEach(function(company, index, array){
         if (!req.body.companyId || (req.body.companyId ? req.body.companyId==company.companyId : false)){
           company.result = [];

@@ -23,7 +23,7 @@ exports.find = function(req, res, next) {
    });
 }
 
-exports.findCompanys = function(search, callback) {
+exports.findCompanys = function(req, search, callback) {
     var where = {
         employeeId:req.session.user.employeeId
     }
@@ -34,10 +34,12 @@ exports.findCompanys = function(search, callback) {
         var searchResult = [];
         if (employee){
             employee.EMPRESAs.forEach(function(company, index, array){
-                searchResult.push({
-                    companyId: company.companyId,
-                    companyName: company.companyName,
-                });
+                if(search.companyId == undefined || company.companyId == search.companyId){
+                    searchResult.push({
+                        companyId: company.companyId,
+                        companyName: company.companyName,
+                    });
+                }
             });
         }
         callback(searchResult);

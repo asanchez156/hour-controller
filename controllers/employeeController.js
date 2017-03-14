@@ -2,6 +2,7 @@
 var models = require("../models/models.js")
 
 exports.find = function(req, res, next) {
+    // se obtendran los empleados de los que se encarga el usuario registrado
    	var where = {
         //companyId:1
     }
@@ -22,21 +23,25 @@ exports.find = function(req, res, next) {
 }
 
 exports.findEmployees = function(search, callback) {
-    console.log("search: ", search);
+    console.log("search employees: ", search);
    	models.Employee.findAll({
-        where: search,
+        where: {
+            //employeeId : search.employeeId
+        },
         include: [models.Company],
         order: [['name', 'ASC']],
     }).then(function(listEmployee) {
+        console.log("found employees: ", JSON.stringify(listEmployee));
     	var searchResult = [];
     	listEmployee.forEach(function(element, index, array){
       		searchResult.push({
       				employeeId: element.employeeId,
-              companyId: element.EMPRESA.companyId,
+              //companyId: element.EMPRESAs.companyId,
       				employeeName: element.name,
-      				companyName: element.EMPRESA.companyName
+      				//companyName: element.EMPRESAs.companyName
     		  });
     	});
+      console.log("END findEmployees");
     	callback(searchResult);
     });
 }
