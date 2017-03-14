@@ -4,16 +4,14 @@
 // MW de autorizacion
 exports.loginRequired = function(req, res, next) {
     //  ------------ debugueando---------------
-    if(process.env.APP_ENV=='development'){
+    /*if(process.env.APP_ENV=='development'){
         req.session.user = {
           id: 1,
-          username: "admin",
+          username: "paco",
           mode: 1,
-          employeeId: 0,
-          employeeName: "admin",
-          companyId: 0,
-          companyName: "amdin"};
-    }
+          employeeId: 1
+        };
+    }*/
     //  ------------ debugueando---------------
     if (req.session.user) {
         next();
@@ -40,11 +38,12 @@ exports.create = function(req, res) {
             req.session.messages.error.push(error.message);
             res.redirect("/");
         } else {
+            if (process.env.APP_ENV=='development') console.log("User: ", JSON.stringify(user));
             req.session.user = {
                 id: user.userId,
                 username: user.username,
                 employeeId: user.employeeId,
-                //employeeName: user.EMPLEADO.name,
+                employee: user.EMPLEADO,
                 //employeeSurname: user.EMPLEADO.surname,
                 mode: user.userMode
             };

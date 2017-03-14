@@ -2,23 +2,26 @@
 var models = require("../models/models.js")
 
 exports.find = function(req, res, next) {
-   	var where = {
-//        companyId:1
+    console.log(JSON.stringify(req.session.user));
+    var where = {
+          employeeId:req.session.user.employeeId
+   }
+    models.Employee.findOne({
+       where: where,
+       include: [models.Company]
+   }).then(function(employee) {
+    var searchResult = [];
+    if (employee){
+        employee.EMPRESAs.forEach(function(company, index, array){
+            searchResult.push({
+                companyId: company.companyId,
+                companyName: company.companyName,
+            });
+        });
     }
-   	models.Company.findAll({
-        where: where,
-        order: [['companyName', 'ASC']],
-    }).then(function(listCompany) {
-    	var searchResult = [];
-    	listCompany.forEach(function(element, index, array){
-      		searchResult.push({
-      				companyId: element.companyId,
-      				companyName: element.companyName,
-    		  });
-    	});
-    		if (process.env.APP_ENV=='development') console.log("Search Companys", JSON.stringify(searchResult));
-    	res.send(JSON.stringify(searchResult));
-    });
+    if (process.env.APP_ENV=='development') console.log("Search Companys on employeeId", JSON.stringify(searchResult));
+    res.send(JSON.stringify(searchResult));
+   });
 }
 
 exports.findCompanys = function(search, callback) {
